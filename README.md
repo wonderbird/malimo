@@ -37,20 +37,26 @@ dotnet tool install --global dotnet-reportgenerator-globaltool --configfile NuGe
 
 Run the following commands from the folder containing the `.sln` file in order to build and test.
 
-### Build the Solution and Run the Tests
+### Build the Solution, Run the Tests, Run the Application
 
 ```sh
+# Build the project
 dotnet build
+
+# Run the tests once
 dotnet test
 
-# If you like continuous testing then use the dotnet file watcher to trigger your tests
+# Continuously watch the tests while changing code
 dotnet watch -p ./MarkdownLinkedImagesMover.Tests test
 
-# As an alternative, run the tests with coverage and produce a coverage report
+# Produce a coverage report and open it in the default browser
 rm -r MarkdownLinkedImagesMover.Tests/TestResults && \
   dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='./TestResults/coverage.cobertura.xml' && \
   reportgenerator "-reports:MarkdownLinkedImagesMover.Tests/TestResults/*.xml" "-targetdir:report" "-reporttypes:Html;lcov" "-title:DotnetStarter"
 open report/index.html
+
+# Run the application
+dotnet run --project MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj
 ```
 
 ### Before Creating a Pull Request ...
