@@ -1,4 +1,4 @@
-namespace DotnetStarter.Logic;
+namespace MarkdownLinkedImagesMover;
 
 public class HelloWorld
 {

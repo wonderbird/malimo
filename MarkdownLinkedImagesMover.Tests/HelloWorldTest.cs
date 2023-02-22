@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace DotnetStarter.Logic.Tests;
+namespace MarkdownLinkedImagesMover.Tests;
 
 public class HelloWorldTest
 {
