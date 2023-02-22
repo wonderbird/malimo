@@ -12,8 +12,8 @@ public class ProgramTests
         var writer = new StringWriter();
         Console.SetOut(writer);
 
-        Program.Main(null);
+        Program.Main(new FileInfo("data/source/Testfile.md"));
 
-        Assert.Equal("Processed 0 images.\n", writer.ToString());
+        Assert.Equal("Processed 0 images from 'Testfile.md'.\n", writer.ToString());
     }
 }

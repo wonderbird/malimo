@@ -56,7 +56,10 @@ rm -r MarkdownLinkedImagesMover.Tests/TestResults && \
 open report/index.html
 
 # Run the application
-dotnet run --project MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj
+dotnet run --project MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj -- --file path/to/file.md
+
+# Get help
+dotnet run --project MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj -- --help
 ```
 
 ### Before Creating a Pull Request ...
