@@ -16,7 +16,7 @@ public static class Program
     public static void Main(FileInfo file)
     {
         var fileContent = File.ReadAllText(file.FullName);
-        var isEmpty = !MarkdownParser.ParseLinkedImages(fileContent).Any();
-        Console.WriteLine($"File '{file.Name}' is {(isEmpty ? "" : "not")} empty.");
+        var hasImages = MarkdownParser.ParseLinkedImages(fileContent).Any();
+        Console.WriteLine($"File '{file.Name}' contains {(hasImages ? "" : "no ")}images.");
     }
 }
