@@ -1,8 +1,12 @@
 using System;
 using System.IO;
+using System.Linq;
 
 namespace MarkdownLinkedImagesMover;
 
+/// <summary>
+/// Program entry point.
+/// </summary>
 public static class Program
 {
     /// <summary>
@@ -11,6 +15,8 @@ public static class Program
     /// <param name="file">Markdown file containing the references to image files which shall be moved</param>
     public static void Main(FileInfo file)
     {
-        Console.WriteLine($"Processed 0 images from '{file.Name}'.");
+        var fileContent = File.ReadAllText(file.FullName);
+        var count = MarkdownParser.ParseLinkedImages(fileContent).Count();
+        Console.WriteLine($"Processed {count} image(s) from '{file.Name}'.");
     }
 }
