@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using Xunit;
 
 namespace MarkdownLinkedImagesMover.Tests;
 
@@ -14,6 +13,6 @@ public class ProgramTests
 
         Program.Main(new FileInfo("data/source/Testfile.md"));
 
-        Assert.Equal("Processed 1 image(s) from 'Testfile.md'.\n", writer.ToString());
+        Assert.Equal("File 'Testfile.md' is not empty.\n", writer.ToString());
     }
 }
