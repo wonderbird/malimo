@@ -14,6 +14,6 @@ public class ProgramTests
 
         Program.Main(new FileInfo("data/source/Testfile.md"));
 
-        Assert.Equal("Processed 0 images from 'Testfile.md'.\n", writer.ToString());
+        Assert.Equal("Processed 1 image(s) from 'Testfile.md'.\n", writer.ToString());
     }
 }
