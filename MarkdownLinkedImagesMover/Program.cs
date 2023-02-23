@@ -16,7 +16,7 @@ public static class Program
     public static void Main(FileInfo file)
     {
         var fileContent = File.ReadAllText(file.FullName);
-        var count = MarkdownParser.ParseLinkedImages(fileContent).Count();
-        Console.WriteLine($"Processed {count} image(s) from '{file.Name}'.");
+        var isEmpty = !MarkdownParser.ParseLinkedImages(fileContent).Any();
+        Console.WriteLine($"File '{file.Name}' is {(isEmpty ? "" : "not")} empty.");
     }
 }
