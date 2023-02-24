@@ -13,6 +13,6 @@ public class ProgramTests
 
         Program.Main(new FileInfo("data/source/Testfile.md"));
 
-        Assert.Equal("File 'Testfile.md' contains images.\n", writer.ToString());
+        Assert.Equal("File 'Testfile.md' contains 'noun-starship-3799189.png'.\n", writer.ToString());
     }
 }

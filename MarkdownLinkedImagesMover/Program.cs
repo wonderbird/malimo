@@ -16,7 +16,8 @@ public static class Program
     public static void Main(FileInfo file)
     {
         var fileContent = File.ReadAllText(file.FullName);
-        var hasImages = MarkdownParser.ParseLinkedImages(fileContent).Any();
-        Console.WriteLine($"File '{file.Name}' contains {(hasImages ? "" : "no ")}images.");
+        var images = MarkdownParser.ParseLinkedImages(fileContent);
+        var imageNames = string.Join(", ", images.Select(f => $"'{f.Name}'"));
+        Console.WriteLine($"File '{file.Name}' contains {imageNames}.");
     }
 }

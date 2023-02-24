@@ -14,13 +14,15 @@ internal static class MarkdownParser
             return Array.Empty<FileInfo>();
         }
 
-        var regex = new Regex(@"!\[\[.+\]\]");
-        if (!regex.IsMatch(fileContent))
+        var regex = new Regex(@"!\[\[(.+)\]\]");
+        var match = regex.Match(fileContent);
+
+        if (!match.Success)
         {
             return Array.Empty<FileInfo>();
         }
 
-        return new[] { new FileInfo("anything") };
+        return new[] { new FileInfo(match.Groups[1].Value) };
 
     }
 }
