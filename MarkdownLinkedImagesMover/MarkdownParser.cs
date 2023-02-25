@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace MarkdownLinkedImagesMover;
@@ -15,14 +16,7 @@ internal static class MarkdownParser
         }
 
         var regex = new Regex(@"!\[\[(.+)\]\]");
-        var match = regex.Match(fileContent);
-
-        if (!match.Success)
-        {
-            return Array.Empty<FileInfo>();
-        }
-
-        return new[] { new FileInfo(match.Groups[1].Value) };
-
+        var matches = regex.Matches(fileContent);
+        return matches.Select(match => new FileInfo(match.Groups[1].Value));
     }
 }
