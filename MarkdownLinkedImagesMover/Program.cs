@@ -16,8 +16,10 @@ public static class Program
     public static void Main(FileInfo file)
     {
         var fileContent = File.ReadAllText(file.FullName);
+        Console.WriteLine($"File '{file.Name}' contains");
+
         var images = MarkdownParser.ParseLinkedImages(fileContent);
-        var imageNames = string.Join(", ", images.Select(f => $"'{f.Name}'"));
-        Console.WriteLine($"File '{file.Name}' contains {imageNames}.");
+        var imageNames = string.Join("", images.Select(f => $"- '{f.Name}'\n"));
+        Console.WriteLine(imageNames);
     }
 }
