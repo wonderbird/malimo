@@ -17,6 +17,6 @@ internal static class MarkdownParser
 
         var regex = new Regex(@"!\[\[(.+)\]\]");
         var matches = regex.Matches(fileContent);
-        return matches.Select(match => new FileInfo(match.Groups[1].Value));
+        return matches.Select(match => new FileInfo(match.Groups[1].Value)).Distinct(new CompareFileInfo());
     }
 }

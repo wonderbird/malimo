@@ -29,16 +29,6 @@ public class MarkdownParserTests
     }
 
     [Fact]
-    public void StringWithSingleLink()
-    {
-        var expectedFiles = new[] { new FileInfo("first link.png") };
-        var fileContent = $"![[{expectedFiles[0].Name}]]"; 
-
-        MarkdownParser.ParseLinkedImages(fileContent)
-            .Should().BeEquivalentTo(expectedFiles, options => options.Including(f => f.Name));
-    }
-    
-    [Fact]
     public void StringWithMultipleLinks()
     {
         var expectedFiles = new List<FileInfo>
@@ -53,6 +43,27 @@ public class MarkdownParserTests
         expectedFiles.ForEach(fileInfo => fileContentBuilder.Append(CultureInfo.InvariantCulture, $"## {fileInfo.Name}:\n\n![[{fileInfo.Name}]]\n\n"));
 
         MarkdownParser.ParseLinkedImages(fileContentBuilder.ToString())
-            .Should().BeEquivalentTo(expectedFiles, options => options.Including(f => f.Name));
+            .Should().BeEquivalentTo(expectedFiles, options => options.Using(new CompareFileInfo()));
+    }
+
+    [Fact]
+    public void StringWithDuplicatedLinks()
+    {
+        var containedFiles = new List<FileInfo>
+        {
+            new("A.png"),
+            new("A.png")
+        };
+        var expectedFiles = new List<FileInfo>
+        {
+            new("A.png"),
+        };
+
+        var fileContentBuilder = new StringBuilder();
+        fileContentBuilder.Append("# List of Images\n\n");
+        containedFiles.ForEach(fileInfo => fileContentBuilder.Append(CultureInfo.InvariantCulture, $"## {fileInfo.Name}:\n\n![[{fileInfo.Name}]]\n\n"));
+
+        MarkdownParser.ParseLinkedImages(fileContentBuilder.ToString())
+            .Should().BeEquivalentTo(expectedFiles, options => options.Using(new CompareFileInfo()));
     }
 }
