@@ -1,4 +1,8 @@
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace MarkdownLinkedImagesMover.Tests;
 
@@ -31,6 +35,24 @@ public class MarkdownParserTests
         var fileContent = $"![[{expectedFiles[0].Name}]]"; 
 
         MarkdownParser.ParseLinkedImages(fileContent)
+            .Should().BeEquivalentTo(expectedFiles, options => options.Including(f => f.Name));
+    }
+    
+    [Fact]
+    public void StringWithMultipleLinks()
+    {
+        var expectedFiles = new List<FileInfo>
+        {
+            new("link1.png"),
+            new("link2.png"),
+            new("link3.png")
+        };
+
+        var fileContentBuilder = new StringBuilder();
+        fileContentBuilder.Append("# List of Images\n\n");
+        expectedFiles.ForEach(fileInfo => fileContentBuilder.Append(CultureInfo.InvariantCulture, $"## {fileInfo.Name}:\n\n![[{fileInfo.Name}]]\n\n"));
+
+        MarkdownParser.ParseLinkedImages(fileContentBuilder.ToString())
             .Should().BeEquivalentTo(expectedFiles, options => options.Including(f => f.Name));
     }
 }
