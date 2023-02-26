@@ -56,7 +56,7 @@ rm -r MarkdownLinkedImagesMover.Tests/TestResults && \
 open report/index.html
 
 # Run the application
-dotnet run --project MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj -- --file path/to/file.md
+dotnet run --project MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj -- --file MarkdownLinkedImagesMover.Tests/data/source/Testfile.md --target-dir MarkdownLinkedImagesMover.Tests/data/target
 
 # Get help
 dotnet run --project MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj -- --help
