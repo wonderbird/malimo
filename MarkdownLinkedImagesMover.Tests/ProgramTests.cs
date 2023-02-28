@@ -3,12 +3,11 @@ using System.IO;
 
 namespace MarkdownLinkedImagesMover.Tests;
 
-public class ProgramTests
+public sealed class ProgramTests : IDisposable
 {
-    public ProgramTests()
-    {
-        TestData.Setup();
-    }
+    private readonly TestDirectory _testDir;
+
+    public ProgramTests() => _testDir = TestDirectory.Create();
 
     [Fact]
     public void ProcessTestfile()
@@ -16,14 +15,29 @@ public class ProgramTests
         var writer = new StringWriter();
         Console.SetOut(writer);
 
-        Program.Main(new FileInfo("data/source/Testfile.md"), new DirectoryInfo("data/target"));
+        Program.Main(new FileInfo(Path.Combine(_testDir.SourceDir.FullName, "Testfile.md")), _testDir.TargetDir);
 
         var output = writer.ToString();
 
-        Assert.Matches("Target folder: '.*/data/target'", output);
-
+        Assert.Contains($"Target folder: '{_testDir.TargetDir.FullName}'", output);
         Assert.Contains("File 'Testfile.md' contains", output);
         Assert.Contains("'noun-starship-3799189.png'", output);
         Assert.Contains("'noun-island-1479438.png'", output);
+    }
+
+    private void ReleaseUnmanagedResources()
+    {
+        _testDir.Delete();
+    }
+
+    public void Dispose()
+    {
+        ReleaseUnmanagedResources();
+        GC.SuppressFinalize(this);
+    }
+
+    ~ProgramTests()
+    {
+        ReleaseUnmanagedResources();
     }
 }
