@@ -5,6 +5,11 @@ namespace MarkdownLinkedImagesMover.Tests;
 
 public class ProgramTests
 {
+    public ProgramTests()
+    {
+        TestData.Setup();
+    }
+
     [Fact]
     public void ProcessTestfile()
     {

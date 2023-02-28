@@ -25,16 +25,16 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="data\source\Testfile.md">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="data\source\noun-starship-3799189.png">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
       <None Update="data\target\.gitkeep">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="data\source\noun-island-1479438.png">
+      <None Update="data\seed\noun-island-1479438.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="data\seed\noun-starship-3799189.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="data\seed\Testfile.md">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>
