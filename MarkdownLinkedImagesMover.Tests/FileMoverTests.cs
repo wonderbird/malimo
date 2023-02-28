@@ -4,6 +4,11 @@ namespace MarkdownLinkedImagesMover.Tests;
 
 public class FileMoverTests
 {
+    public FileMoverTests()
+    {
+        TestData.Setup();
+    }
+
     [Fact]
     public void MoveExistingFileToValidDestination()
     {
