@@ -19,7 +19,9 @@ public sealed class AppTests : IDisposable
 
         new App(loggerMock.Object).Run(sourceFile, _testDir.TargetDir);
 
-        loggerMock.VerifyLog(logger => logger.LogInformation("Target folder: '{@TargetFolder}'", _testDir.TargetDir.FullName));
+        loggerMock.VerifyLog(
+            logger => logger.LogInformation("Target folder: '{@TargetFolder}'", _testDir.TargetDir.FullName)
+        );
         loggerMock.VerifyLog(logger => logger.LogInformation("File '{@SourceFile}' contains", sourceFile.FullName));
         loggerMock.VerifyLog(logger => logger.LogInformation("- '{@ImageFile}'", "noun-starship-3799189.png"));
         loggerMock.VerifyLog(logger => logger.LogInformation("- '{@ImageFile}'", "noun-island-1479438.png"));
