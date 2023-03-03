@@ -11,10 +11,6 @@ public sealed class AppTests : IDisposable
 
     public AppTests() => _testDir = TestDirectory.Create();
 
-    // TODO: Fix static code analysis warnings
-#pragma warning disable CA1822
-#pragma warning disable CA1848
-#pragma warning disable CA2254
     [Fact]
     public void ProcessTestfile()
     {
@@ -44,7 +40,4 @@ public sealed class AppTests : IDisposable
     {
         ReleaseUnmanagedResources();
     }
-#pragma warning disable CA2254
-#pragma warning restore CA1848
-#pragma warning restore CA1822
 }
