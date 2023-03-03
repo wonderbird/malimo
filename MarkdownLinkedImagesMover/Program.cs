@@ -1,6 +1,5 @@
-using System;
 using System.IO;
-using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MarkdownLinkedImagesMover;
 
@@ -16,13 +15,16 @@ public static class Program
     /// <param name="targetDir">Move files to this target folder</param>
     public static void Main(FileInfo file, DirectoryInfo targetDir)
     {
-        var fileContent = File.ReadAllText(file.FullName);
+        var serviceCollection = new ServiceCollection();
+        ConfigureServices(serviceCollection);
+        var serviceProvider = serviceCollection.BuildServiceProvider();
 
-        Console.WriteLine($"Target folder: '{targetDir.FullName}'");
-        Console.WriteLine($"File '{file.Name}' contains");
+        var app = serviceProvider.GetRequiredService<App>();
+        app.Run(file, targetDir);
+    }
 
-        var images = MarkdownParser.ParseLinkedImages(fileContent);
-        var imageNames = string.Join("", images.Select(f => $"- '{f.Name}'\n"));
-        Console.WriteLine(imageNames);
+    private static void ConfigureServices(ServiceCollection serviceCollection)
+    {
+        serviceCollection.AddSingleton<App>();
     }
 }
