@@ -37,7 +37,7 @@ dotnet tool install --global dotnet-reportgenerator-globaltool --configfile NuGe
 
 Run the following commands from the folder containing the `.sln` file in order to build and test.
 
-### Build the Solution, Run the Tests, Run the Application
+### Build and Test the Solution
 
 ```sh
 # Build the project
@@ -45,21 +45,48 @@ dotnet build
 
 # Run the tests once
 dotnet test
+```
 
+```shell
 # Continuously watch the tests while changing code
 dotnet watch -p ./MarkdownLinkedImagesMover.Tests test
+```
 
+```shell
 # Produce a coverage report and open it in the default browser
 rm -r MarkdownLinkedImagesMover.Tests/TestResults && \
   dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='./TestResults/coverage.cobertura.xml' && \
   reportgenerator "-reports:MarkdownLinkedImagesMover.Tests/TestResults/*.xml" "-targetdir:report" "-reporttypes:Html;lcov" "-title:DotnetStarter"
 open report/index.html
+```
 
-# Run the application
-dotnet run --project MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj -- --file MarkdownLinkedImagesMover.Tests/data/source/Testfile.md --target-dir MarkdownLinkedImagesMover.Tests/data/target
+### Run the Application
 
+```shell
 # Get help
 dotnet run --project MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj -- --help
+```
+
+```shell
+# Prepare test data to run the application
+cp -Rv MarkdownLinkedImagesMover.Tests/data/seed MarkdownLinkedImagesMover.Tests/data/source
+mkdir MarkdownLinkedImagesMover.Tests/data/target
+```
+
+```shell
+# Run the application
+dotnet run --project MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj -- --file MarkdownLinkedImagesMover.Tests/data/source/Testfile.md --target-dir MarkdownLinkedImagesMover.Tests/data/target
+```
+
+```shell
+# Inspect the result
+ls -la MarkdownLinkedImagesMover.Tests/data/source
+ls -la MarkdownLinkedImagesMover.Tests/data/target
+```
+
+```shell
+# Cleanup test data
+rm -r MarkdownLinkedImagesMover.Tests/data/source MarkdownLinkedImagesMover.Tests/data/target
 ```
 
 ### Before Creating a Pull Request ...
