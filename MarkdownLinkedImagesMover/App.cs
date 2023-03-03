@@ -1,6 +1,4 @@
-using System;
 using System.IO;
-using System.Linq;
 using Microsoft.Extensions.Logging;
 
 namespace MarkdownLinkedImagesMover;
@@ -11,10 +9,6 @@ internal class App
 
     public App(ILogger<App> logger) => Logger = logger;
 
-    // TODO: Fix static code analysis warnings
-#pragma warning disable CA1822
-#pragma warning disable CA1848
-#pragma warning disable CA2254
     public void Run(FileInfo file, DirectoryInfo targetDir)
     {
         var fileContent = File.ReadAllText(file.FullName);
@@ -28,7 +22,4 @@ internal class App
             Logger.LogInformation("- '{@ImageFile}'", image.Name);
         }
     }
-#pragma warning disable CA2254
-#pragma warning restore CA1848
-#pragma warning restore CA1822
 }
