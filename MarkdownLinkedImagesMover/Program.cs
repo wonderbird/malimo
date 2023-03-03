@@ -1,5 +1,6 @@
 using System.IO;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace MarkdownLinkedImagesMover;
 
@@ -25,6 +26,13 @@ public static class Program
 
     private static void ConfigureServices(ServiceCollection serviceCollection)
     {
-        serviceCollection.AddSingleton<App>();
+        serviceCollection
+            .AddLogging(configure =>
+            {
+                configure.SetMinimumLevel(LogLevel.Debug);
+                configure.AddDebug();
+                configure.AddConsole();
+            })
+            .AddSingleton<App>();
     }
 }
