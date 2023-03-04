@@ -20,6 +20,9 @@ internal class App
         foreach (var image in images)
         {
             Logger.LogInformation("- '{@ImageFile}'", image);
+
+            var sourceFile = new FileInfo(Path.Combine(file.DirectoryName?? "", image));
+            FileMover.Move(sourceFile, targetDir);
         }
     }
 }
