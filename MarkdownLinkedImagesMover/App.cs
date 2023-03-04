@@ -19,7 +19,7 @@ internal class App
         var images = MarkdownParser.ParseLinkedImages(fileContent);
         foreach (var image in images)
         {
-            Logger.LogInformation("- '{@ImageFile}'", image.Name);
+            Logger.LogInformation("- '{@ImageFile}'", image);
         }
     }
 }

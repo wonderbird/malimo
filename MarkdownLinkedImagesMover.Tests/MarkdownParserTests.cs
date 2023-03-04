@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -31,31 +30,31 @@ public class MarkdownParserTests
     [Fact]
     public void StringWithMultipleLinks()
     {
-        var expectedFiles = new FileInfo[] { new("link1.png"), new("link2.png"), new("link3.png") };
+        var expectedFiles = new[] { "link1.png", "link2.png", "link3.png" };
 
         var fileContent = CreateMarkdownWithLinksTo(expectedFiles);
 
         MarkdownParser
             .ParseLinkedImages(fileContent)
             .Should()
-            .BeEquivalentTo(expectedFiles, options => options.Using(new CompareFileInfo()));
+            .BeEquivalentTo(expectedFiles);
     }
 
     [Fact]
     public void StringWithDuplicatedLinks()
     {
-        var containedFiles = new FileInfo[] { new("A.png"), new("A.png") };
-        var expectedFiles = new FileInfo[] { new("A.png") };
+        var containedFiles = new[] { "A.png", "A.png" };
+        var expectedFiles = new[] { "A.png" };
 
         var fileContent = CreateMarkdownWithLinksTo(containedFiles);
 
         MarkdownParser
             .ParseLinkedImages(fileContent)
             .Should()
-            .BeEquivalentTo(expectedFiles, options => options.Using(new CompareFileInfo()));
+            .BeEquivalentTo(expectedFiles);
     }
 
-    private static string CreateMarkdownWithLinksTo(IEnumerable<FileInfo> imageFiles)
+    private static string CreateMarkdownWithLinksTo(IEnumerable<string> imageFiles)
     {
         var fileContentBuilder = new StringBuilder();
 
@@ -64,10 +63,10 @@ public class MarkdownParserTests
         imageFiles
             .ToList()
             .ForEach(
-                fileInfo =>
+                fileName =>
                     fileContentBuilder.Append(
                         CultureInfo.InvariantCulture,
-                        $"## {fileInfo.Name}:\n\n![[{fileInfo.Name}]]\n\n"
+                        $"## {fileName}:\n\n![[{fileName}]]\n\n"
                     )
             );
 
