@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 
 namespace MarkdownLinkedImagesMover;
@@ -9,20 +10,18 @@ internal class App
 
     public App(ILogger<App> logger) => Logger = logger;
 
-    public void Run(FileInfo file, DirectoryInfo targetDir)
+    public void Run(FileInfo markdownFile, DirectoryInfo targetDir)
     {
-        var fileContent = File.ReadAllText(file.FullName);
+        var fileContent = File.ReadAllText(markdownFile.FullName);
+        var imageNames = MarkdownParser.ParseLinkedImages(fileContent).ToList();
 
         Logger.LogInformation("Target folder: '{@TargetFolder}'", targetDir.FullName);
-        Logger.LogInformation("File '{@SourceFile}' contains", file.FullName);
+        Logger.LogInformation("File '{@SourceFile}' contains", markdownFile.FullName);
+        imageNames.ToList().ForEach(imageName => Logger.LogInformation("- '{@ImageFile}'", imageName));
 
-        var images = MarkdownParser.ParseLinkedImages(fileContent);
-        foreach (var image in images)
-        {
-            Logger.LogInformation("- '{@ImageFile}'", image);
-
-            var sourceFile = new FileInfo(Path.Combine(file.DirectoryName?? "", image));
-            FileMover.Move(sourceFile, targetDir);
-        }
+        imageNames
+            .Select(imageName => new FileInfo(Path.Combine(markdownFile.DirectoryName?? "", imageName)))
+            .ToList()
+            .ForEach(sourceFile => FileMover.Move(sourceFile, targetDir));
     }
 }
