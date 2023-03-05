@@ -28,6 +28,12 @@ public static class Program
     private static void ConfigureServices(IServiceCollection serviceCollection)
     {
         serviceCollection
+            .AddLoggingToConsoleAndDebug()
+            .AddSingleton<App>();
+    }
+
+    private static IServiceCollection AddLoggingToConsoleAndDebug(this IServiceCollection serviceCollection) =>
+        serviceCollection
             .AddLogging(configure =>
             {
                 configure.SetMinimumLevel(LogLevel.Debug);
@@ -39,7 +45,5 @@ public static class Program
                     options.FormatterName = nameof(SingleLineConsoleFormatter);
                 });
                 configure.AddConsoleFormatter<SingleLineConsoleFormatter, ConsoleFormatterOptions>();
-            })
-            .AddSingleton<App>();
-    }
+            });
 }
