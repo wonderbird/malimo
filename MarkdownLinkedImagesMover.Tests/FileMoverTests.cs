@@ -1,21 +1,16 @@
-using System;
 using System.IO;
 
 namespace MarkdownLinkedImagesMover.Tests;
 
-public sealed class FileMoverTests : IDisposable
+public sealed class FileMoverTests
 {
-    private readonly TestDirectory _testDir;
-
-    public FileMoverTests() => _testDir = TestDirectory.Create();
-
-    public void Dispose() => _testDir.Delete();
-
     [Fact]
     public void MoveExistingFileToValidDestination()
     {
-        var sourceFile = new FileInfo(Path.Combine(_testDir.SourceDir.FullName, "Testfile.md"));
-        var targetDir = _testDir.TargetDir;
+        using var testDir = TestDirectory.Create();
+
+        var sourceFile = new FileInfo(Path.Combine(testDir.SourceDir.FullName, "Testfile.md"));
+        var targetDir = testDir.TargetDir;
 
         FileMover.Move(sourceFile, targetDir);
 

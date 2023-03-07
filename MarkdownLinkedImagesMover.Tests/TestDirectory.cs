@@ -4,13 +4,15 @@ using System.IO;
 
 namespace MarkdownLinkedImagesMover.Tests;
 
-public class TestDirectory
+public sealed class TestDirectory : IDisposable
 {
     private DirectoryInfo _baseDir;
 
     public DirectoryInfo SourceDir { get; private set; }
 
     public DirectoryInfo TargetDir { get; private set; }
+
+    public void Dispose() => Delete();
 
     public static TestDirectory Create()
     {
@@ -44,8 +46,7 @@ public class TestDirectory
         }
     }
 
-    public void Delete()
-    {
-        _baseDir.Delete(recursive: true);
-    }
+    private void Delete() => _baseDir?.Delete(recursive: true);
+
+    private TestDirectory() { }
 }
