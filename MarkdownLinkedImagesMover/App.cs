@@ -31,7 +31,11 @@ internal class App
         imageNames.ForEach(imageName => _logger.LogInformation("- '{@ImageFile}'", imageName));
     }
 
-    private static void MoveImagesToTargetDir(FileInfo markdownFile, DirectoryInfo targetDir, IEnumerable<string> imageNames) =>
+    private static void MoveImagesToTargetDir(
+        FileInfo markdownFile,
+        DirectoryInfo targetDir,
+        IEnumerable<string> imageNames
+    ) =>
         imageNames
             .Select(imageName => new FileInfo(Path.Combine(markdownFile.DirectoryName ?? "", imageName)))
             .ToList()

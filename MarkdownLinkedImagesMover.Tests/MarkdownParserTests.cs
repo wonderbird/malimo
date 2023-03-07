@@ -34,10 +34,7 @@ public class MarkdownParserTests
 
         var fileContent = CreateMarkdownWithLinksTo(expectedFiles);
 
-        MarkdownParser
-            .ParseLinkedImages(fileContent)
-            .Should()
-            .BeEquivalentTo(expectedFiles);
+        MarkdownParser.ParseLinkedImages(fileContent).Should().BeEquivalentTo(expectedFiles);
     }
 
     [Fact]
@@ -48,10 +45,7 @@ public class MarkdownParserTests
 
         var fileContent = CreateMarkdownWithLinksTo(containedFiles);
 
-        MarkdownParser
-            .ParseLinkedImages(fileContent)
-            .Should()
-            .BeEquivalentTo(expectedFiles);
+        MarkdownParser.ParseLinkedImages(fileContent).Should().BeEquivalentTo(expectedFiles);
     }
 
     private static string CreateMarkdownWithLinksTo(IEnumerable<string> imageFiles)
@@ -64,10 +58,7 @@ public class MarkdownParserTests
             .ToList()
             .ForEach(
                 fileName =>
-                    fileContentBuilder.Append(
-                        CultureInfo.InvariantCulture,
-                        $"## {fileName}:\n\n![[{fileName}]]\n\n"
-                    )
+                    fileContentBuilder.Append(CultureInfo.InvariantCulture, $"## {fileName}:\n\n![[{fileName}]]\n\n")
             );
 
         return fileContentBuilder.ToString();
