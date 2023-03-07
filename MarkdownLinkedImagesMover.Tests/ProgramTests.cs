@@ -1,25 +1,20 @@
-using System;
 using System.IO;
 
 namespace MarkdownLinkedImagesMover.Tests;
 
-public sealed class ProgramTests : IDisposable
+public sealed class ProgramTests
 {
-    private readonly TestDirectory _testDir;
-
-    public ProgramTests() => _testDir = TestDirectory.Create();
-
-    public void Dispose() => _testDir.Delete();
-
     [Fact]
     public void MarkdownFileWithTwoImages()
     {
-        var sourceFile = new FileInfo(Path.Combine(_testDir.SourceDir.FullName, "Testfile.md"));
+        using var testDir = TestDirectory.Create();
 
-        Program.Main(sourceFile, _testDir.TargetDir);
+        var sourceFile = new FileInfo(Path.Combine(testDir.SourceDir.FullName, "Testfile.md"));
 
-        AssertFileExists("noun-island-1479438.png", _testDir.TargetDir);
-        AssertFileExists("noun-starship-3799189.png", _testDir.TargetDir);
+        Program.Main(sourceFile, testDir.TargetDir);
+
+        AssertFileExists("noun-island-1479438.png", testDir.TargetDir);
+        AssertFileExists("noun-starship-3799189.png", testDir.TargetDir);
     }
 
     private static void AssertFileExists(string fileName, FileSystemInfo dir)

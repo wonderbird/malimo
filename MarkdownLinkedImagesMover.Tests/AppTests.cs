@@ -1,28 +1,23 @@
-using System;
 using System.IO;
 using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace MarkdownLinkedImagesMover.Tests;
 
-public sealed class AppTests : IDisposable
+public sealed class AppTests
 {
-    private readonly TestDirectory _testDir;
-
-    public AppTests() => _testDir = TestDirectory.Create();
-
-    public void Dispose() => _testDir.Delete();
-
     [Fact]
     public void ProcessTestfile()
     {
-        var loggerMock = new Mock<ILogger<App>>();
-        var sourceFile = new FileInfo(Path.Combine(_testDir.SourceDir.FullName, "Testfile.md"));
+        using var testDir = TestDirectory.Create();
 
-        new App(loggerMock.Object).Run(sourceFile, _testDir.TargetDir);
+        var loggerMock = new Mock<ILogger<App>>();
+        var sourceFile = new FileInfo(Path.Combine(testDir.SourceDir.FullName, "Testfile.md"));
+
+        new App(loggerMock.Object).Run(sourceFile, testDir.TargetDir);
 
         loggerMock.VerifyLog(
-            logger => logger.LogInformation("Target folder: '{@TargetFolder}'", _testDir.TargetDir.FullName)
+            logger => logger.LogInformation("Target folder: '{@TargetFolder}'", testDir.TargetDir.FullName)
         );
         loggerMock.VerifyLog(logger => logger.LogInformation("File '{@SourceFile}' contains", sourceFile.FullName));
         loggerMock.VerifyLog(logger => logger.LogInformation("- '{@ImageFile}'", "noun-starship-3799189.png"));
