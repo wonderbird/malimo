@@ -11,6 +11,8 @@ public sealed class AppTests : IDisposable
 
     public AppTests() => _testDir = TestDirectory.Create();
 
+    public void Dispose() => _testDir.Delete();
+
     [Fact]
     public void ProcessTestfile()
     {
@@ -25,21 +27,5 @@ public sealed class AppTests : IDisposable
         loggerMock.VerifyLog(logger => logger.LogInformation("File '{@SourceFile}' contains", sourceFile.FullName));
         loggerMock.VerifyLog(logger => logger.LogInformation("- '{@ImageFile}'", "noun-starship-3799189.png"));
         loggerMock.VerifyLog(logger => logger.LogInformation("- '{@ImageFile}'", "noun-island-1479438.png"));
-    }
-
-    private void ReleaseUnmanagedResources()
-    {
-        _testDir.Delete();
-    }
-
-    public void Dispose()
-    {
-        ReleaseUnmanagedResources();
-        GC.SuppressFinalize(this);
-    }
-
-    ~AppTests()
-    {
-        ReleaseUnmanagedResources();
     }
 }
