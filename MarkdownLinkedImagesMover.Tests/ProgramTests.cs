@@ -9,6 +9,8 @@ public sealed class ProgramTests : IDisposable
 
     public ProgramTests() => _testDir = TestDirectory.Create();
 
+    public void Dispose() => _testDir.Delete();
+
     [Fact]
     public void MarkdownFileWithTwoImages()
     {
@@ -24,22 +26,5 @@ public sealed class ProgramTests : IDisposable
     {
         var targetFile = new FileInfo(Path.Combine(dir.FullName, fileName));
         Assert.True(targetFile.Exists, $"file '{targetFile.FullName}' should exist");
-    }
-
-
-    private void ReleaseUnmanagedResources()
-    {
-        _testDir.Delete();
-    }
-
-    public void Dispose()
-    {
-        ReleaseUnmanagedResources();
-        GC.SuppressFinalize(this);
-    }
-
-    ~ProgramTests()
-    {
-        ReleaseUnmanagedResources();
     }
 }

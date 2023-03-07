@@ -9,6 +9,8 @@ public sealed class FileMoverTests : IDisposable
 
     public FileMoverTests() => _testDir = TestDirectory.Create();
 
+    public void Dispose() => _testDir.Delete();
+
     [Fact]
     public void MoveExistingFileToValidDestination()
     {
@@ -19,21 +21,5 @@ public sealed class FileMoverTests : IDisposable
 
         var hasMoved = new FileInfo(Path.Combine(targetDir.FullName, sourceFile.Name)).Exists;
         Assert.True(hasMoved, "file should be moved to target folder");
-    }
-
-    private void ReleaseUnmanagedResources()
-    {
-        _testDir.Delete();
-    }
-
-    public void Dispose()
-    {
-        ReleaseUnmanagedResources();
-        GC.SuppressFinalize(this);
-    }
-
-    ~FileMoverTests()
-    {
-        ReleaseUnmanagedResources();
     }
 }
