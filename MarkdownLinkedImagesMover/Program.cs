@@ -27,23 +27,20 @@ public static class Program
 
     private static void ConfigureServices(IServiceCollection serviceCollection)
     {
-        serviceCollection
-            .AddLoggingToConsoleAndDebug()
-            .AddSingleton<App>();
+        serviceCollection.AddLoggingToConsoleAndDebug().AddSingleton<App>();
     }
 
     private static IServiceCollection AddLoggingToConsoleAndDebug(this IServiceCollection serviceCollection) =>
-        serviceCollection
-            .AddLogging(configure =>
+        serviceCollection.AddLogging(configure =>
+        {
+            configure.SetMinimumLevel(LogLevel.Debug);
+            configure.AddDebug();
+            configure.AddConsole(options =>
             {
-                configure.SetMinimumLevel(LogLevel.Debug);
-                configure.AddDebug();
-                configure.AddConsole(options =>
-                {
-                    // Show all log messages immediately
-                    options.MaxQueueLength = 1;
-                    options.FormatterName = nameof(SingleLineConsoleFormatter);
-                });
-                configure.AddConsoleFormatter<SingleLineConsoleFormatter, ConsoleFormatterOptions>();
+                // Show all log messages immediately
+                options.MaxQueueLength = 1;
+                options.FormatterName = nameof(SingleLineConsoleFormatter);
             });
+            configure.AddConsoleFormatter<SingleLineConsoleFormatter, ConsoleFormatterOptions>();
+        });
 }
