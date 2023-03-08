@@ -32,7 +32,7 @@ public class MarkdownParserTests
     {
         var expectedFiles = new[] { "link1.png", "link2.png", "link3.png" };
 
-        var fileContent = CreateMarkdownWithLinksTo(expectedFiles);
+        var fileContent = CreateMarkdownWithLinksTo(expectedFiles, "\n");
 
         MarkdownParser.ParseLinkedImages(fileContent).Should().BeEquivalentTo(expectedFiles);
     }
@@ -43,24 +43,24 @@ public class MarkdownParserTests
         var containedFiles = new[] { "A.png", "A.png" };
         var expectedFiles = new[] { "A.png" };
 
-        var fileContent = CreateMarkdownWithLinksTo(containedFiles);
+        var fileContent = CreateMarkdownWithLinksTo(containedFiles, "\n");
 
         MarkdownParser.ParseLinkedImages(fileContent).Should().BeEquivalentTo(expectedFiles);
     }
 
-    private static string CreateMarkdownWithLinksTo(IEnumerable<string> imageFiles)
+    [Fact]
+    public void StringWithMultipleLinksInSameLine()
     {
-        var fileContentBuilder = new StringBuilder();
+        var expectedFiles = new[] { "link1.png", "link2.png", "link3.png" };
 
-        fileContentBuilder.Append("# List of Images\n\n");
+        var fileContent = CreateMarkdownWithLinksTo(expectedFiles, " ");
 
-        imageFiles
-            .ToList()
-            .ForEach(
-                fileName =>
-                    fileContentBuilder.Append(CultureInfo.InvariantCulture, $"## {fileName}:\n\n![[{fileName}]]\n\n")
-            );
+        MarkdownParser.ParseLinkedImages(fileContent).Should().BeEquivalentTo(expectedFiles);
+    }
 
-        return fileContentBuilder.ToString();
+    private static string CreateMarkdownWithLinksTo(IEnumerable<string> imageFiles, string separatedBy)
+    {
+        var imageFilesAsLinks = imageFiles.Select(imageFile => $"![[{imageFile}]]");
+        return string.Join(separatedBy, imageFilesAsLinks);
     }
 }

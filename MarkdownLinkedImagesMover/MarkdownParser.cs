@@ -14,7 +14,7 @@ internal static class MarkdownParser
             return Array.Empty<string>();
         }
 
-        var regex = new Regex(@"!\[\[(.+)\]\]");
+        var regex = new Regex(@"!\[\[(.+?)\]\]");
         var matches = regex.Matches(fileContent);
         return matches.Select(match => match.Groups[1].Value).Distinct();
     }
