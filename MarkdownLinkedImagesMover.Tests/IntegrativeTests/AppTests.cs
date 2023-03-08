@@ -9,12 +9,13 @@ public sealed class AppTests
     [Fact]
     public void ProcessTestfile()
     {
+        // TODO: Completely replace the test directory here - we need to mock the file contents
         using var testDir = TestDirectory.Create();
 
         var loggerMock = new Mock<ILogger<App>>();
         var sourceFile = new FileInfo(Path.Combine(testDir.SourceDir.FullName, "Testfile.md"));
 
-        new App(loggerMock.Object).Run(sourceFile, testDir.TargetDir);
+        new App(loggerMock.Object, Mock.Of<IFileMover>()).Run(sourceFile, testDir.TargetDir);
 
         loggerMock.VerifyLog(
             logger => logger.LogInformation("Target folder: '{@TargetFolder}'", testDir.TargetDir.FullName)

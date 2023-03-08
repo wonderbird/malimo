@@ -8,8 +8,13 @@ namespace MarkdownLinkedImagesMover;
 internal class App
 {
     private readonly ILogger<App> _logger;
+    private readonly IFileMover _fileMover;
 
-    public App(ILogger<App> logger) => _logger = logger;
+    public App(ILogger<App> logger, IFileMover fileMover)
+    {
+        _logger = logger;
+        _fileMover = fileMover;
+    }
 
     public void Run(FileInfo markdownFile, DirectoryInfo targetDir)
     {
@@ -31,7 +36,7 @@ internal class App
         imageNames.ForEach(imageName => _logger.LogInformation("- '{@ImageFile}'", imageName));
     }
 
-    private static void MoveImagesToTargetDir(
+    private void MoveImagesToTargetDir(
         FileInfo markdownFile,
         DirectoryInfo targetDir,
         IEnumerable<string> imageNames
@@ -39,5 +44,5 @@ internal class App
         imageNames
             .Select(imageName => new FileInfo(Path.Combine(markdownFile.DirectoryName ?? "", imageName)))
             .ToList()
-            .ForEach(sourceFile => FileMover.Move(sourceFile, targetDir));
+            .ForEach(sourceFile => _fileMover.Move(sourceFile, targetDir));
 }
