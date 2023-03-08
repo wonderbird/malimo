@@ -8,6 +8,7 @@ namespace MarkdownLinkedImagesMover.Tests.IntegrativeTests;
 
 public sealed class AppTests
 {
+    // TODO: BUG: Test what happens if a file contains two images in the same line!
     [Fact]
     public void ProcessTestfile()
     {
@@ -20,7 +21,7 @@ public sealed class AppTests
         var fileSystemMock = new MockFileSystem(
             new Dictionary<string, MockFileData>
             {
-                { sourceFileFullName, new MockFileData(@"![[noun-starship-3799189.png]] ![[noun-island-1479438.png]]") }
+                { sourceFileFullName, new MockFileData("![[noun-starship-3799189.png]]\n![[noun-island-1479438.png]]") }
             }
         );
 
