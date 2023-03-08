@@ -2,9 +2,9 @@ using System.IO;
 
 namespace MarkdownLinkedImagesMover;
 
-internal static class FileMover
+internal class FileMover : IFileMover
 {
-    public static void Move(FileInfo sourceFile, DirectoryInfo targetDir)
+    public void Move(FileInfo sourceFile, DirectoryInfo targetDir)
     {
         var destinationFile = Path.Combine(targetDir.FullName, sourceFile.Name);
         sourceFile.MoveTo(destinationFile);

@@ -25,10 +25,8 @@ public static class Program
         app.Run(file, targetDir);
     }
 
-    private static void ConfigureServices(IServiceCollection serviceCollection)
-    {
-        serviceCollection.AddLoggingToConsoleAndDebug().AddSingleton<App>();
-    }
+    private static void ConfigureServices(IServiceCollection serviceCollection) =>
+        serviceCollection.AddLoggingToConsoleAndDebug().AddTransient<IFileMover, FileMover>().AddSingleton<App>();
 
     private static IServiceCollection AddLoggingToConsoleAndDebug(this IServiceCollection serviceCollection) =>
         serviceCollection.AddLogging(configure =>
