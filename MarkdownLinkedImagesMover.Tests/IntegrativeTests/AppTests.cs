@@ -2,7 +2,7 @@ using System.IO;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace MarkdownLinkedImagesMover.Tests;
+namespace MarkdownLinkedImagesMover.Tests.IntegrativeTests;
 
 public sealed class AppTests
 {

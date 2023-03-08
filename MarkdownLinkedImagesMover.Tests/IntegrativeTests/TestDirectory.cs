@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.IO;
 
-namespace MarkdownLinkedImagesMover.Tests;
+namespace MarkdownLinkedImagesMover.Tests.IntegrativeTests;
 
 public sealed class TestDirectory : IDisposable
 {
