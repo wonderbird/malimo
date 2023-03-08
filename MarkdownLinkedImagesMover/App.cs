@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 
@@ -8,11 +9,13 @@ namespace MarkdownLinkedImagesMover;
 internal class App
 {
     private readonly ILogger<App> _logger;
+    private readonly IFileSystem _fileSystem;
     private readonly IFileMover _fileMover;
 
-    public App(ILogger<App> logger, IFileMover fileMover)
+    public App(ILogger<App> logger, IFileSystem fileSystem, IFileMover fileMover)
     {
         _logger = logger;
+        _fileSystem = fileSystem;
         _fileMover = fileMover;
     }
 
@@ -23,9 +26,9 @@ internal class App
         MoveImagesToTargetDir(markdownFile, targetDir, imageNames);
     }
 
-    private static List<string> GetImagesFromMarkdownFile(FileSystemInfo markdownFile)
+    private List<string> GetImagesFromMarkdownFile(FileSystemInfo markdownFile)
     {
-        var fileContent = File.ReadAllText(markdownFile.FullName);
+        var fileContent = _fileSystem.File.ReadAllText(markdownFile.FullName);
         return MarkdownParser.ParseLinkedImages(fileContent).ToList();
     }
 
