@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.IO;
+using System.IO.Abstractions.TestingHelpers;
 using Microsoft.Extensions.Logging;
 using Moq;
 
@@ -9,17 +11,22 @@ public sealed class AppTests
     [Fact]
     public void ProcessTestfile()
     {
-        // TODO: Completely replace the test directory here - we need to mock the file contents
-        using var testDir = TestDirectory.Create();
+        const string sourceFileFullName = "/MockedSourceFile.md";
+        var targetDir = new DirectoryInfo("/MockedTargetDir");
 
         var loggerMock = new Mock<ILogger<App>>();
-        var sourceFile = new FileInfo(Path.Combine(testDir.SourceDir.FullName, "Testfile.md"));
 
-        new App(loggerMock.Object, Mock.Of<IFileMover>()).Run(sourceFile, testDir.TargetDir);
-
-        loggerMock.VerifyLog(
-            logger => logger.LogInformation("Target folder: '{@TargetFolder}'", testDir.TargetDir.FullName)
+        var sourceFile = new FileInfo(sourceFileFullName);
+        var fileSystemMock = new MockFileSystem(
+            new Dictionary<string, MockFileData>
+            {
+                { sourceFileFullName, new MockFileData(@"![[noun-starship-3799189.png]] ![[noun-island-1479438.png]]") }
+            }
         );
+
+        new App(loggerMock.Object, fileSystemMock, Mock.Of<IFileMover>()).Run(sourceFile, targetDir);
+
+        loggerMock.VerifyLog(logger => logger.LogInformation("Target folder: '{@TargetFolder}'", targetDir.FullName));
         loggerMock.VerifyLog(logger => logger.LogInformation("File '{@SourceFile}' contains", sourceFile.FullName));
         loggerMock.VerifyLog(logger => logger.LogInformation("- '{@ImageFile}'", "noun-starship-3799189.png"));
         loggerMock.VerifyLog(logger => logger.LogInformation("- '{@ImageFile}'", "noun-island-1479438.png"));

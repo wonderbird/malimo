@@ -1,4 +1,5 @@
 using System.IO;
+using System.IO.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
@@ -26,7 +27,11 @@ public static class Program
     }
 
     private static void ConfigureServices(IServiceCollection serviceCollection) =>
-        serviceCollection.AddLoggingToConsoleAndDebug().AddTransient<IFileMover, FileMover>().AddSingleton<App>();
+        serviceCollection
+            .AddLoggingToConsoleAndDebug()
+            .AddTransient<IFileSystem, FileSystem>()
+            .AddTransient<IFileMover, FileMover>()
+            .AddSingleton<App>();
 
     private static IServiceCollection AddLoggingToConsoleAndDebug(this IServiceCollection serviceCollection) =>
         serviceCollection.AddLogging(configure =>
