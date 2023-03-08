@@ -4,7 +4,7 @@ using System.IO.Abstractions.TestingHelpers;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace MarkdownLinkedImagesMover.Tests.IntegrativeTests;
+namespace MarkdownLinkedImagesMover.Tests;
 
 public sealed class AppTests
 {
