@@ -3,7 +3,7 @@
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/wonderbird/markdown-linked-images-mover)
 [![Build Status Badge](https://github.com/wonderbird/markdown-linked-images-mover/workflows/.NET/badge.svg)](https://github.com/wonderbird/markdown-linked-images-mover/actions?query=workflow%3A%22.NET%22)
 
-Move all images referred to by a markdown file to a folder
+Move all images used by a markdown file to a folder.
 
 ## Thanks
 
@@ -75,7 +75,7 @@ mkdir MarkdownLinkedImagesMover.Tests/data/target
 
 ```shell
 # Run the application
-dotnet run --project MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj -- --file MarkdownLinkedImagesMover.Tests/data/source/Testfile.md --target-dir MarkdownLinkedImagesMover.Tests/data/target
+dotnet run --project MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj -- --no-action --file MarkdownLinkedImagesMover.Tests/data/source/Testfile.md --target-dir MarkdownLinkedImagesMover.Tests/data/target
 ```
 
 ```shell
