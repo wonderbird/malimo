@@ -7,19 +7,19 @@ namespace MarkdownLinkedImagesMover;
 
 internal static class ServiceProviderFactory
 {
-    public static ServiceProvider CreateServiceProvider(bool noAction)
+    public static ServiceProvider CreateServiceProvider(bool isDryRun)
     {
         var serviceCollection = new ServiceCollection();
-        ConfigureServices(serviceCollection, noAction);
+        ConfigureServices(serviceCollection, isDryRun);
         return serviceCollection.BuildServiceProvider();
     }
 
-    private static void ConfigureServices(IServiceCollection serviceCollection, bool noAction)
+    private static void ConfigureServices(IServiceCollection serviceCollection, bool isDryRun)
     {
         serviceCollection
             .AddLoggingToConsoleAndDebug()
             .AddTransient<IFileSystem, FileSystem>()
-            .AddFileMover(noAction)
+            .AddFileMover(isDryRun)
             .AddSingleton<App>();
     }
 
@@ -37,9 +37,9 @@ internal static class ServiceProviderFactory
             configure.AddConsoleFormatter<SingleLineConsoleFormatter, ConsoleFormatterOptions>();
         });
 
-    private static IServiceCollection AddFileMover(this IServiceCollection serviceCollection, bool noAction)
+    private static IServiceCollection AddFileMover(this IServiceCollection serviceCollection, bool isDryRun)
     {
-        if (noAction)
+        if (isDryRun)
         {
             serviceCollection.AddTransient<IFileMover, NoAction>();
         }
