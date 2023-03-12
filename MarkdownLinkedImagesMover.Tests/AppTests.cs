@@ -8,16 +8,60 @@ namespace MarkdownLinkedImagesMover.Tests;
 
 public sealed class AppTests
 {
-    // TODO: BUG: Test what happens if a file contains two images in the same line!
     [Fact]
-    public void ProcessTestfile()
+    public void WhenLastImageDoesNotExist_ThenDoNotMoveAnyFile()
     {
         const string sourceFileFullName = "/MockedSourceFile.md";
+        var fileSystemMock = new MockFileSystem(
+            new Dictionary<string, MockFileData>
+            {
+                { sourceFileFullName, new MockFileData("![[image1.png]] ![[image2.png]]") },
+                { "/image1.png", new MockFileData("") }
+                // /image2.png does not exist
+            }
+        );
+
+        Assert.False(fileSystemMock.FileExists("/image.png"));
+
         var targetDir = new DirectoryInfo("/MockedTargetDir");
-
-        var loggerMock = new Mock<ILogger<App>>();
-
         var sourceFile = new FileInfo(sourceFileFullName);
+        var loggerMock = new Mock<ILogger<App>>();
+        var fileMoverMock = new Mock<IFileMover>();
+
+        new App(loggerMock.Object, fileSystemMock, fileMoverMock.Object).Run(sourceFile, targetDir);
+
+        fileMoverMock.Verify(mover => mover.Move(It.IsAny<FileInfo>(), It.IsAny<DirectoryInfo>()), Times.Never);
+    }
+
+    [Fact]
+    public void WhenImagesDoNotExist_ThenLogMissingFiles()
+    {
+        const string sourceFileFullName = "/MockedSourceFile.md";
+        var fileSystemMock = new MockFileSystem(
+            new Dictionary<string, MockFileData>
+            {
+                { sourceFileFullName, new MockFileData("![[image1.png]] ![[image2.png]] ![[image3.png]]") },
+                // /image1.png does not exist
+                { "/image2.png", new MockFileData("") }
+                // /image3.png does not exist
+            }
+        );
+
+        var targetDir = new DirectoryInfo("/MockedTargetDir");
+        var sourceFile = new FileInfo(sourceFileFullName);
+        var loggerMock = new Mock<ILogger<App>>();
+        var fileMoverMock = new Mock<IFileMover>();
+
+        new App(loggerMock.Object, fileSystemMock, fileMoverMock.Object).Run(sourceFile, targetDir);
+
+        loggerMock.VerifyLog(logger => logger.LogError("File '{@ImageFile}' does not exist", "/image1.png"));
+        loggerMock.VerifyLog(logger => logger.LogError("File '{@ImageFile}' does not exist", "/image3.png"));
+    }
+
+    [Fact]
+    public void WhenAllImagesExist_ThenProduceCorrectLogs()
+    {
+        const string sourceFileFullName = "/MockedSourceFile.md";
         var fileSystemMock = new MockFileSystem(
             new Dictionary<string, MockFileData>
             {
@@ -25,7 +69,12 @@ public sealed class AppTests
             }
         );
 
-        new App(loggerMock.Object, fileSystemMock, Mock.Of<IFileMover>()).Run(sourceFile, targetDir);
+        var targetDir = new DirectoryInfo("/MockedTargetDir");
+        var sourceFile = new FileInfo(sourceFileFullName);
+        var loggerMock = new Mock<ILogger<App>>();
+        var fileMoverMock = new Mock<IFileMover>();
+
+        new App(loggerMock.Object, fileSystemMock, fileMoverMock.Object).Run(sourceFile, targetDir);
 
         loggerMock.VerifyLog(logger => logger.LogInformation("Target folder: '{@TargetFolder}'", targetDir.FullName));
         loggerMock.VerifyLog(logger => logger.LogInformation("File '{@SourceFile}' contains", sourceFile.FullName));
