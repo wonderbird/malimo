@@ -22,8 +22,15 @@ internal class App
     public void Run(FileInfo markdownFile, DirectoryInfo targetDir)
     {
         var imageNames = GetImagesFromMarkdownFile(markdownFile);
+
         LogImageNames(markdownFile, targetDir, imageNames);
-        MoveImagesToTargetDir(markdownFile, targetDir, imageNames);
+
+        var allImagesExist = ValidateAllFilesExist(markdownFile, imageNames);
+
+        if (allImagesExist)
+        {
+            MoveImagesToTargetDir(markdownFile, targetDir, imageNames);
+        }
     }
 
     private List<string> GetImagesFromMarkdownFile(FileSystemInfo markdownFile)
@@ -38,6 +45,10 @@ internal class App
         _logger.LogInformation("File '{@SourceFile}' contains", markdownFile.FullName);
         imageNames.ForEach(imageName => _logger.LogInformation("- '{@ImageFile}'", imageName));
     }
+
+    private bool ValidateAllFilesExist(FileInfo markdownFile, List<string> imageNames) =>
+        imageNames.Select(imageName => Path.Combine(markdownFile.DirectoryName ?? "", imageName))
+            .All(name => _fileSystem.File.Exists(name));
 
     private void MoveImagesToTargetDir(
         FileInfo markdownFile,
