@@ -8,7 +8,6 @@ namespace MarkdownLinkedImagesMover.Tests;
 
 public sealed class AppTests
 {
-    // TODO: BUG: Test what happens if a file contains two images in the same line!
     [Fact]
     public void ProcessTestfile()
     {
