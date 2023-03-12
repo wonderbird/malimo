@@ -17,6 +17,7 @@ public sealed class AppTests
             {
                 { sourceFileFullName, new MockFileData("![[image1.png]] ![[image2.png]]") },
                 { "/image1.png", new MockFileData("") }
+                // /image2.png does not exist
             }
         );
 
@@ -26,6 +27,7 @@ public sealed class AppTests
         var sourceFile = new FileInfo(sourceFileFullName);
         var loggerMock = new Mock<ILogger<App>>();
         var fileMoverMock = new Mock<IFileMover>();
+
         new App(loggerMock.Object, fileSystemMock, fileMoverMock.Object).Run(sourceFile, targetDir);
 
 // TODO: Verify that an error has been reported in a separate test - loggerMock.VerifyLog(logger => logger.LogError("File '{@ImageFile}' does not exist", "/image.png"));
@@ -36,11 +38,6 @@ public sealed class AppTests
     public void GivenAllImagesExist_ProducesCorrectLogs()
     {
         const string sourceFileFullName = "/MockedSourceFile.md";
-        var targetDir = new DirectoryInfo("/MockedTargetDir");
-
-        var loggerMock = new Mock<ILogger<App>>();
-
-        var sourceFile = new FileInfo(sourceFileFullName);
         var fileSystemMock = new MockFileSystem(
             new Dictionary<string, MockFileData>
             {
@@ -48,7 +45,12 @@ public sealed class AppTests
             }
         );
 
-        new App(loggerMock.Object, fileSystemMock, Mock.Of<IFileMover>()).Run(sourceFile, targetDir);
+        var targetDir = new DirectoryInfo("/MockedTargetDir");
+        var sourceFile = new FileInfo(sourceFileFullName);
+        var loggerMock = new Mock<ILogger<App>>();
+        var fileMoverMock = new Mock<IFileMover>();
+
+        new App(loggerMock.Object, fileSystemMock, fileMoverMock.Object).Run(sourceFile, targetDir);
 
         loggerMock.VerifyLog(logger => logger.LogInformation("Target folder: '{@TargetFolder}'", targetDir.FullName));
         loggerMock.VerifyLog(logger => logger.LogInformation("File '{@SourceFile}' contains", sourceFile.FullName));
