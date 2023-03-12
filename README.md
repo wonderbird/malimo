@@ -75,7 +75,7 @@ mkdir MarkdownLinkedImagesMover.Tests/data/target
 
 ```shell
 # Run the application
-dotnet run --project MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj -- --no-action --file MarkdownLinkedImagesMover.Tests/data/source/Testfile.md --target-dir MarkdownLinkedImagesMover.Tests/data/target
+dotnet run --project MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj -- --dry-run --file MarkdownLinkedImagesMover.Tests/data/source/Testfile.md --target-dir MarkdownLinkedImagesMover.Tests/data/target
 ```
 
 ```shell

@@ -20,7 +20,7 @@ public sealed class ProgramTests
     }
 
     [Fact]
-    public void NoAction()
+    public void DryRun()
     {
         using var testDir = TestDirectory.Create();
 
