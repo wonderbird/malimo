@@ -3,7 +3,15 @@
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/wonderbird/markdown-linked-images-mover)
 [![Build Status Badge](https://github.com/wonderbird/markdown-linked-images-mover/workflows/.NET/badge.svg)](https://github.com/wonderbird/markdown-linked-images-mover/actions?query=workflow%3A%22.NET%22)
 
-Move all images used by a markdown file to a folder.
+Move all images used by a markdown file into a folder.
+
+## Motivation
+
+During online talks and workshops I take notes containing many screenshots. I would like to move these screenshots into a separate folder, so that I can share them later.
+
+## Development and Support Status
+
+I am developing during my spare time and use this project for learning purposes. Please assume that I will need some days to answer your questions. At some point I might lose interest in the project. Please keep this in mind when using this project in a production environment.
 
 ## Thanks
 
