@@ -5,13 +5,14 @@ on:
   push:
     branches:
       - main
+      - ci/publish
   pull_request:
     branches:
       - main
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     name: Build and test
     steps:
       - uses: actions/checkout@v3
@@ -30,7 +31,7 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --configuration Debug --no-restore
+        run: dotnet build --configuration Release --no-restore
 
       - name: Run tests
         run: dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='./TestResults/coverage.cobertura.xml'
@@ -46,3 +47,12 @@ jobs:
         with:
           name: coverage-reports
           path: report
+
+      - name: Package
+        run: dotnet publish --configuration Release --runtime osx.12-arm64 --self-contained true
+
+      - name: Attach package to build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: markdown-linked-images-mover
+          path: bin/Release/net7.0/osx.12-arm64/publish
