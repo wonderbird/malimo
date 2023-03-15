@@ -55,4 +55,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: markdown-linked-images-mover
-          path: bin/Release/net7.0/osx.12-arm64/publish
+          path: MarkdownLinkedImagesMover/bin/Release/net7.0/osx.12-arm64/publish
