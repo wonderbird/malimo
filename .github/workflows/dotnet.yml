@@ -49,7 +49,7 @@ jobs:
           path: report
 
       - name: Package
-        run: dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --no-restore --configuration Release --runtime osx.12-arm64 --self-contained true
+        run: dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime osx.12-arm64 --self-contained true
 
       - name: Attach package to build artifacts
         uses: actions/upload-artifact@v3
