@@ -65,9 +65,9 @@ jobs:
         
       - name: Sign and Notarize
         run: |
-          "sh BuildAndReleaseScripts/SignMac.sh \"${{env.DOTNET_ROOT}}/markdown-linked-images-mover/MarkdownLinkedImagesMover\" \"${{env.DOTNET_ROOT}}/markdown-linked-images-mover/*\" \"Developer ID Application: Stefan Boos\" \"BuildAndReleaseScripts/entitlements.plist\""
+          "/bin/sh BuildAndReleaseScripts/SignMac.sh \"${{env.DOTNET_ROOT}}/markdown-linked-images-mover/MarkdownLinkedImagesMover\" \"${{env.DOTNET_ROOT}}/markdown-linked-images-mover/*\" \"Developer ID Application: Stefan Boos\" \"BuildAndReleaseScripts/entitlements.plist\""
           zip -rj markdown-linked-images-mover.zip ${{env.DOTNET_ROOT}}/markdown-linked-images-mover/*
-          "sh BuildAndReleaseScripts/Notarize.sh \"xpdbumm@boos.systems\" \"${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}\" \"systems.boos.markdown-linked-images-mover\" \"M9YN683HBZ\" \"./markdown-linked-images-mover.zip\""
+          "/bin/sh BuildAndReleaseScripts/Notarize.sh \"xpdbumm@boos.systems\" \"${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}\" \"systems.boos.markdown-linked-images-mover\" \"M9YN683HBZ\" \"./markdown-linked-images-mover.zip\""
       
       - name: Attach package to build artifacts
         uses: actions/upload-artifact@v3
