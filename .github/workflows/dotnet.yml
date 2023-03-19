@@ -10,6 +10,9 @@ on:
     branches:
       - main
 
+env:
+  PUBLISH_PATH: publish
+
 jobs:
   build-and-test:
     runs-on: macos-latest
@@ -49,10 +52,25 @@ jobs:
           path: report
 
       - name: Package
-        run: dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime osx.12-arm64 --self-contained true
+        run: |
+          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime osx.12-arm64 --self-contained true --output ${{ env.PUBLISH_PATH }}
+          rm ${{ env.PUBLISH_PATH }}/*.pdb
+          chmod +x ${{ env.PUBLISH_PATH }}/MarkdownLinkedImagesMover
 
+      - name: Add Cert to Keychain
+        uses: apple-actions/import-codesign-certs@v1
+        with:
+          p12-file-base64: ${{ secrets.APPLE_DEVELOPER_ID_APP_CERTIFICATE_BASE64 }}
+          p12-password: ${{ secrets.APPLE_DEVELOPER_ID_APP_CERTIFICATE_PASSWORD }}
+        
+      - name: Sign and Notarize
+        run: |
+          "sh BuildAndReleaseScripts/SignMac.sh \"${{ env.PUBLISH_PATH }}/MarkdownLinkedImagesMover\" \"${{ env.PUBLISH_PATH }}/*\" \"Developer ID Application: Stefan Boos\" \"BuildAndReleaseScripts/entitlements.plist\""
+          zip -rj markdown-linked-images-mover.zip ${{ env.PUBLISH_PATH }}/*
+          "sh BuildAndReleaseScripts/Notarize.sh \"xpdbumm@boos.systems\" \"${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}\" \"systems.boos.markdown-linked-images-mover\" \"M9YN683HBZ\" \"./markdown-linked-images-mover.zip\""
+      
       - name: Attach package to build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: markdown-linked-images-mover
-          path: MarkdownLinkedImagesMover/bin/Release/net7.0/osx.12-arm64/publish
+          path: ${{ env.PUBLISH_PATH }}
