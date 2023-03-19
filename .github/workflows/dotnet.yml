@@ -53,9 +53,9 @@ jobs:
 
       - name: Package
         run: |
-          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime osx.12-arm64 --self-contained true --output ${{ env.PUBLISH_PATH }}
-          rm ${{ env.PUBLISH_PATH }}/*.pdb
-          chmod +x ${{ env.PUBLISH_PATH }}/MarkdownLinkedImagesMover
+          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime osx.12-arm64 --self-contained true --output ${{env.DOTNET_ROOT}}/markdown-linked-images-mover
+          rm ${{env.DOTNET_ROOT}}/markdown-linked-images-mover/*.pdb
+          chmod +x ${{env.DOTNET_ROOT}}/markdown-linked-images-mover/MarkdownLinkedImagesMover
 
       - name: Add Cert to Keychain
         uses: apple-actions/import-codesign-certs@v1
@@ -65,12 +65,12 @@ jobs:
         
       - name: Sign and Notarize
         run: |
-          "sh BuildAndReleaseScripts/SignMac.sh \"${{ env.PUBLISH_PATH }}/MarkdownLinkedImagesMover\" \"${{ env.PUBLISH_PATH }}/*\" \"Developer ID Application: Stefan Boos\" \"BuildAndReleaseScripts/entitlements.plist\""
-          zip -rj markdown-linked-images-mover.zip ${{ env.PUBLISH_PATH }}/*
+          "sh BuildAndReleaseScripts/SignMac.sh \"${{env.DOTNET_ROOT}}/markdown-linked-images-mover/MarkdownLinkedImagesMover\" \"${{env.DOTNET_ROOT}}/markdown-linked-images-mover/*\" \"Developer ID Application: Stefan Boos\" \"BuildAndReleaseScripts/entitlements.plist\""
+          zip -rj markdown-linked-images-mover.zip ${{env.DOTNET_ROOT}}/markdown-linked-images-mover/*
           "sh BuildAndReleaseScripts/Notarize.sh \"xpdbumm@boos.systems\" \"${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}\" \"systems.boos.markdown-linked-images-mover\" \"M9YN683HBZ\" \"./markdown-linked-images-mover.zip\""
       
       - name: Attach package to build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: markdown-linked-images-mover
-          path: ${{ env.PUBLISH_PATH }}
+          path: ${{env.DOTNET_ROOT}}/markdown-linked-images-mover
