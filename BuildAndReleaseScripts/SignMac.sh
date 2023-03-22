@@ -17,11 +17,14 @@ for f in $2
 do 
     if [ "$f" = "$1" ]; 
     then 
-        echo "Runtime Signing $f" 
-        codesign --timestamp --sign "$3" $f --options=runtime --no-strict --entitlements $4
+        echo "Runtime Signing $f"
+        # Adopted from https://www.kenmuse.com/blog/notarizing-dotnet-console-apps-for-macos/ 
+        codesign --force --verbose --timestamp --sign "$3" "$f" --options=runtime --no-strict --entitlements "$4"
     else 
-        echo "Signing $f" 
-        codesign --timestamp --sign "$3" $f --no-strict 
+        echo "NOT Signing $f" 
+        # Adopted from https://www.kenmuse.com/blog/notarizing-dotnet-console-apps-for-macos/
+        # Not needed?
+        #codesign --force --verbose --timestamp --sign "$3" "$f" --no-strict 
     fi
 done
 
