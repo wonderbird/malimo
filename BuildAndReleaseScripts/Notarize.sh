@@ -7,29 +7,12 @@
 ## dev_team $4 DEVID
 ## FileName $5 ./filename.zip
 
+responseJson=$(xcrun notarytool submit "$5" --wait --apple-id "$1" --password "$2" --team-id "$4" --output-format json)
+status=echo "$responseJson" | jq '.status'
+id=echo "$responseJson" | jq '.id'
 
-#xcrun altool --notarize-app --primary-bundle-id "$3" --username $1 --password "$2" --asc-provider "$4" --file "$5"
-requestUUID=$(xcrun altool --notarize-app --primary-bundle-id "$3" --username $1 --password "$2" --asc-provider "$4" --file "$5">&1  | awk '/RequestUUID/ { print $NF; }')
+xcrun notarytool log "$id" --apple-id "$1" --password "$2" notarytool_log.json
+cat notarytool_log.json
 
-echo "Notarization RequestUUID: $requestUUID"
-    
-if [[ $requestUUID == "" ]]; then 
-    echo "could not upload for notarization"
-    exit 1
-fi
-
-# wait for status to be not "in progress" any more
-request_status="in progress"
-while [[ "$request_status" == "in progress" ]]; do
-    echo -n "waiting... "
-    sleep 10
-    request_status=$(xcrun altool --notarization-info "$requestUUID" --username $1 --password "$2"  2>&1  | awk -F ': ' '/Status:/ { print $2; }' )
-    echo "$request_status"
-done
-
-xcrun altool --notarization-info "$requestUUID" --username $1 --password "$2"
-    
-if [[ $request_status != "success" ]]; then
-    echo "## could not notarize $filepath"
-    exit 1
-fi
+echo "====="
+echo "Status: $status"

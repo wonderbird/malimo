@@ -19,6 +19,9 @@ jobs:
     name: Build and test
     steps:
       - uses: actions/checkout@v3
+        
+      - name: Install macOS tools (jq)
+        run: brew install jq
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -69,7 +72,7 @@ jobs:
 
       - name: Zip publish artifacts
         run: |
-          zip -r markdown-linked-images-mover.zip markdown-linked-images-mover/*
+          ditto -c --sequesterRsrc -k -V markdown-linked-images-mover markdown-linked-images-mover.zip
 
       - name: Notarize application
         run: |
