@@ -51,11 +51,11 @@ jobs:
           name: coverage-reports
           path: report
 
-      - name: Package
+      - name: Create publish dir
         run: |
-          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime osx.12-arm64 --self-contained true --output ${{env.DOTNET_ROOT}}/markdown-linked-images-mover
-          rm ${{env.DOTNET_ROOT}}/markdown-linked-images-mover/*.pdb
-          chmod +x ${{env.DOTNET_ROOT}}/markdown-linked-images-mover/MarkdownLinkedImagesMover
+          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime osx.12-arm64 --self-contained true --output markdown-linked-images-mover
+          rm markdown-linked-images-mover/*.pdb
+          chmod +x markdown-linked-images-mover/MarkdownLinkedImagesMover
 
       - name: Add Cert to Keychain
         uses: apple-actions/import-codesign-certs@v1
@@ -63,19 +63,20 @@ jobs:
           p12-file-base64: ${{ secrets.APPLE_DEVELOPER_ID_APP_CERTIFICATE_BASE64 }}
           p12-password: ${{ secrets.APPLE_DEVELOPER_ID_APP_CERTIFICATE_PASSWORD }}
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        with:
-          limit-access-to-actor: true
-
-      - name: Sign and Notarize
+      - name: Sign publish artifacts
         run: |
-          "/bin/sh BuildAndReleaseScripts/SignMac.sh \"${{env.DOTNET_ROOT}}/markdown-linked-images-mover/MarkdownLinkedImagesMover\" \"${{env.DOTNET_ROOT}}/markdown-linked-images-mover/*\" \"Developer ID Application: Stefan Boos\" \"BuildAndReleaseScripts/entitlements.plist\""
-          zip -rj markdown-linked-images-mover.zip ${{env.DOTNET_ROOT}}/markdown-linked-images-mover/*
-          "/bin/sh BuildAndReleaseScripts/Notarize.sh \"xpdbumm@boos.systems\" \"${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}\" \"systems.boos.markdown-linked-images-mover\" \"M9YN683HBZ\" \"./markdown-linked-images-mover.zip\""
-      
-      - name: Attach package to build artifacts
+          /bin/sh BuildAndReleaseScripts/SignMac.sh "markdown-linked-images-mover/MarkdownLinkedImagesMover" "markdown-linked-images-mover/*" "Developer ID Application: Stefan Boos" "BuildAndReleaseScripts/entitlements.plist"
+
+      - name: Zip publish artifacts
+        run: |
+          zip -r markdown-linked-images-mover.zip markdown-linked-images-mover/*
+
+      - name: Notarize application
+        run: |
+          /bin/sh BuildAndReleaseScripts/Notarize.sh "xpdbumm@boos.systems" "${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}" "systems.boos.markdown-linked-images-mover" "M9YN683HBZ" "./markdown-linked-images-mover.zip"
+
+      - name: Attach application zip to build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: markdown-linked-images-mover
-          path: ${{env.DOTNET_ROOT}}/markdown-linked-images-mover
+          path: ./markdown-linked-images-mover
