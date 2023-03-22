@@ -19,9 +19,6 @@ jobs:
     name: Build and test
     steps:
       - uses: actions/checkout@v3
-        
-      - name: Install macOS tools (jq)
-        run: brew install jq
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -68,7 +65,7 @@ jobs:
 
       - name: Sign publish artifacts
         run: |
-          /bin/sh BuildAndReleaseScripts/SignMac.sh "markdown-linked-images-mover/MarkdownLinkedImagesMover" "markdown-linked-images-mover/*" "Developer ID Application: Stefan Boos" "BuildAndReleaseScripts/entitlements.plist"
+          /bin/sh BuildAndReleaseScripts/SignMac.sh "markdown-linked-images-mover/MarkdownLinkedImagesMover" "markdown-linked-images-mover" "Developer ID Application: Stefan Boos" "BuildAndReleaseScripts/entitlements.plist"
 
       - name: Zip publish artifacts
         run: |
