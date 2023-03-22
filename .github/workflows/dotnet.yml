@@ -62,7 +62,12 @@ jobs:
         with:
           p12-file-base64: ${{ secrets.APPLE_DEVELOPER_ID_APP_CERTIFICATE_BASE64 }}
           p12-password: ${{ secrets.APPLE_DEVELOPER_ID_APP_CERTIFICATE_PASSWORD }}
-        
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
+
       - name: Sign and Notarize
         run: |
           "/bin/sh BuildAndReleaseScripts/SignMac.sh \"${{env.DOTNET_ROOT}}/markdown-linked-images-mover/MarkdownLinkedImagesMover\" \"${{env.DOTNET_ROOT}}/markdown-linked-images-mover/*\" \"Developer ID Application: Stefan Boos\" \"BuildAndReleaseScripts/entitlements.plist\""
