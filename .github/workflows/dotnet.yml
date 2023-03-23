@@ -73,7 +73,7 @@ jobs:
 
       - name: Notarize application
         run: |
-          /bin/sh BuildAndReleaseScripts/Notarize.sh "xpdbumm@boos.systems" "${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}" "systems.boos.markdown-linked-images-mover" "M9YN683HBZ" "./markdown-linked-images-mover.zip"
+          /bin/sh BuildAndReleaseScripts/Notarize.sh "xpdbumm@boos.systems" "${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}" "M9YN683HBZ" "./markdown-linked-images-mover.zip"
 
       - name: Attach application zip to build artifacts
         uses: actions/upload-artifact@v3

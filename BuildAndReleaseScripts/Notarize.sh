@@ -3,13 +3,12 @@
 ## usage sh Notarize.sh "devemail" "Password1." "group.com.company" "DEVID" "./filename.zip"
 ## dev_account $1 "devemail"
 ## dev_Password $2 "Password1."
-## GroupID $3 "group.com.company" 
-## dev_team $4 DEVID
-## FileName $5 ./filename.zip
+## dev_team $3 DEVID
+## FileName $4 ./filename.zip
 
 responseJson=$(xcrun notarytool submit "$5" --wait --apple-id "$1" --password "$2" --team-id "$4" --output-format json)
 status=$(echo "$responseJson" | jq '.status')
-id=$(echo "$responseJson" | jq '.id')
+id=$(echo "$responseJson" | jq --raw-output '.id')
 
 xcrun notarytool log "$id" --apple-id "$1" --password "$2" notarize_log.json
 
