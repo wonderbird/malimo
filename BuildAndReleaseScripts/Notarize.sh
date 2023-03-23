@@ -10,7 +10,7 @@ responseJson=$(xcrun notarytool submit "$4" --wait --apple-id "$1" --password "$
 status=$(echo "$responseJson" | jq '.status')
 id=$(echo "$responseJson" | jq --raw-output '.id')
 
-xcrun notarytool log "$id" --apple-id "$1" --password "$2" notarize_log.json
+xcrun notarytool log "$id" --apple-id "$1" --password "$2" --team-id "$3" notarize_log.json
 
 echo "====="
 echo "    Notarize ID: $id"
