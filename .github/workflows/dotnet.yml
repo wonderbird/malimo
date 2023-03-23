@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - main
-      - ci/publish
   pull_request:
     branches:
       - main
@@ -54,6 +53,7 @@ jobs:
   publish:
     runs-on: macos-latest
     name: Publish
+    if: github.ref == 'refs/heads/main'
     
     needs: build-and-test
     
