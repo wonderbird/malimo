@@ -53,7 +53,10 @@ jobs:
 
   publish:
     runs-on: macos-latest
-    name: Build and test
+    name: Publish
+    
+    needs: build-and-test
+    
     steps:
       - uses: actions/checkout@v3
 
