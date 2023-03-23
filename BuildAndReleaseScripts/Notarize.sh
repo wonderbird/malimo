@@ -6,7 +6,7 @@
 ## dev_team $3 DEVID
 ## FileName $4 ./filename.zip
 
-responseJson=$(xcrun notarytool submit "$5" --wait --apple-id "$1" --password "$2" --team-id "$4" --output-format json)
+responseJson=$(xcrun notarytool submit "$4" --wait --apple-id "$1" --password "$2" --team-id "$3" --output-format json)
 status=$(echo "$responseJson" | jq '.status')
 id=$(echo "$responseJson" | jq --raw-output '.id')
 
