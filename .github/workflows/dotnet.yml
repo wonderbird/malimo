@@ -80,3 +80,9 @@ jobs:
         with:
           name: markdown-linked-images-mover
           path: ./markdown-linked-images-mover
+
+      - name: Attach notarize log
+        uses: actions/upload-artifact@v3
+        with:
+          name: notarize_log.json
+          path: ./notarize_log.json

@@ -8,11 +8,10 @@
 ## FileName $5 ./filename.zip
 
 responseJson=$(xcrun notarytool submit "$5" --wait --apple-id "$1" --password "$2" --team-id "$4" --output-format json)
-status=echo "$responseJson" | jq '.status'
-id=echo "$responseJson" | jq '.id'
+status=$(echo "$responseJson" | jq '.status')
+id=$(echo "$responseJson" | jq '.id')
 
-xcrun notarytool log "$id" --apple-id "$1" --password "$2" notarytool_log.json
-cat notarytool_log.json
+xcrun notarytool log "$id" --apple-id "$1" --password "$2" notarize_log.json
 
 echo "====="
-echo "Status: $status"
+echo "Notarize status: $status"
