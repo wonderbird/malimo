@@ -13,4 +13,5 @@ id=$(echo "$responseJson" | jq --raw-output '.id')
 xcrun notarytool log "$id" --apple-id "$1" --password "$2" notarize_log.json
 
 echo "====="
+echo "    Notarize ID: $id"
 echo "Notarize status: $status"
