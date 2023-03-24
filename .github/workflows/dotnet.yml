@@ -107,9 +107,9 @@ jobs:
         shell: bash
         run: |
           r=$(cat CHANGELOG.md)                             # <--- Read CHANGELOG.md
-          r="${r//'%'/'%25'}"                               # Multiline escape sequences for %
-          r="${r//$'\n'/'%0A'}"                             # Multiline escape sequences for '\n'
-          r="${r//$'\r'/'%0D'}"                             # Multiline escape sequences for '\r'
+          r="${r//'%'/%25}"                                 # Multiline escape sequences for %
+          r="${r//$'\n'/%0A}"                               # Multiline escape sequences for '\n'
+          r="${r//$'\r'/%0D}"                               # Multiline escape sequences for '\r'
           echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT          # <--- Set environment variable
 
       - name: Upload binaries to release
