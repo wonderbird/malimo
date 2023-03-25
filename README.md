@@ -18,6 +18,16 @@ I am developing during my spare time and use this project for learning purposes.
 Many thanks to [JetBrains](https://www.jetbrains.com/?from=markdown-linked-images-mover) who provide
 an [Open Source License](https://www.jetbrains.com/community/opensource/) for this project ❤️.
 
+## Install
+
+At the moment, I am maintaining only a macOS installer for [Homebrew](https://brew.sh):
+
+```shell
+brew install wonderbird/tools/markdown-linked-images-mover
+```
+
+The corresponding cask is at [wonderbird / homebrew-tools / Casks / markdown-linked-images-mover.rb](https://github.com/wonderbird/homebrew-tools/blob/main/Casks/markdown-linked-images-mover.rb).
+
 ## Development
 
 ### Quick-Start
