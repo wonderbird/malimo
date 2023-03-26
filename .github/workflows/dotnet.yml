@@ -16,7 +16,7 @@ env:
 
 jobs:
   build-and-test:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     name: Build and test
     steps:
       - uses: actions/checkout@v3
@@ -53,6 +53,16 @@ jobs:
           path: report
 
   publish:
+    strategy:
+      matrix:
+        architecture: [arm64, x64]
+
+    env:
+      RUNTIME: osx.12-${{ matrix.architecture }}
+      PUBLISH_DIR: markdown-linked-images-mover.${{ matrix.architecture }}
+      PUBLISH_ZIP_FILENAME: markdown-linked-images-mover.${{ matrix.architecture }}.bottle.zip
+      NOTARIZE_LOG_FILENAME: notarize_log.${{ matrix.architecture }}.json
+
     runs-on: macos-latest
     name: Publish
     if: ${{ startsWith(github.ref, 'refs/tags/') }}
@@ -73,9 +83,9 @@ jobs:
 
       - name: Create publish package
         run: |
-          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime osx.12-arm64 --self-contained true --output markdown-linked-images-mover
-          rm markdown-linked-images-mover/*.pdb
-          chmod +x markdown-linked-images-mover/MarkdownLinkedImagesMover
+          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime "${RUNTIME}" --self-contained true --output "${PUBLISH_DIR}"
+          rm "${PUBLISH_DIR}/*.pdb"
+          chmod +x "${PUBLISH_DIR}/MarkdownLinkedImagesMover"
 
       - name: Add cert to keychain
         uses: apple-actions/import-codesign-certs@v2
@@ -85,20 +95,20 @@ jobs:
 
       - name: Sign publish artifacts
         run: |
-          /bin/sh BuildAndReleaseScripts/SignMac.sh "markdown-linked-images-mover/MarkdownLinkedImagesMover" "markdown-linked-images-mover" "Developer ID Application: Stefan Boos" "BuildAndReleaseScripts/entitlements.plist"
+          /bin/sh BuildAndReleaseScripts/SignMac.sh "${PUBLISH_DIR}/MarkdownLinkedImagesMover" "${PUBLISH_DIR}" "Developer ID Application: Stefan Boos" "BuildAndReleaseScripts/entitlements.plist"
 
       - name: Zip publish artifacts
         run: |
-          ditto -c --sequesterRsrc -k -V markdown-linked-images-mover markdown-linked-images-mover.zip
+          ditto -c --sequesterRsrc -k -V "${PUBLISH_DIR}" "${PUBLISH_ZIP_FILENAME}"
 
       - name: Notarize publish artifacts
         run: |
-          /bin/sh BuildAndReleaseScripts/Notarize.sh "xpdbumm@boos.systems" "${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}" "M9YN683HBZ" "./markdown-linked-images-mover.zip"
+          /bin/sh BuildAndReleaseScripts/Notarize.sh "xpdbumm@boos.systems" "${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}" "M9YN683HBZ" "${PUBLISH_ZIP_FILENAME}"
 
-      - name: Attach notarize log to build artifacts
+      - name: Attach notarize log to publish artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: notarize_log.json
+          name: "${NOTARIZE_LOG_FILENAME}"
           path: ./notarize_log.json
 
       # Adopted from https://github.com/svenstaro/upload-release-action
@@ -112,12 +122,12 @@ jobs:
           r="${r//$'\r'/%0D}"                               # Multiline escape sequences for '\r'
           echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT          # <--- Set environment variable
 
-      - name: Upload binaries to release
+      - name: Upload publish artifacts to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: markdown-linked-images-mover.zip
-          asset_name: markdown-linked-images-mover.zip
+          file: "${PUBLISH_ZIP_FILENAME}"
+          asset_name: "${PUBLISH_ZIP_FILENAME}"
           tag: ${{ github.ref }}
           overwrite: true
           body: ${{ steps.read_release.outputs.RELEASE_BODY }}
