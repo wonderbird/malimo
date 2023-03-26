@@ -3,10 +3,10 @@ name: .NET
 # Save energy - only build main branch updates
 on:
   push:
-    branches:
-      - main
-    tags:
-      - 'v*'
+#    branches:
+#      - main
+#    tags:
+#      - 'v*'
   pull_request:
     branches:
       - main
@@ -65,7 +65,7 @@ jobs:
 
     runs-on: macos-latest
     name: Publish
-    if: ${{ startsWith(github.ref, 'refs/tags/') }}
+#    if: ${{ startsWith(github.ref, 'refs/tags/') }}
     
     needs: build-and-test
     
@@ -84,7 +84,7 @@ jobs:
       - name: Create publish package
         run: |
           dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime "${RUNTIME}" --self-contained true --output "${PUBLISH_DIR}"
-          rm "${PUBLISH_DIR}/*.pdb"
+          rm -f "${PUBLISH_DIR}/*.pdb"
           chmod +x "${PUBLISH_DIR}/MarkdownLinkedImagesMover"
 
       - name: Add cert to keychain
