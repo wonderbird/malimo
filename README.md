@@ -28,6 +28,21 @@ brew install wonderbird/tools/markdown-linked-images-mover
 
 The corresponding cask is at [wonderbird / homebrew-tools / Casks / markdown-linked-images-mover.rb](https://github.com/wonderbird/homebrew-tools/blob/main/Casks/markdown-linked-images-mover.rb).
 
+## Installation
+
+For macOS I am maintaining a [Homebrew](https://brew.sh) installer:
+
+```shell
+brew install wonderbird/tools/markdown-linked-images-mover
+```
+
+You can get help by entering
+```shell
+MarkdownLinkedImagesMover --help
+```
+
+The corresponding Homebrew cask is at [wonderbird / homebrew-tools / Casks / markdown-linked-images-mover.rb](https://github.com/wonderbird/homebrew-tools/blob/main/Casks/markdown-linked-images-mover.rb).
+
 ## Development
 
 ### Quick-Start
