@@ -69,7 +69,7 @@ jobs:
     
     needs: build-and-test
     
-    # Allow publishing to the release
+    # Configure GITHUB_TOKEN so that it allows uploading to the release
     permissions:
       contents: write
     
@@ -84,7 +84,7 @@ jobs:
       - name: Create publish package
         run: |
           dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime "${RUNTIME}" --self-contained true --output "${PUBLISH_DIR}"
-          rm "${PUBLISH_DIR}/*.pdb"
+          rm -f "${PUBLISH_DIR}/*.pdb"
           chmod +x "${PUBLISH_DIR}/MarkdownLinkedImagesMover"
 
       - name: Add cert to keychain
