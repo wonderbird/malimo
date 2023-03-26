@@ -83,9 +83,9 @@ jobs:
 
       - name: Create publish package
         run: |
-          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime "${RUNTIME}" --self-contained true --output "${PUBLISH_DIR}"
-          rm -f "${PUBLISH_DIR}/*.pdb"
-          chmod +x "${PUBLISH_DIR}/MarkdownLinkedImagesMover"
+          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime "${{ env.RUNTIME }}" --self-contained true --output "${{ env.PUBLISH_DIR }}"
+          rm -f "${{ env.PUBLISH_DIR }}/*.pdb"
+          chmod +x "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover"
 
       - name: Add cert to keychain
         uses: apple-actions/import-codesign-certs@v2
@@ -95,20 +95,20 @@ jobs:
 
       - name: Sign publish artifacts
         run: |
-          /bin/sh BuildAndReleaseScripts/SignMac.sh "${PUBLISH_DIR}/MarkdownLinkedImagesMover" "${PUBLISH_DIR}" "Developer ID Application: Stefan Boos" "BuildAndReleaseScripts/entitlements.plist"
+          /bin/sh BuildAndReleaseScripts/SignMac.sh "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover" "${{ env.PUBLISH_DIR }}" "Developer ID Application: Stefan Boos" "BuildAndReleaseScripts/entitlements.plist"
 
       - name: Zip publish artifacts
         run: |
-          ditto -c --sequesterRsrc -k -V "${PUBLISH_DIR}" "${PUBLISH_ZIP_FILENAME}"
+          ditto -c --sequesterRsrc -k -V "${{ env.PUBLISH_DIR }}" "${{ env.PUBLISH_ZIP_FILENAME }}"
 
       - name: Notarize publish artifacts
         run: |
-          /bin/sh BuildAndReleaseScripts/Notarize.sh "xpdbumm@boos.systems" "${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}" "M9YN683HBZ" "${PUBLISH_ZIP_FILENAME}"
+          /bin/sh BuildAndReleaseScripts/Notarize.sh "xpdbumm@boos.systems" "${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}" "M9YN683HBZ" "${{ env.PUBLISH_ZIP_FILENAME }}"
 
       - name: Attach notarize log to publish artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: "${NOTARIZE_LOG_FILENAME}"
+          name: ${{ env.NOTARIZE_LOG_FILENAME }}
           path: ./notarize_log.json
 
       # Adopted from https://github.com/svenstaro/upload-release-action
@@ -126,8 +126,8 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: "${PUBLISH_ZIP_FILENAME}"
-          asset_name: "${PUBLISH_ZIP_FILENAME}"
+          file: ${{ env.PUBLISH_ZIP_FILENAME }}
+          asset_name: ${{ env.PUBLISH_ZIP_FILENAME }}
           tag: ${{ github.ref }}
           overwrite: true
           body: ${{ steps.read_release.outputs.RELEASE_BODY }}
