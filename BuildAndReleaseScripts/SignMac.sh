@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # This file is adopted from https://github.com/coding-flamingo/CodeSignConsoleApp/blob/main/BuildAndReleaseScripts/SignMac.sh
 # and from https://www.kenmuse.com/blog/notarizing-dotnet-console-apps-for-macos/ 
 ## usage /bin/sh BuildAndReleaseScripts/SignMac.sh "markdown-linked-images-mover/MarkdownLinkedImagesMover" "markdown-linked-images-mover" "Developer ID Application: Stefan Boos" "BuildAndReleaseScripts/entitlements.plist"
@@ -20,7 +20,7 @@ do
   codesign --force --verbose --timestamp --sign "$3" "$f" --options=runtime --no-strict --entitlements "$4"
 done
 
-for f in "$2"/*(.dll|.dylib)
+for f in "$2"/*{.dll,.dylib}
 do 
   echo "Signing $f" 
   codesign --force --verbose --timestamp --sign "$3" "$f" --no-strict 

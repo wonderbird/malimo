@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 # This file is adopted from https://github.com/coding-flamingo/CodeSignConsoleApp/blob/main/BuildAndReleaseScripts/Notarize.sh
 ## usage sh Notarize.sh "devemail" "Password1." "group.com.company" "DEVID" "./filename.zip"
 ## dev_account $1 "devemail"
