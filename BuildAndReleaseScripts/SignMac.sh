@@ -20,7 +20,7 @@ do
   codesign --force --verbose --timestamp --sign "$3" "$f" --options=runtime --no-strict --entitlements "$4"
 done
 
-for f in "$2"/*.dylib
+for f in "$2"/*(.dll|.dylib)
 do 
   echo "Signing $f" 
   codesign --force --verbose --timestamp --sign "$3" "$f" --no-strict 
