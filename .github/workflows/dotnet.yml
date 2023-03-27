@@ -61,6 +61,7 @@ jobs:
       RUNTIME: osx.12-${{ matrix.architecture }}
       PUBLISH_DIR: markdown-linked-images-mover.${{ matrix.architecture }}
       PUBLISH_ZIP_FILENAME: markdown-linked-images-mover.${{ matrix.architecture }}.bottle.zip
+      SHA256SUM_FILENAME: markdown-linked-images-mover.${{ matrix.architecture }}.bottle.zip.sha256
       NOTARIZE_LOG_FILENAME: notarize_log.${{ matrix.architecture }}.json
 
     runs-on: macos-latest
@@ -105,11 +106,21 @@ jobs:
         run: |
           /bin/sh BuildAndReleaseScripts/Notarize.sh "xpdbumm@boos.systems" "${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}" "M9YN683HBZ" "${{ env.PUBLISH_ZIP_FILENAME }}"
 
+      - name: Calculate SHA256 hash of publish artifacts
+        run: |
+          shasum -a 256 "${{ env.PUBLISH_ZIP_FILENAME }}" > "${{ env.SHA256SUM_FILENAME }}"
+
       - name: Attach notarize log to publish artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.NOTARIZE_LOG_FILENAME }}
           path: ./notarize_log.json
+          
+      - name: Attach SHA256SUM to publish artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.SHA256SUM_FILENAME }}
+          path: ${{ env.SHA256SUM_FILENAME }}
 
       # Adopted from https://github.com/svenstaro/upload-release-action
       - name: Read CHANGELOG.md and use it as a body of new release
