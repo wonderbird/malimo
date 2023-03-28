@@ -124,6 +124,9 @@ jobs:
           path: ${{ env.SHA256SUM_FILENAME }}
 
   release:
+    name: Publish
+    needs: publish
+    
     strategy:
       matrix:
         architecture: [arm64, x64]
@@ -132,10 +135,8 @@ jobs:
       PUBLISH_ZIP_FILENAME: markdown-linked-images-mover.${{ matrix.architecture }}.bottle.zip
 
     runs-on: ubuntu-latest
-    name: Publish
     if: ${{ startsWith(github.ref, 'refs/tags/') }}
     
-    needs: publish
 
     # Configure GITHUB_TOKEN so that it allows uploading to the release
     permissions:
