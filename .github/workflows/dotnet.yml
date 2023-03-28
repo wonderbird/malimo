@@ -3,10 +3,10 @@ name: .NET
 # Save energy - only build main branch updates
 on:
   push:
-    branches:
-      - main
-    tags:
-      - 'v*'
+#    branches:
+#      - main
+#    tags:
+#      - 'v*'
   pull_request:
     branches:
       - main
@@ -16,8 +16,8 @@ env:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
     name: Build and test
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
 
@@ -53,6 +53,9 @@ jobs:
           path: report
 
   publish:
+    name: Publish
+    needs: build-and-test
+    
     strategy:
       matrix:
         architecture: [arm64, x64]
@@ -65,14 +68,6 @@ jobs:
       NOTARIZE_LOG_FILENAME: notarize_log.${{ matrix.architecture }}.json
 
     runs-on: macos-latest
-    name: Publish
-    if: ${{ startsWith(github.ref, 'refs/tags/') }}
-    
-    needs: build-and-test
-    
-    # Configure GITHUB_TOKEN so that it allows uploading to the release
-    permissions:
-      contents: write
     
     steps:
       - uses: actions/checkout@v3
@@ -116,12 +111,43 @@ jobs:
           name: ${{ env.NOTARIZE_LOG_FILENAME }}
           path: ./notarize_log.json
           
+      - name: Attach application to publish artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.PUBLISH_ZIP_FILENAME }}
+          path: ${{ env.PUBLISH_ZIP_FILENAME }}
+
       - name: Attach SHA256SUM to publish artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.SHA256SUM_FILENAME }}
           path: ${{ env.SHA256SUM_FILENAME }}
 
+  release:
+    strategy:
+      matrix:
+        architecture: [arm64, x64]
+
+    env:
+      PUBLISH_ZIP_FILENAME: markdown-linked-images-mover.${{ matrix.architecture }}.bottle.zip
+
+    runs-on: ubuntu-latest
+    name: Publish
+    if: ${{ startsWith(github.ref, 'refs/tags/') }}
+    
+    needs: publish
+
+    # Configure GITHUB_TOKEN so that it allows uploading to the release
+    permissions:
+      contents: write
+    
+    steps:
+      - uses: actions/checkout@v3
+    
+      - uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.PUBLISH_ZIP_FILENAME }}
+    
       # Adopted from https://github.com/svenstaro/upload-release-action
       - name: Read CHANGELOG.md and use it as a body of new release
         id: read_release
@@ -133,7 +159,7 @@ jobs:
           r="${r//$'\r'/%0D}"                               # Multiline escape sequences for '\r'
           echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT          # <--- Set environment variable
 
-      - name: Upload publish artifacts to release
+      - name: Upload publish artifact to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
