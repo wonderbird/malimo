@@ -14,14 +14,8 @@ echo "CertName: $3"
 echo "Entitlements: $4"
 echo "======== END INPUTS ========"
 
-for f in $1 "$2"/createdump
+for f in $1 "$2"/createdump "$2"/*{.dll,.dylib}
 do
   echo "Runtime Signing $f"
   codesign --force --verbose --timestamp --sign "$3" "$f" --options=runtime --no-strict --entitlements "$4"
-done
-
-for f in "$2"/*{.dll,.dylib}
-do 
-  echo "Signing $f" 
-  codesign --force --verbose --timestamp --sign "$3" "$f" --no-strict 
 done
