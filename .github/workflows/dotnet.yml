@@ -77,10 +77,10 @@ jobs:
         with:
           dotnet-version: 7.0.x
 
-      - name: Create publish package
+      - name: Create application
         run: |
-          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime "${{ env.RUNTIME }}" --self-contained true --output "${{ env.PUBLISH_DIR }}"
-          rm -f "${{ env.PUBLISH_DIR }}/*.pdb"
+          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime "${{ env.RUNTIME }}" --self-contained true -p:PublishSingleFile:true --output "${{ env.PUBLISH_DIR }}"
+          rm -vf "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover.pdb" "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover.xml"
           chmod +x "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover"
 
       - name: Add cert to keychain
@@ -89,39 +89,29 @@ jobs:
           p12-file-base64: ${{ secrets.APPLE_DEVELOPER_ID_APP_CERTIFICATE_BASE64 }}
           p12-password: ${{ secrets.APPLE_DEVELOPER_ID_APP_CERTIFICATE_PASSWORD }}
 
-      - name: Sign publish artifacts
+      - name: Sign application
         run: |
           /bin/sh BuildAndReleaseScripts/SignMac.sh "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover" "${{ env.PUBLISH_DIR }}" "Developer ID Application: Stefan Boos" "BuildAndReleaseScripts/entitlements.plist"
 
-      - name: Zip publish artifacts
+      - name: Zip application
         run: |
           ditto -c --sequesterRsrc -k -V "${{ env.PUBLISH_DIR }}" "${{ env.PUBLISH_ZIP_FILENAME }}"
 
-      - name: Notarize publish artifacts
+      - name: Notarize application
         run: |
           /bin/sh BuildAndReleaseScripts/Notarize.sh "xpdbumm@boos.systems" "${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}" "M9YN683HBZ" "${{ env.PUBLISH_ZIP_FILENAME }}"
 
-      - name: Calculate SHA256 hash of publish artifacts
-        run: |
-          shasum -a 256 "${{ env.PUBLISH_ZIP_FILENAME }}" > "${{ env.SHA256SUM_FILENAME }}"
-
-      - name: Attach notarize log to publish artifacts
+      - name: Attach notarize log to build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.NOTARIZE_LOG_FILENAME }}
           path: ./notarize_log.json
           
-      - name: Attach application to publish artifacts
+      - name: Attach application to build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.PUBLISH_ZIP_FILENAME }}
           path: ${{ env.PUBLISH_ZIP_FILENAME }}
-
-      - name: Attach SHA256SUM to publish artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.SHA256SUM_FILENAME }}
-          path: ${{ env.SHA256SUM_FILENAME }}
 
   release:
     name: Publish
@@ -160,7 +150,7 @@ jobs:
           r="${r//$'\r'/%0D}"                               # Multiline escape sequences for '\r'
           echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT          # <--- Set environment variable
 
-      - name: Upload publish artifact to release
+      - name: Upload application to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
