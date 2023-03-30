@@ -91,7 +91,7 @@ jobs:
 
       - name: Sign application
         run: |
-          /bin/sh BuildAndReleaseScripts/SignMac.sh "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover" "${{ env.PUBLISH_DIR }}" "Developer ID Application: Stefan Boos" "BuildAndReleaseScripts/entitlements.plist"
+          /bin/sh BuildAndReleaseScripts/SignMac.sh "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover" "Developer ID Application: Stefan Boos" "BuildAndReleaseScripts/entitlements.plist"
 
       - name: Zip application
         run: |
