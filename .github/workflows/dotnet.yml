@@ -3,10 +3,10 @@ name: .NET
 # Save energy - only build main branch updates
 on:
   push:
-#    branches:
-#      - main
-#    tags:
-#      - 'v*'
+    branches:
+      - main
+    tags:
+      - 'v*'
   pull_request:
     branches:
       - main
