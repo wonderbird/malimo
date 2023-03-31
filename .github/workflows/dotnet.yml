@@ -81,7 +81,8 @@ jobs:
       - name: Prepare release files (win)
         if: runner.os == 'Windows'
         run: |
-          del "${{ env.PUBLISH_DIR }}\MarkdownLinkedImagesMover.pdb" "${{ env.PUBLISH_DIR }}\MarkdownLinkedImagesMover.xml"
+          del "${{ env.PUBLISH_DIR }}\MarkdownLinkedImagesMover.pdb"
+          del "${{ env.PUBLISH_DIR }}\MarkdownLinkedImagesMover.xml"
 
       - name: Prepare release files (osx)
         if: runner.os == 'macOS'
