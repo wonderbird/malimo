@@ -106,16 +106,9 @@ jobs:
           path: ${{ env.PUBLISH_ZIP_FILENAME }}
 
   release:
-    name: Publish
+    name: Release
     needs: publish
     
-    strategy:
-      matrix:
-        architecture: [arm64, x64]
-
-    env:
-      PUBLISH_ZIP_FILENAME: markdown-linked-images-mover.${{ matrix.architecture }}.bottle.zip
-
     runs-on: ubuntu-latest
     if: ${{ startsWith(github.ref, 'refs/tags/') }}
     
@@ -128,8 +121,11 @@ jobs:
       - uses: actions/checkout@v3
     
       - uses: actions/download-artifact@v3
-        with:
-          name: ${{ env.PUBLISH_ZIP_FILENAME }}
+        
+      - name: Move ZIPs to working directory
+        run: |
+          mv markdown-linked-images-mover.arm64.bottle/markdown-linked-images-mover.arm64.bottle.zip .
+          mv markdown-linked-images-mover.x64.bottle/markdown-linked-images-mover.x64.bottle.zip .
     
       # Adopted from https://github.com/svenstaro/upload-release-action
       - name: Read CHANGELOG.md and use it as a body of new release
@@ -146,8 +142,8 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ env.PUBLISH_ZIP_FILENAME }}
-          asset_name: ${{ env.PUBLISH_ZIP_FILENAME }}
+          file_glob: true
+          file: markdown-linked-images-mover.*.bottle.zip
           tag: ${{ github.ref }}
           overwrite: true
           body: ${{ steps.read_release.outputs.RELEASE_BODY }}
