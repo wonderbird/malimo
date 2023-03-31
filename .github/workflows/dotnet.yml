@@ -50,16 +50,19 @@ jobs:
     
     strategy:
       matrix:
-        architecture: [arm64, x64]
+        include:
+          - os: macos-latest
+            runtime: "osx.12-arm64"
+          - os: macos-latest
+            runtime: "osx.12-x64"
 
     env:
-      RUNTIME: osx.12-${{ matrix.architecture }}
-      PUBLISH_DIR: markdown-linked-images-mover.${{ matrix.architecture }}
-      PUBLISH_ZIP_FILENAME: markdown-linked-images-mover.${{ matrix.architecture }}.bottle.zip
-      SHA256SUM_FILENAME: markdown-linked-images-mover.${{ matrix.architecture }}.bottle.zip.sha256
-      NOTARIZE_LOG_FILENAME: notarize_log.${{ matrix.architecture }}.json
+      PUBLISH_DIR: markdown-linked-images-mover.${{ matrix.runtime }}
+      PUBLISH_ZIP_FILENAME: markdown-linked-images-mover.${{ matrix.runtime }}.bottle.zip
+      SHA256SUM_FILENAME: markdown-linked-images-mover.${{ matrix.runtime }}.bottle.zip.sha256
+      NOTARIZE_LOG_FILENAME: notarize_log.${{ matrix.runtime }}.json
 
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
     
     steps:
       - uses: actions/checkout@v3
@@ -71,7 +74,7 @@ jobs:
 
       - name: Create application
         run: |
-          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime "${{ env.RUNTIME }}" --self-contained true -p:PublishSingleFile=true --output "${{ env.PUBLISH_DIR }}"
+          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true --output "${{ env.PUBLISH_DIR }}"
           rm -vf "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover.pdb" "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover.xml"
           chmod +x "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover"
 
@@ -124,8 +127,8 @@ jobs:
         
       - name: Move ZIPs to working directory
         run: |
-          mv markdown-linked-images-mover.arm64.bottle/markdown-linked-images-mover.arm64.bottle.zip .
-          mv markdown-linked-images-mover.x64.bottle/markdown-linked-images-mover.x64.bottle.zip .
+          mv markdown-linked-images-mover.arm64.bottle/markdown-linked-images-mover.osx.12-arm64.bottle.zip .
+          mv markdown-linked-images-mover.x64.bottle/markdown-linked-images-mover.osx.12-x64.bottle.zip .
     
       # Adopted from https://github.com/svenstaro/upload-release-action
       - name: Read CHANGELOG.md and use it as a body of new release
