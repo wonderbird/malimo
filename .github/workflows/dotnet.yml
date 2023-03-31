@@ -77,6 +77,15 @@ jobs:
       - name: Create application
         run: |
           dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true --output "${{ env.PUBLISH_DIR }}"
+
+      - name: Prepare release files (win)
+        if: runner.os == 'Windows'
+        run: |
+          del "${{ env.PUBLISH_DIR }}\MarkdownLinkedImagesMover.pdb" "${{ env.PUBLISH_DIR }}\MarkdownLinkedImagesMover.xml"
+
+      - name: Prepare release files (osx)
+        if: runner.os == 'macOS'
+        run: |
           rm -vf "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover.pdb" "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover.xml"
           chmod +x "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover"
 
