@@ -51,6 +51,8 @@ jobs:
     strategy:
       matrix:
         include:
+          - os: windows-latest
+            runtime: win-x64
 #          - os: macos-latest
 #            runtime: "osx.12-arm64"
 #          - os: macos-latest
@@ -127,6 +129,7 @@ jobs:
         
       - name: Move ZIPs to working directory
         run: |
+          mv markdown-linked-images-mover.arm64.bottle/markdown-linked-images-mover.win-x64.bottle.zip .
 #          mv markdown-linked-images-mover.arm64.bottle/markdown-linked-images-mover.osx.12-arm64.bottle.zip .
 #          mv markdown-linked-images-mover.x64.bottle/markdown-linked-images-mover.osx.12-x64.bottle.zip .
     
