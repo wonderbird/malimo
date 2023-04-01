@@ -9,6 +9,35 @@ namespace malimo.Tests;
 public sealed class AppTests
 {
     [Fact]
+    public void WhenMissingFileArgument_ThenLogError()
+    {
+        var loggerMock = new Mock<ILogger<App>>();
+        var dir = new DirectoryInfo("arbitrary string");
+
+        new App(loggerMock.Object, null, null).Run(null, dir);
+
+        loggerMock.VerifyLog(logger => logger.LogError("ERROR: Missing --file option"));
+    }
+
+    [Fact]
+    public void WhenMissingTargetDirArgument_ThenLogError()
+    {
+        var loggerMock = new Mock<ILogger<App>>();
+        const string sourceFileFullName = "/MockedSourceFile.md";
+        var fileSystemMock = new MockFileSystem(
+            new Dictionary<string, MockFileData>
+            {
+                { sourceFileFullName, new MockFileData("") }
+            }
+        );
+        var sourceFile = new FileInfo(sourceFileFullName);
+
+        new App(loggerMock.Object, fileSystemMock, null).Run(sourceFile, null);
+
+        loggerMock.VerifyLog(logger => logger.LogError("ERROR: Missing --target-dir option"));
+    }
+
+    [Fact]
     public void WhenLastImageDoesNotExist_ThenDoNotMoveAnyFile()
     {
         const string sourceFileFullName = "/MockedSourceFile.md";

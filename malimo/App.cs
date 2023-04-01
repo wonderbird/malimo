@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
+using System.Threading;
 using Microsoft.Extensions.Logging;
 
 namespace malimo;
@@ -21,6 +22,18 @@ internal class App
 
     public void Run(FileInfo markdownFile, DirectoryInfo targetDir)
     {
+        if (markdownFile == null)
+        {
+            _logger.LogError("ERROR: Missing --file option");
+            return;
+        }
+
+        if (targetDir == null)
+        {
+            _logger.LogError("ERROR: Missing --target-dir option");
+            return;
+        }
+
         var imageNames = GetImagesFromMarkdownFile(markdownFile);
         LogImageNames(markdownFile, targetDir, imageNames);
 
