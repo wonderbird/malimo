@@ -12,7 +12,7 @@ on:
       - main
 
 env:
-  PUBLISH_PATH: publish
+  RETENTION_DAYS: 5
 
 jobs:
   build-and-test:
@@ -51,6 +51,7 @@ jobs:
         with:
           name: coverage-reports
           path: report
+          retention-days: ${{ env.RETENTION_DAYS }}
 
   publish-macos:
     name: Publish macOS
@@ -109,12 +110,14 @@ jobs:
         with:
           name: ${{ env.NOTARIZE_LOG_FILENAME }}
           path: ./notarize_log.json
+          retention-days: ${{ env.RETENTION_DAYS }}
           
       - name: Attach application to build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.PUBLISH_ZIP_FILENAME }}
           path: ${{ env.PUBLISH_ZIP_FILENAME }}
+          retention-days: ${{ env.RETENTION_DAYS }}
 
   publish-win:
     name: Publish Windows
@@ -154,6 +157,7 @@ jobs:
         with:
           name: ${{ env.PUBLISH_DIR }}
           path: ${{ env.PUBLISH_DIR }}/*
+          retention-days: ${{ env.RETENTION_DAYS }}
 
   release:
     name: Release
