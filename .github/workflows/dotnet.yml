@@ -144,8 +144,8 @@ jobs:
       - name: Attach application to build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.PUBLISH_ZIP_FILENAME }}
-          path: ${{ env.PUBLISH_ZIP_FILENAME }}
+          name: ${{ env.PUBLISH_DIR }}
+          path: ${{ env.PUBLISH_DIR }}/*
 
   release:
     name: Release
@@ -163,9 +163,11 @@ jobs:
     
       - uses: actions/download-artifact@v3
         
-      - name: Move ZIPs to working directory
-        run: |
-          mv markdown-linked-images-mover.win-x64.bottle/markdown-linked-images-mover.win-x64.bottle.zip .
+      - name: ZIP Windows application
+        run: zip -r9 markdown-linked-images-mover.win-x64.bottle.zip markdown-linked-images-mover.win-x64.bottle/*
+        
+#      - name: Move macOS ZIPs to working directory
+#        run: |
 #          mv markdown-linked-images-mover.arm64.bottle/markdown-linked-images-mover.osx.12-arm64.bottle.zip .
 #          mv markdown-linked-images-mover.x64.bottle/markdown-linked-images-mover.osx.12-x64.bottle.zip .
     
