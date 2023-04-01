@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-namespace MarkdownLinkedImagesMover.Tests;
+namespace malimo.Tests;
 
 public class MarkdownParserTests
 {

@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace MarkdownLinkedImagesMover;
+namespace malimo;
 
 internal interface IFileMover
 {

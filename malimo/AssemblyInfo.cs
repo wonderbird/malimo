@@ -1,4 +1,4 @@
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("MarkdownLinkedImagesMover.Tests")]
+[assembly: InternalsVisibleTo("malimo.Tests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

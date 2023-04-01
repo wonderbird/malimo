@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace MarkdownLinkedImagesMover.Tests.IntegrativeTests;
+namespace malimo.Tests.IntegrativeTests;
 
 public sealed class FileMoverTests
 {

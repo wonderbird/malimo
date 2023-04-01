@@ -1,7 +1,7 @@
 using System.IO;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace MarkdownLinkedImagesMover;
+namespace malimo;
 
 /// <summary>
 /// Program entry point.

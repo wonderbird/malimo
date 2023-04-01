@@ -23,7 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\MarkdownLinkedImagesMover\MarkdownLinkedImagesMover.csproj" />
+        <ProjectReference Include="..\malimo\malimo.csproj" />
     </ItemGroup>
 
     <ItemGroup>
