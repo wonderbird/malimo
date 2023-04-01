@@ -3,13 +3,60 @@ name: .NET
 # Save energy - only build main branch updates
 on:
   push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - main
 
 env:
-  RETENTION_DAYS: 1
+  RETENTION_DAYS: 5
 
 jobs:
+  build-and-test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+
+      - name: Install dotnet global tools (coverlet, reportgenerator)
+        run: |
+          dotnet tool install --global coverlet.console
+          dotnet tool install --global dotnet-reportgenerator-globaltool
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Run tests
+        run: dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='./TestResults/coverage.cobertura.xml'
+
+      - name: Generate coverage reports
+        run: reportgenerator "-reports:MarkdownLinkedImagesMover.Tests/TestResults/*.xml" \
+          "-targetdir:report" \
+          "-reporttypes:Html;lcov" \
+          "-title:DotnetStarter"
+
+      - name: Attach coverage reports to build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-reports
+          path: report
+          retention-days: ${{ env.RETENTION_DAYS }}
+
   publish-macos:
     name: Publish macOS
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+    needs: build-and-test
     
     strategy:
       matrix:
@@ -41,10 +88,31 @@ jobs:
           rm -vf "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover.pdb" "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover.xml"
           chmod +x "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover"
 
+      - name: Add cert to keychain
+        uses: apple-actions/import-codesign-certs@v2
+        with:
+          p12-file-base64: ${{ secrets.APPLE_DEVELOPER_ID_APP_CERTIFICATE_BASE64 }}
+          p12-password: ${{ secrets.APPLE_DEVELOPER_ID_APP_CERTIFICATE_PASSWORD }}
+
+      - name: Sign application
+        run: |
+          /bin/sh BuildAndReleaseScripts/SignMac.sh "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover" "Developer ID Application: Stefan Boos" "BuildAndReleaseScripts/entitlements.plist"
+
       - name: Zip application
         run: |
           ditto -c --sequesterRsrc -k -V "${{ env.PUBLISH_DIR }}" "${{ env.PUBLISH_ZIP_FILENAME }}"
 
+      - name: Notarize application
+        run: |
+          /bin/sh BuildAndReleaseScripts/Notarize.sh "xpdbumm@boos.systems" "${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}" "M9YN683HBZ" "${{ env.PUBLISH_ZIP_FILENAME }}"
+
+      - name: Attach notarize log to build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.NOTARIZE_LOG_FILENAME }}
+          path: ./notarize_log.json
+          retention-days: ${{ env.RETENTION_DAYS }}
+          
       - name: Attach application to build artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -54,6 +122,8 @@ jobs:
 
   publish-win:
     name: Publish Windows
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+    needs: build-and-test
     
     strategy:
       matrix:
@@ -92,6 +162,7 @@ jobs:
 
   release:
     name: Release
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: [publish-macos, publish-win]
     
     runs-on: ubuntu-latest
@@ -115,3 +186,24 @@ jobs:
         run: |
           mv markdown-linked-images-mover.osx.12-arm64.bottle.zip/markdown-linked-images-mover.osx.12-arm64.bottle.zip ./release/  
           mv markdown-linked-images-mover.osx.12-x64.bottle.zip/markdown-linked-images-mover.osx.12-x64.bottle.zip ./release/
+    
+      # Adopted from https://github.com/svenstaro/upload-release-action
+      - name: Read CHANGELOG.md and use it as a body of new release
+        id: read_release
+        shell: bash
+        run: |
+          r=$(cat CHANGELOG.md)                             # <--- Read CHANGELOG.md
+          r="${r//'%'/%25}"                                 # Multiline escape sequences for %
+          r="${r//$'\n'/%0A}"                               # Multiline escape sequences for '\n'
+          r="${r//$'\r'/%0D}"                               # Multiline escape sequences for '\r'
+          echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT          # <--- Set environment variable
+
+      - name: Upload application to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file_glob: true
+          file: markdown-linked-images-mover.*.bottle.zip
+          tag: ${{ github.ref }}
+          overwrite: true
+          body: ${{ steps.read_release.outputs.RELEASE_BODY }}
