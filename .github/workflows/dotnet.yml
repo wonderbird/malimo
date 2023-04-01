@@ -67,7 +67,7 @@ jobs:
       PUBLISH_ZIP_FILENAME: markdown-linked-images-mover.${{ matrix.runtime }}.bottle.zip
       NOTARIZE_LOG_FILENAME: notarize_log.${{ matrix.runtime }}.json
 
-    runs-on: ${{ matrix.os }}
+    runs-on: macos-latest
     
     steps:
       - uses: actions/checkout@v3
