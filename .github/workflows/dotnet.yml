@@ -113,5 +113,5 @@ jobs:
         
       - name: Move macOS ZIPs to release folder
         run: |
-          mv markdown-linked-images-mover.osx.12-arm64.bottle/markdown-linked-images-mover.osx.12-arm64.bottle.zip ./release/  
-          mv markdown-linked-images-mover.osx.12-x64.bottle/markdown-linked-images-mover.osx.12-x64.bottle.zip ./release/
+          mv markdown-linked-images-mover.osx.12-arm64.bottle.zip/markdown-linked-images-mover.osx.12-arm64.bottle.zip ./release/  
+          mv markdown-linked-images-mover.osx.12-x64.bottle.zip/markdown-linked-images-mover.osx.12-x64.bottle.zip ./release/
