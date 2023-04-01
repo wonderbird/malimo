@@ -132,7 +132,6 @@ jobs:
     
     env:
       PUBLISH_DIR: markdown-linked-images-mover.${{ matrix.runtime }}
-      PUBLISH_ZIP_FILENAME: markdown-linked-images-mover.${{ matrix.runtime }}.bottle.zip
 
     runs-on: windows-latest
     
@@ -183,7 +182,7 @@ jobs:
           limit-access-to-actor: true
       
       - name: ZIP Windows application
-        run: zip -r9 markdown-linked-images-mover.win-x64.bottle.zip markdown-linked-images-mover.win-x64.bottle/*
+        run: zip -r9 markdown-linked-images-mover.win-x64.zip markdown-linked-images-mover.win-x64/*
         
 #      - name: Move macOS ZIPs to working directory
 #        run: |
