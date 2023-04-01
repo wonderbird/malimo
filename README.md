@@ -1,7 +1,7 @@
 # malimo - Markdown Linked Images Mover
 
-[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/wonderbird/markdown-linked-images-mover)
-[![Build Status Badge](https://github.com/wonderbird/markdown-linked-images-mover/workflows/.NET/badge.svg)](https://github.com/wonderbird/markdown-linked-images-mover/actions?query=workflow%3A%22.NET%22)
+[![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/wonderbird/malimo)
+[![Build Status Badge](https://github.com/wonderbird/malimo/workflows/.NET/badge.svg)](https://github.com/wonderbird/malimo/actions?query=workflow%3A%22.NET%22)
 
 Move all images used by a markdown file into a folder.
 
@@ -15,7 +15,7 @@ I am developing during my spare time and use this project for learning purposes.
 
 ## Thanks
 
-Many thanks to [JetBrains](https://www.jetbrains.com/?from=markdown-linked-images-mover) who provide
+Many thanks to [JetBrains](https://www.jetbrains.com/?from=malimo) who provide
 an [Open Source License](https://www.jetbrains.com/community/opensource/) for this project ❤️.
 
 ## Installation
@@ -23,7 +23,7 @@ an [Open Source License](https://www.jetbrains.com/community/opensource/) for th
 For macOS I am maintaining a [Homebrew](https://brew.sh) installer:
 
 ```shell
-brew install wonderbird/tools/markdown-linked-images-mover
+brew install wonderbird/tools/malimo
 ```
 
 This creates a symlink named `malimo` in your `$(brew --prefix)/bin` directory. After successful installation
@@ -33,14 +33,14 @@ you can run the program and get help by entering
 malimo --help
 ```
 
-The corresponding Homebrew cask is at [wonderbird / homebrew-tools / Casks / markdown-linked-images-mover.rb](https://github.com/wonderbird/homebrew-tools/blob/main/Casks/markdown-linked-images-mover.rb).
+The corresponding Homebrew cask is at [wonderbird / homebrew-tools / Casks / malimo.rb](https://github.com/wonderbird/homebrew-tools/blob/main/Casks/malimo.rb).
 
 ## Development
 
 ### Quick-Start
 
 Click
-the [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/wonderbird/markdown-linked-images-mover)
+the [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/wonderbird/malimo)
 badge (also above) to launch a web IDE.
 
 If that does not work for you or if you'd like to have the project on your local machine, then continue reading.
