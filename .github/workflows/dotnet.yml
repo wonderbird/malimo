@@ -176,13 +176,16 @@ jobs:
     
       - uses: actions/download-artifact@v3
         
-      - name: ZIP Windows application
-        run: zip -r9 markdown-linked-images-mover.win-x64.zip markdown-linked-images-mover.win-x64/*
+      - name: Create release folder
+        run: mkdir release
         
-      - name: Move macOS ZIPs to working directory
+      - name: ZIP Windows application
+        run: zip -r9 release/markdown-linked-images-mover.win-x64.zip markdown-linked-images-mover.win-x64/*
+        
+      - name: Move macOS ZIPs to release folder
         run: |
-          mv markdown-linked-images-mover.arm64.bottle/markdown-linked-images-mover.osx.12-arm64.bottle.zip .
-          mv markdown-linked-images-mover.x64.bottle/markdown-linked-images-mover.osx.12-x64.bottle.zip .
+          mv markdown-linked-images-mover.osx.12-arm64.bottle.zip/markdown-linked-images-mover.osx.12-arm64.bottle.zip ./release/  
+          mv markdown-linked-images-mover.osx.12-x64.bottle.zip/markdown-linked-images-mover.osx.12-x64.bottle.zip ./release/
     
       # Adopted from https://github.com/svenstaro/upload-release-action
       - name: Read CHANGELOG.md and use it as a body of new release
@@ -195,12 +198,12 @@ jobs:
           r="${r//$'\r'/%0D}"                               # Multiline escape sequences for '\r'
           echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT          # <--- Set environment variable
 
-      - name: Upload application to release
+      - name: Upload applications to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file_glob: true
-          file: markdown-linked-images-mover.*.bottle.zip
+          file: release/*
           tag: ${{ github.ref }}
           overwrite: true
           body: ${{ steps.read_release.outputs.RELEASE_BODY }}
