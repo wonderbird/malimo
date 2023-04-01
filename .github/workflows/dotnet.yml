@@ -52,20 +52,20 @@ jobs:
           name: coverage-reports
           path: report
 
-  publish:
-    name: Publish
+  publish-macos:
+    name: Publish macOS
     needs: build-and-test
     
     strategy:
       matrix:
-        architecture: [arm64, x64]
+        runtime:
+          - osx.12-arm64
+          - osx.12-x64
 
     env:
-      RUNTIME: osx.12-${{ matrix.architecture }}
-      PUBLISH_DIR: markdown-linked-images-mover.${{ matrix.architecture }}
-      PUBLISH_ZIP_FILENAME: markdown-linked-images-mover.${{ matrix.architecture }}.bottle.zip
-      SHA256SUM_FILENAME: markdown-linked-images-mover.${{ matrix.architecture }}.bottle.zip.sha256
-      NOTARIZE_LOG_FILENAME: notarize_log.${{ matrix.architecture }}.json
+      PUBLISH_DIR: markdown-linked-images-mover.${{ matrix.runtime }}
+      PUBLISH_ZIP_FILENAME: markdown-linked-images-mover.${{ matrix.runtime }}.bottle.zip
+      NOTARIZE_LOG_FILENAME: notarize_log.${{ matrix.runtime }}.json
 
     runs-on: macos-latest
     
@@ -79,7 +79,10 @@ jobs:
 
       - name: Create application
         run: |
-          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime "${{ env.RUNTIME }}" --self-contained true -p:PublishSingleFile=true --output "${{ env.PUBLISH_DIR }}"
+          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true --output "${{ env.PUBLISH_DIR }}"
+
+      - name: Prepare release files
+        run: |
           rm -vf "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover.pdb" "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover.xml"
           chmod +x "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover"
 
@@ -113,21 +116,52 @@ jobs:
           name: ${{ env.PUBLISH_ZIP_FILENAME }}
           path: ${{ env.PUBLISH_ZIP_FILENAME }}
 
-  release:
-    name: Publish
-    needs: publish
+  publish-win:
+    name: Publish Windows
+    needs: build-and-test
     
     strategy:
       matrix:
-        architecture: [arm64, x64]
-
+        runtime:
+          - win-x64
+    
     env:
-      PUBLISH_ZIP_FILENAME: markdown-linked-images-mover.${{ matrix.architecture }}.bottle.zip
+      PUBLISH_DIR: markdown-linked-images-mover.${{ matrix.runtime }}
+      PUBLISH_ZIP_FILENAME: markdown-linked-images-mover.${{ matrix.runtime }}.bottle.zip
 
+    runs-on: windows-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+
+      - name: Create application
+        run: |
+          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true --output "${{ env.PUBLISH_DIR }}"
+
+      - name: Prepare release files
+        if: runner.os == 'Windows'
+        run: |
+          del "${{ env.PUBLISH_DIR }}\MarkdownLinkedImagesMover.pdb"
+          del "${{ env.PUBLISH_DIR }}\MarkdownLinkedImagesMover.xml"
+
+      - name: Attach application to build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.PUBLISH_DIR }}
+          path: ${{ env.PUBLISH_DIR }}/*
+
+  release:
+    name: Release
+    needs: [publish-macos, publish-win]
+    
     runs-on: ubuntu-latest
     if: ${{ startsWith(github.ref, 'refs/tags/') }}
     
-
     # Configure GITHUB_TOKEN so that it allows uploading to the release
     permissions:
       contents: write
@@ -136,8 +170,14 @@ jobs:
       - uses: actions/checkout@v3
     
       - uses: actions/download-artifact@v3
-        with:
-          name: ${{ env.PUBLISH_ZIP_FILENAME }}
+        
+      - name: ZIP Windows application
+        run: zip -r9 markdown-linked-images-mover.win-x64.bottle.zip markdown-linked-images-mover.win-x64.bottle/*
+        
+      - name: Move macOS ZIPs to working directory
+        run: |
+          mv markdown-linked-images-mover.arm64.bottle/markdown-linked-images-mover.osx.12-arm64.bottle.zip .
+          mv markdown-linked-images-mover.x64.bottle/markdown-linked-images-mover.osx.12-x64.bottle.zip .
     
       # Adopted from https://github.com/svenstaro/upload-release-action
       - name: Read CHANGELOG.md and use it as a body of new release
@@ -154,8 +194,8 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ env.PUBLISH_ZIP_FILENAME }}
-          asset_name: ${{ env.PUBLISH_ZIP_FILENAME }}
+          file_glob: true
+          file: markdown-linked-images-mover.*.bottle.zip
           tag: ${{ github.ref }}
           overwrite: true
           body: ${{ steps.read_release.outputs.RELEASE_BODY }}
