@@ -112,10 +112,14 @@ jobs:
     name: Publish Windows
     needs: build-and-test
     
+    strategy:
+      matrix:
+        runtime:
+          - win-x64
+    
     env:
-      RUNTIME: win-x64
-      PUBLISH_DIR: markdown-linked-images-mover.${{ env.RUNTIME }}
-      PUBLISH_ZIP_FILENAME: markdown-linked-images-mover.${{ env.RUNTIME }}.bottle.zip
+      PUBLISH_DIR: markdown-linked-images-mover.${{ matrix.runtime }}
+      PUBLISH_ZIP_FILENAME: markdown-linked-images-mover.${{ matrix.runtime }}.bottle.zip
 
     runs-on: windows-latest
     
@@ -129,7 +133,7 @@ jobs:
 
       - name: Create application
         run: |
-          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime "${{ env.RUNTIME }}" --self-contained true -p:PublishSingleFile=true --output "${{ env.PUBLISH_DIR }}"
+          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true --output "${{ env.PUBLISH_DIR }}"
 
       - name: Prepare release files (win)
         if: runner.os == 'Windows'
