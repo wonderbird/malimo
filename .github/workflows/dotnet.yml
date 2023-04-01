@@ -198,12 +198,12 @@ jobs:
           r="${r//$'\r'/%0D}"                               # Multiline escape sequences for '\r'
           echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT          # <--- Set environment variable
 
-      - name: Upload application to release
+      - name: Upload applications to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file_glob: true
-          file: markdown-linked-images-mover.*.bottle.zip
+          file: release/*
           tag: ${{ github.ref }}
           overwrite: true
           body: ${{ steps.read_release.outputs.RELEASE_BODY }}
