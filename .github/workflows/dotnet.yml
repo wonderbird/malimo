@@ -55,6 +55,7 @@ jobs:
 
   publish-macos:
     name: Publish macOS
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: build-and-test
     
     strategy:
@@ -121,6 +122,7 @@ jobs:
 
   publish-win:
     name: Publish Windows
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: build-and-test
     
     strategy:
@@ -161,10 +163,10 @@ jobs:
 
   release:
     name: Release
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: [publish-macos, publish-win]
     
     runs-on: ubuntu-latest
-    if: ${{ startsWith(github.ref, 'refs/tags/') }}
     
     # Configure GITHUB_TOKEN so that it allows uploading to the release
     permissions:
