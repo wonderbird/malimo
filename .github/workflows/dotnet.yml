@@ -66,6 +66,11 @@ jobs:
     
       - uses: actions/download-artifact@v3
         
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
+      
       - name: Move macOS ZIPs to working directory
         run: |
           mv markdown-linked-images-mover.arm64.bottle.zip/markdown-linked-images-mover.osx.12-arm64.bottle.zip .
