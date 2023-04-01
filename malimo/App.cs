@@ -4,7 +4,7 @@ using System.IO.Abstractions;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 
-namespace MarkdownLinkedImagesMover;
+namespace malimo;
 
 internal class App
 {

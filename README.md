@@ -1,4 +1,4 @@
-# Markdown Linked Images Mover
+# malimo - Markdown Linked Images Mover
 
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/wonderbird/markdown-linked-images-mover)
 [![Build Status Badge](https://github.com/wonderbird/markdown-linked-images-mover/workflows/.NET/badge.svg)](https://github.com/wonderbird/markdown-linked-images-mover/actions?query=workflow%3A%22.NET%22)
@@ -74,14 +74,14 @@ dotnet test
 
 ```shell
 # Continuously watch the tests while changing code
-dotnet watch -p ./MarkdownLinkedImagesMover.Tests test
+dotnet watch -p ./malimo.Tests test
 ```
 
 ```shell
 # Produce a coverage report and open it in the default browser
-rm -r MarkdownLinkedImagesMover.Tests/TestResults && \
+rm -r malimo.Tests/TestResults && \
   dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='./TestResults/coverage.cobertura.xml' && \
-  reportgenerator "-reports:MarkdownLinkedImagesMover.Tests/TestResults/*.xml" "-targetdir:report" "-reporttypes:Html;lcov" "-title:DotnetStarter"
+  reportgenerator "-reports:malimo.Tests/TestResults/*.xml" "-targetdir:report" "-reporttypes:Html;lcov" "-title:DotnetStarter"
 open report/index.html
 ```
 
@@ -89,29 +89,29 @@ open report/index.html
 
 ```shell
 # Get help
-dotnet run --project MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj -- --help
+dotnet run --project malimo/malimo.csproj -- --help
 ```
 
 ```shell
 # Prepare test data to run the application
-cp -Rv MarkdownLinkedImagesMover.Tests/data/seed MarkdownLinkedImagesMover.Tests/data/source
-mkdir MarkdownLinkedImagesMover.Tests/data/target
+cp -Rv malimo.Tests/data/seed malimo.Tests/data/source
+mkdir malimo.Tests/data/target
 ```
 
 ```shell
 # Run the application
-dotnet run --project MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj -- --dry-run --file MarkdownLinkedImagesMover.Tests/data/source/Testfile.md --target-dir MarkdownLinkedImagesMover.Tests/data/target
+dotnet run --project malimo/malimo.csproj -- --dry-run --file malimo.Tests/data/source/Testfile.md --target-dir malimo.Tests/data/target
 ```
 
 ```shell
 # Inspect the result
-ls -la MarkdownLinkedImagesMover.Tests/data/source
-ls -la MarkdownLinkedImagesMover.Tests/data/target
+ls -la malimo.Tests/data/source
+ls -la malimo.Tests/data/target
 ```
 
 ```shell
 # Cleanup test data
-rm -r MarkdownLinkedImagesMover.Tests/data/source MarkdownLinkedImagesMover.Tests/data/target
+rm -r malimo.Tests/data/source malimo.Tests/data/target
 ```
 
 ### Before Creating a Pull Request ...

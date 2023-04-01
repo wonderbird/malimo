@@ -3,7 +3,7 @@ image:
 
 tasks:
   - init: dotnet restore && dotnet build --configuration Debug --no-restore
-    command: dotnet watch -p ./MarkdownLinkedImagesMover.Tests test
+    command: dotnet watch -p ./malimo.Tests test
   - openMode: split-right
     command: mob status
 

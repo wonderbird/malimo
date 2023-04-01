@@ -41,7 +41,7 @@ jobs:
         run: dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='./TestResults/coverage.cobertura.xml'
 
       - name: Generate coverage reports
-        run: reportgenerator "-reports:MarkdownLinkedImagesMover.Tests/TestResults/*.xml" \
+        run: reportgenerator "-reports:malimo.Tests/TestResults/*.xml" \
           "-targetdir:report" \
           "-reporttypes:Html;lcov" \
           "-title:DotnetStarter"
@@ -81,12 +81,12 @@ jobs:
 
       - name: Create application
         run: |
-          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true --output "${{ env.PUBLISH_DIR }}"
+          dotnet publish malimo/malimo.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true --output "${{ env.PUBLISH_DIR }}"
 
       - name: Prepare release files
         run: |
-          rm -vf "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover.pdb" "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover.xml"
-          chmod +x "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover"
+          rm -vf "${{ env.PUBLISH_DIR }}/malimo.pdb" "${{ env.PUBLISH_DIR }}/malimo.xml"
+          chmod +x "${{ env.PUBLISH_DIR }}/malimo"
 
       - name: Add cert to keychain
         uses: apple-actions/import-codesign-certs@v2
@@ -96,7 +96,7 @@ jobs:
 
       - name: Sign application
         run: |
-          /bin/sh BuildAndReleaseScripts/SignMac.sh "${{ env.PUBLISH_DIR }}/MarkdownLinkedImagesMover" "Developer ID Application: Stefan Boos" "BuildAndReleaseScripts/entitlements.plist"
+          /bin/sh BuildAndReleaseScripts/SignMac.sh "${{ env.PUBLISH_DIR }}/malimo" "Developer ID Application: Stefan Boos" "BuildAndReleaseScripts/entitlements.plist"
 
       - name: Zip application
         run: |
@@ -145,13 +145,13 @@ jobs:
 
       - name: Create application
         run: |
-          dotnet publish MarkdownLinkedImagesMover/MarkdownLinkedImagesMover.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true --output "${{ env.PUBLISH_DIR }}"
+          dotnet publish malimo/malimo.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true --output "${{ env.PUBLISH_DIR }}"
 
       - name: Prepare release files
         if: runner.os == 'Windows'
         run: |
-          del "${{ env.PUBLISH_DIR }}\MarkdownLinkedImagesMover.pdb"
-          del "${{ env.PUBLISH_DIR }}\MarkdownLinkedImagesMover.xml"
+          del "${{ env.PUBLISH_DIR }}\malimo.pdb"
+          del "${{ env.PUBLISH_DIR }}\malimo.xml"
 
       - name: Attach application to build artifacts
         uses: actions/upload-artifact@v3

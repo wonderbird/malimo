@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 
-namespace MarkdownLinkedImagesMover;
+namespace malimo;
 
 internal static class ServiceProviderFactory
 {
