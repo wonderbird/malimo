@@ -35,7 +35,10 @@ public sealed class LogOutputTests
     public void SomeImagesDoNotExist()
     {
         var sourceFile = new FileInfo("/MockedSourceFile.md");
-        _fileSystemMock.AddFile(sourceFile.FullName, new MockFileData("![[image1.png]] ![[image2.png]] ![[image3.png]]"));
+        _fileSystemMock.AddFile(
+            sourceFile.FullName,
+            new MockFileData("![[image1.png]] ![[image2.png]] ![[image3.png]]")
+        );
         _fileSystemMock.AddFile("/image2.png", new MockFileData(""));
 
         var targetDir = new DirectoryInfo("/MockedTargetDir");
@@ -51,7 +54,10 @@ public sealed class LogOutputTests
     public void AllImagesExist()
     {
         var sourceFile = new FileInfo("/MockedSourceFile.md");
-        _fileSystemMock.AddFile(sourceFile.FullName, new MockFileData("![[noun-starship-3799189.png]]\n![[noun-island-1479438.png]]"));
+        _fileSystemMock.AddFile(
+            sourceFile.FullName,
+            new MockFileData("![[noun-starship-3799189.png]]\n![[noun-island-1479438.png]]")
+        );
 
         var targetDir = new DirectoryInfo("/MockedTargetDir");
         var fileMoverMock = new Mock<IFileMover>();

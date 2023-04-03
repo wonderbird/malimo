@@ -60,7 +60,8 @@ internal class App
     }
 
     private List<string> CheckForMissingFiles(FileInfo markdownFile, IEnumerable<string> imageNames) =>
-        imageNames.Select(imageName => Path.Combine(markdownFile.DirectoryName ?? "", imageName))
+        imageNames
+            .Select(imageName => Path.Combine(markdownFile.DirectoryName ?? "", imageName))
             .Where(fullName => !_fileSystem.File.Exists(fullName))
             .ToList();
 

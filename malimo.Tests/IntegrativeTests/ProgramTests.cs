@@ -34,9 +34,11 @@ public sealed class ProgramTests
         AssertFileDoesNotExist("noun-starship-3799189.png", testDir.TargetDir);
     }
 
-    private static void AssertFileDoesNotExist(string fileName, FileSystemInfo dir) => AssertFileStatus(FileStatus.DoesNotExist, fileName, dir);
+    private static void AssertFileDoesNotExist(string fileName, FileSystemInfo dir) =>
+        AssertFileStatus(FileStatus.DoesNotExist, fileName, dir);
 
-    private static void AssertFileExists(string fileName, FileSystemInfo dir) => AssertFileStatus(FileStatus.DoesExist, fileName, dir);
+    private static void AssertFileExists(string fileName, FileSystemInfo dir) =>
+        AssertFileStatus(FileStatus.DoesExist, fileName, dir);
 
     private static void AssertFileStatus(FileStatus expected, string fileName, FileSystemInfo dir)
     {
