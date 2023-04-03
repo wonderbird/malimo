@@ -32,6 +32,15 @@ public sealed class LogOutputTests
     }
 
     [Fact]
+    public void MissingFileAndTargetDirArguments()
+    {
+        new App(_loggerMock.Object, null, null).Run(null, null);
+
+        _loggerMock.VerifyLog(logger => logger.LogError("ERROR: Missing --file option"));
+        _loggerMock.VerifyLog(logger => logger.LogError("ERROR: Missing --target-dir option"));
+    }
+
+    [Fact]
     public void SomeImagesDoNotExist()
     {
         var sourceFile = new FileInfo("/MockedSourceFile.md");

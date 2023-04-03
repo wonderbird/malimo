@@ -22,15 +22,8 @@ internal class App
 
     public void Run(FileInfo markdownFile, DirectoryInfo targetDir)
     {
-        if (markdownFile == null)
+        if (InvalidArguments(markdownFile, targetDir))
         {
-            _logger.LogError("ERROR: Missing --file option");
-            return;
-        }
-
-        if (targetDir == null)
-        {
-            _logger.LogError("ERROR: Missing --target-dir option");
             return;
         }
 
@@ -44,6 +37,30 @@ internal class App
         {
             MoveImagesToTargetDir(markdownFile, targetDir, imageNames);
         }
+    }
+
+    private bool InvalidArguments(FileInfo markdownFile, DirectoryInfo targetDir)
+    {
+        var isValid = true;
+
+        if (markdownFile == null)
+        {
+            _logger.LogError("ERROR: Missing --file option");
+            isValid = false;
+        }
+
+        if (targetDir == null)
+        {
+            _logger.LogError("ERROR: Missing --target-dir option");
+            isValid = false;
+        }
+
+        if (!isValid)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private List<string> GetImagesFromMarkdownFile(FileSystemInfo markdownFile)
