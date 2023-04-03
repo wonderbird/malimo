@@ -45,13 +45,13 @@ internal class App
 
         if (markdownFile == null)
         {
-            _logger.LogError("ERROR: Missing --file option");
+            _logger.LogError("Missing --file option");
             isValid = false;
         }
 
         if (targetDir == null)
         {
-            _logger.LogError("ERROR: Missing --target-dir option");
+            _logger.LogError("Missing --target-dir option");
             isValid = false;
         }
 

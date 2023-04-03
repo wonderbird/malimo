@@ -17,7 +17,7 @@ public sealed class LogOutputTests
 
         new App(_loggerMock.Object, null, null).Run(null, dir);
 
-        _loggerMock.VerifyLog(logger => logger.LogError("ERROR: Missing --file option"));
+        _loggerMock.VerifyLog(logger => logger.LogError("Missing --file option"));
     }
 
     [Fact]
@@ -28,7 +28,7 @@ public sealed class LogOutputTests
 
         new App(_loggerMock.Object, _fileSystemMock, null).Run(sourceFile, null);
 
-        _loggerMock.VerifyLog(logger => logger.LogError("ERROR: Missing --target-dir option"));
+        _loggerMock.VerifyLog(logger => logger.LogError("Missing --target-dir option"));
     }
 
     [Fact]
@@ -36,8 +36,8 @@ public sealed class LogOutputTests
     {
         new App(_loggerMock.Object, null, null).Run(null, null);
 
-        _loggerMock.VerifyLog(logger => logger.LogError("ERROR: Missing --file option"));
-        _loggerMock.VerifyLog(logger => logger.LogError("ERROR: Missing --target-dir option"));
+        _loggerMock.VerifyLog(logger => logger.LogError("Missing --file option"));
+        _loggerMock.VerifyLog(logger => logger.LogError("Missing --target-dir option"));
     }
 
     [Fact]
