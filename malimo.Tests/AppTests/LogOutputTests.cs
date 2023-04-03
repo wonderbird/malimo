@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions.TestingHelpers;
 using Microsoft.Extensions.Logging;
@@ -9,6 +8,7 @@ namespace malimo.Tests.AppTests;
 public sealed class LogOutputTests
 {
     private readonly Mock<ILogger<App>> _loggerMock = new();
+    private readonly MockFileSystem _fileSystemMock = new();
 
     [Fact]
     public void MissingFileArgument()
@@ -23,16 +23,10 @@ public sealed class LogOutputTests
     [Fact]
     public void MissingTargetDirArgument()
     {
-        const string sourceFileFullName = "/MockedSourceFile.md";
-        var fileSystemMock = new MockFileSystem(
-            new Dictionary<string, MockFileData>
-            {
-                { sourceFileFullName, new MockFileData("") }
-            }
-        );
-        var sourceFile = new FileInfo(sourceFileFullName);
+        var sourceFile = new FileInfo("/MockedSourceFile.md");
+        _fileSystemMock.AddFile(sourceFile.FullName, new MockFileData(""));
 
-        new App(_loggerMock.Object, fileSystemMock, null).Run(sourceFile, null);
+        new App(_loggerMock.Object, _fileSystemMock, null).Run(sourceFile, null);
 
         _loggerMock.VerifyLog(logger => logger.LogError("ERROR: Missing --target-dir option"));
     }
@@ -40,22 +34,14 @@ public sealed class LogOutputTests
     [Fact]
     public void SomeImagesDoNotExist()
     {
-        const string sourceFileFullName = "/MockedSourceFile.md";
-        var fileSystemMock = new MockFileSystem(
-            new Dictionary<string, MockFileData>
-            {
-                { sourceFileFullName, new MockFileData("![[image1.png]] ![[image2.png]] ![[image3.png]]") },
-                // /image1.png does not exist
-                { "/image2.png", new MockFileData("") }
-                // /image3.png does not exist
-            }
-        );
+        var sourceFile = new FileInfo("/MockedSourceFile.md");
+        _fileSystemMock.AddFile(sourceFile.FullName, new MockFileData("![[image1.png]] ![[image2.png]] ![[image3.png]]"));
+        _fileSystemMock.AddFile("/image2.png", new MockFileData(""));
 
         var targetDir = new DirectoryInfo("/MockedTargetDir");
-        var sourceFile = new FileInfo(sourceFileFullName);
         var fileMoverMock = new Mock<IFileMover>();
 
-        new App(_loggerMock.Object, fileSystemMock, fileMoverMock.Object).Run(sourceFile, targetDir);
+        new App(_loggerMock.Object, _fileSystemMock, fileMoverMock.Object).Run(sourceFile, targetDir);
 
         _loggerMock.VerifyLog(logger => logger.LogError("File '{@ImageFile}' does not exist", "/image1.png"));
         _loggerMock.VerifyLog(logger => logger.LogError("File '{@ImageFile}' does not exist", "/image3.png"));
@@ -64,19 +50,13 @@ public sealed class LogOutputTests
     [Fact]
     public void AllImagesExist()
     {
-        const string sourceFileFullName = "/MockedSourceFile.md";
-        var fileSystemMock = new MockFileSystem(
-            new Dictionary<string, MockFileData>
-            {
-                { sourceFileFullName, new MockFileData("![[noun-starship-3799189.png]]\n![[noun-island-1479438.png]]") }
-            }
-        );
+        var sourceFile = new FileInfo("/MockedSourceFile.md");
+        _fileSystemMock.AddFile(sourceFile.FullName, new MockFileData("![[noun-starship-3799189.png]]\n![[noun-island-1479438.png]]"));
 
         var targetDir = new DirectoryInfo("/MockedTargetDir");
-        var sourceFile = new FileInfo(sourceFileFullName);
         var fileMoverMock = new Mock<IFileMover>();
 
-        new App(_loggerMock.Object, fileSystemMock, fileMoverMock.Object).Run(sourceFile, targetDir);
+        new App(_loggerMock.Object, _fileSystemMock, fileMoverMock.Object).Run(sourceFile, targetDir);
 
         _loggerMock.VerifyLog(logger => logger.LogInformation("Target folder: '{@TargetFolder}'", targetDir.FullName));
         _loggerMock.VerifyLog(logger => logger.LogInformation("File '{@SourceFile}' contains", sourceFile.FullName));
