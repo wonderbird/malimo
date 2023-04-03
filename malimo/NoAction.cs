@@ -4,7 +4,5 @@ namespace malimo;
 
 internal class NoAction : IFileMover
 {
-    public void Move(FileInfo sourceFile, DirectoryInfo targetDir)
-    {
-    }
+    public void Move(FileInfo sourceFile, DirectoryInfo targetDir) { }
 }

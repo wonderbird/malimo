@@ -19,5 +19,6 @@ public static class Program
         var serviceProvider = ServiceProviderFactory.CreateServiceProvider(dryRun);
         var app = serviceProvider.GetRequiredService<App>();
         app.Run(file, targetDir);
+        serviceProvider.Dispose(); // Flush log messages
     }
 }

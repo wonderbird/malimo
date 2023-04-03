@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
+using System.Threading;
 using Microsoft.Extensions.Logging;
 
 namespace malimo;
@@ -21,6 +22,11 @@ internal class App
 
     public void Run(FileInfo markdownFile, DirectoryInfo targetDir)
     {
+        if (HasInvalidArguments(markdownFile, targetDir))
+        {
+            return;
+        }
+
         var imageNames = GetImagesFromMarkdownFile(markdownFile);
         LogImageNames(markdownFile, targetDir, imageNames);
 
@@ -31,6 +37,25 @@ internal class App
         {
             MoveImagesToTargetDir(markdownFile, targetDir, imageNames);
         }
+    }
+
+    private bool HasInvalidArguments(FileInfo markdownFile, DirectoryInfo targetDir)
+    {
+        var isValid = true;
+
+        if (markdownFile == null)
+        {
+            _logger.LogError("Missing --file option");
+            isValid = false;
+        }
+
+        if (targetDir == null)
+        {
+            _logger.LogError("Missing --target-dir option");
+            isValid = false;
+        }
+
+        return !isValid;
     }
 
     private List<string> GetImagesFromMarkdownFile(FileSystemInfo markdownFile)
@@ -47,7 +72,8 @@ internal class App
     }
 
     private List<string> CheckForMissingFiles(FileInfo markdownFile, IEnumerable<string> imageNames) =>
-        imageNames.Select(imageName => Path.Combine(markdownFile.DirectoryName ?? "", imageName))
+        imageNames
+            .Select(imageName => Path.Combine(markdownFile.DirectoryName ?? "", imageName))
             .Where(fullName => !_fileSystem.File.Exists(fullName))
             .ToList();
 
