@@ -4,9 +4,9 @@ using System.IO.Abstractions.TestingHelpers;
 using Microsoft.Extensions.Logging;
 using Moq;
 
-namespace malimo.Tests;
+namespace malimo.Tests.AppTests;
 
-public sealed class AppTests
+public sealed class LogOutputTests
 {
     [Fact]
     public void WhenMissingFileArgument_ThenLogError()
@@ -35,31 +35,6 @@ public sealed class AppTests
         new App(loggerMock.Object, fileSystemMock, null).Run(sourceFile, null);
 
         loggerMock.VerifyLog(logger => logger.LogError("ERROR: Missing --target-dir option"));
-    }
-
-    [Fact]
-    public void WhenLastImageDoesNotExist_ThenDoNotMoveAnyFile()
-    {
-        const string sourceFileFullName = "/MockedSourceFile.md";
-        var fileSystemMock = new MockFileSystem(
-            new Dictionary<string, MockFileData>
-            {
-                { sourceFileFullName, new MockFileData("![[image1.png]] ![[image2.png]]") },
-                { "/image1.png", new MockFileData("") }
-                // /image2.png does not exist
-            }
-        );
-
-        Assert.False(fileSystemMock.FileExists("/image.png"));
-
-        var targetDir = new DirectoryInfo("/MockedTargetDir");
-        var sourceFile = new FileInfo(sourceFileFullName);
-        var loggerMock = new Mock<ILogger<App>>();
-        var fileMoverMock = new Mock<IFileMover>();
-
-        new App(loggerMock.Object, fileSystemMock, fileMoverMock.Object).Run(sourceFile, targetDir);
-
-        fileMoverMock.Verify(mover => mover.Move(It.IsAny<FileInfo>(), It.IsAny<DirectoryInfo>()), Times.Never);
     }
 
     [Fact]
