@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.5-alpha] - 2023-04-01
 
+### Added
+
+- Log and abort if a mandatory argument is missing, i.e. --file or --target-dir
+
 ### Changed
 
 - Renamed the application to "malimo"
