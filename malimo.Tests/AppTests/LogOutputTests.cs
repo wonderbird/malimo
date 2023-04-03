@@ -9,7 +9,7 @@ namespace malimo.Tests.AppTests;
 public sealed class LogOutputTests
 {
     [Fact]
-    public void WhenMissingFileArgument_ThenLogError()
+    public void MissingFileArgument()
     {
         var loggerMock = new Mock<ILogger<App>>();
         var dir = new DirectoryInfo("arbitrary string");
@@ -20,7 +20,7 @@ public sealed class LogOutputTests
     }
 
     [Fact]
-    public void WhenMissingTargetDirArgument_ThenLogError()
+    public void MissingTargetDirArgument()
     {
         var loggerMock = new Mock<ILogger<App>>();
         const string sourceFileFullName = "/MockedSourceFile.md";
@@ -38,7 +38,7 @@ public sealed class LogOutputTests
     }
 
     [Fact]
-    public void WhenImagesDoNotExist_ThenLogMissingFiles()
+    public void SomeImagesDoNotExist()
     {
         const string sourceFileFullName = "/MockedSourceFile.md";
         var fileSystemMock = new MockFileSystem(
@@ -63,7 +63,7 @@ public sealed class LogOutputTests
     }
 
     [Fact]
-    public void WhenAllImagesExist_ThenProduceCorrectLogs()
+    public void AllImagesExist()
     {
         const string sourceFileFullName = "/MockedSourceFile.md";
         var fileSystemMock = new MockFileSystem(

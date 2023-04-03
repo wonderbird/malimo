@@ -9,7 +9,7 @@ namespace malimo.Tests.AppTests;
 public class FileSystemInteractionTests
 {
     [Fact]
-    public void WhenLastImageDoesNotExist_ThenDoNotMoveAnyFile()
+    public void LastImageDoesNotExist()
     {
         const string sourceFileFullName = "/MockedSourceFile.md";
         var fileSystemMock = new MockFileSystem(
