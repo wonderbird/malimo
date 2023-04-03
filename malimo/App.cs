@@ -22,7 +22,7 @@ internal class App
 
     public void Run(FileInfo markdownFile, DirectoryInfo targetDir)
     {
-        if (InvalidArguments(markdownFile, targetDir))
+        if (HasInvalidArguments(markdownFile, targetDir))
         {
             return;
         }
@@ -39,7 +39,7 @@ internal class App
         }
     }
 
-    private bool InvalidArguments(FileInfo markdownFile, DirectoryInfo targetDir)
+    private bool HasInvalidArguments(FileInfo markdownFile, DirectoryInfo targetDir)
     {
         var isValid = true;
 
@@ -55,12 +55,7 @@ internal class App
             isValid = false;
         }
 
-        if (!isValid)
-        {
-            return true;
-        }
-
-        return false;
+        return !isValid;
     }
 
     private List<string> GetImagesFromMarkdownFile(FileSystemInfo markdownFile)
