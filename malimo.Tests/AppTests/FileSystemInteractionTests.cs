@@ -11,20 +11,18 @@ public class FileSystemInteractionTests
     [Fact]
     public void LastImageDoesNotExist()
     {
-        const string sourceFileFullName = "/MockedSourceFile.md";
-        var fileSystemMock = new MockFileSystem(
-            new Dictionary<string, MockFileData>
-            {
-                { sourceFileFullName, new MockFileData("![[image1.png]] ![[image2.png]]") },
-                { "/image1.png", new MockFileData("") }
-                // /image2.png does not exist
-            }
-        );
+        var sourceFile = new FileInfo("/MockedSourceFile.md");
+        const string existingImageFile = "image1.png";
+        const string missingImageFile = "image2.png";
 
-        Assert.False(fileSystemMock.FileExists("/image.png"));
+        var fileSystemMock = new MockFileSystem();
+        fileSystemMock.AddFile(sourceFile.FullName, new MockFileData($"![[{existingImageFile}]] ![[{missingImageFile}]]"));
+        fileSystemMock.AddFile($"/{existingImageFile}", new MockFileData(""));
+
+        Assert.True(fileSystemMock.FileExists($"/{existingImageFile}"));
+        Assert.False(fileSystemMock.FileExists($"/{missingImageFile}"));
 
         var targetDir = new DirectoryInfo("/MockedTargetDir");
-        var sourceFile = new FileInfo(sourceFileFullName);
         var loggerMock = new Mock<ILogger<App>>();
         var fileMoverMock = new Mock<IFileMover>();
 
