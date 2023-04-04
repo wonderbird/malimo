@@ -85,7 +85,7 @@ jobs:
 
       - name: Prepare release files
         run: |
-          rm -vf "${{ env.PUBLISH_DIR }}/malimo.pdb" "${{ env.PUBLISH_DIR }}/malimo.xml"
+          rm -vf "${{ env.PUBLISH_DIR }}/malimo.pdb"
           chmod +x "${{ env.PUBLISH_DIR }}/malimo"
 
       - name: Add cert to keychain
@@ -151,7 +151,6 @@ jobs:
         if: runner.os == 'Windows'
         run: |
           del "${{ env.PUBLISH_DIR }}\malimo.pdb"
-          del "${{ env.PUBLISH_DIR }}\malimo.xml"
 
       - name: Attach application to build artifacts
         uses: actions/upload-artifact@v3

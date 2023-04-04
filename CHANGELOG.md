@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Print correct version number when --version argument is given 
+- Print correct version number when --version argument is given
+- Print description when --help argument is given
 
 ### Changed
 
