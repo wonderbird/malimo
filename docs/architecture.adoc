@@ -8,10 +8,20 @@ This documentation is based on the https://docs.arc42.org[arc42] template. The e
 https://www.dokchess.de/["DokChess als Beispiel für arc42"] act as templates for some sections. Many thanks to all
 contributors for your valuable work.
 
-The architecture document grows as needed. Chapter numbers are following the suggestions from
+The architecture document is grown as needed. Chapter numbers follow the suggestions from
 https://docs.arc42.org[arc42]. Numbering gaps are a consequence.
 
-== 8. Concepts
+== 7 Deployment View
+
+[source,mermaid]
+....
+C4Deployment
+title Deployment of Markdown Linked Images Mover (malimo)
+
+Deployment_Node(user, "User's computer", "macOS or Windows")
+....
+
+== 8 Concepts
 
 === 8.1 Create a Release
 
@@ -21,20 +31,20 @@ https://docs.arc42.org[arc42]. Numbering gaps are a consequence.
 
 ==== Trigger the Release Pipeline
 
-After a pull request to main has been merged to `main`, create and push a version tag:
+After a pull request has been merged to `main`, create and push a version tag:
 
 ```shell
 git checkout main
 git pull
-git tag -a "v0.1.5" -m "v0.1.5"
+git tag -a "v0.1.5-alpha" -m "v0.1.5-alpha"
 git push --tags
 ```
 
-This will trigger the full link:../.github/workflows/dotnet.yml[GitHub Action to publish a new release]. The workflow will finally produce the GitHub release and attach the installation packages for the target operating systems. 
+This will trigger the full link:../.github/workflows/dotnet.yml[GitHub Action to publish a new release]. The workflow will finally produce the https://github.com/wonderbird/malimo/releases[GitHub release] and attach the installation packages for the target operating systems.
 
 ==== Update Homebrew Tools
 
-After a successful release update corresponding cask in the https://github.com/wonderbird/homebrew-tools[Homebrew tap wonderbird/tools]:
+After a successful release, update corresponding cask in the https://github.com/wonderbird/homebrew-tools[Homebrew tap wonderbird/tools]:
 
 . Download the release artifacts for macOS, e.g. to `~/Downloads/malimo*`
 . `shasum -a 256 ~/Downloads/malimo*`
