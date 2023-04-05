@@ -1,0 +1,44 @@
+= Architecture
+
+:toc:
+
+== Acknowledgements
+
+This documentation is based on the https://docs.arc42.org[arc42] template. The examples provided there and in
+https://www.dokchess.de/["DokChess als Beispiel für arc42"] act as templates for some sections. Many thanks to all
+contributors for your valuable work.
+
+The architecture document grows as needed. Chapter numbers are following the suggestions from
+https://docs.arc42.org[arc42]. Numbering gaps are a consequence.
+
+== 8. Concepts
+
+=== 8.1 Create a Release
+
+==== Prerequisite
+
+- The link:../CHANGELOG.md[CHANGELOG.md] must be up-to-date.
+
+==== Trigger the Release Pipeline
+
+After a pull request to main has been merged to `main`, create and push a version tag:
+
+```shell
+git checkout main
+git pull
+git tag -a "v0.1.5" -m "v0.1.5"
+git push --tags
+```
+
+This will trigger the full link:../.github/workflows/dotnet.yml[GitHub Action to publish a new release]. The workflow will finally produce the GitHub release and attach the installation packages for the target operating systems. 
+
+==== Update Homebrew Tools
+
+After a successful release update corresponding cask in the https://github.com/wonderbird/homebrew-tools[Homebrew tap wonderbird/tools]:
+
+. Download the release artifacts for macOS, e.g. to `~/Downloads/malimo*`
+. `shasum -a 256 ~/Downloads/malimo*`
+. Update the `version` and `sha256` entries for the new release
+. Test the update locally using `brew upgrade malimo`
+. Publish the changes
+. Ensure the test pipelines are green
