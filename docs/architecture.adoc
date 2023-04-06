@@ -13,13 +13,11 @@ https://docs.arc42.org[arc42]. Numbering gaps are a consequence.
 
 == 7 Deployment View
 
-[source,mermaid]
-....
-C4Deployment
-title Deployment of Markdown Linked Images Mover (malimo)
-
-Deployment_Node(user, "User's computer", "macOS or Windows")
-....
+[mermaid]
+----
+graph TD;
+  A -> B;
+----
 
 == 8 Concepts
 
