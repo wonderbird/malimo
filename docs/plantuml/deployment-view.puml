@@ -1,0 +1,35 @@
+@startuml
+left to right direction
+
+node "macOS" <<arm>> as armMac {
+    artifact "/opt/homebrew/bin/malimo ->\n/opt/homebrew/Caskroom/malimo" as armMalimo
+}
+
+node "macOS" <<intel>> as intelMac {
+    artifact "/opt/homebrew/bin/malimo ->\n/opt/homebrew/Caskroom/malimo" as intelMalimo
+}
+
+node "Windows" {
+    artifact "malimo exe\nIn custom directory" as winMalimo
+}
+
+cloud {
+  node "GitHub: wonderbird/malimo/releases" {
+    artifact "malimo osx 12-arm64 bottle zip" as armBottle
+    artifact "malimo osx 12-x64 bottle zip" as intelBottle
+    artifact "malimo win-x64 zip" as winRelease
+  }
+  
+  node "GitHub: wonderbird/homebrew-tools" {
+    artifact "Casks/malimo.rb" as cask
+  }
+}
+
+cask .. armBottle
+cask .. intelBottle
+
+armMalimo .. cask
+intelMalimo .. cask
+
+winMalimo .. winRelease
+@enduml

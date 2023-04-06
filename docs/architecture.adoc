@@ -1,3 +1,5 @@
+:gitplant: http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/wonderbird/malimo/blob/docs/how-to-release/docs/plantuml
+
 = Architecture
 
 :toc:
@@ -13,11 +15,8 @@ https://docs.arc42.org[arc42]. Numbering gaps are a consequence.
 
 == 7 Deployment View
 
-[mermaid]
-----
-graph TD;
-  A -> B;
-----
+.Deployment View
+image::{gitplant}/deployment-view.puml[Deployment View]
 
 == 8 Concepts
 
