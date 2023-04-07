@@ -13,6 +13,25 @@ contributors for your valuable work.
 The architecture document is grown as needed. Chapter numbers follow the suggestions from
 https://docs.arc42.org[arc42]. Numbering gaps are a consequence.
 
+== 3 Business Context
+
+.Business Context
+image::{gitplant}/business-context.puml[Business Context]
+
+The diagram above shows the roles of the different user groups. It also shows the dependency of the system:
+
+[cols="1,4"]
+|===
+|User
+|use the command line interface application "malimo" (CLI) to move all images used by a markdown file into a folder
+
+|Administrator
+|install and maintain the CLI application on the user's computer
+
+|User's filesystem
+|the CLI operates in the local filesystem of the user's computer
+|===
+
 == 5 Composite Structure
 
 The individual components making up the malimo system are depicted below:
@@ -23,10 +42,10 @@ image::{gitplant}/composite-structure.puml[Composite Structure]
 [cols="1,4"]
 |===
 | malimo
-| CLI application
+| CLI application allowing users to invoke the operations of the Markdown Linked Images Mover system
 
 | malimo.rb
-| https://brew.sh[Homebrew] cask allowing to install the malimo application on macOS
+| https://brew.sh[Homebrew] cask allowing allowing administrators to install the malimo application on macOS
 |===
 
 == 7 Deployment View
