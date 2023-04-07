@@ -1,0 +1,11 @@
+@startuml
+"User" as user
+component "Markdown Linked\nImages Mover" <<system>> as malimo
+database "User's\nfilesystem" as filesystem
+
+user - malimo : process markdown file
+malimo - filesystem : read markdown file,\nmove linked image files\nto target folder
+
+"Administrator" as admin
+malimo -- admin : install, update,\nuninstall
+@enduml

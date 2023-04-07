@@ -37,6 +37,10 @@ The corresponding Homebrew cask is at [wonderbird / homebrew-tools / Casks / mal
 
 ## Development
 
+### Architecture Overview
+
+[docs/architecture.adoc](docs/architecture.adoc) gives an overview of the architecture. Section **8 Concepts** explains maintenance tasks.
+
 ### Quick-Start
 
 Click

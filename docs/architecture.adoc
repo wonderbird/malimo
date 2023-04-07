@@ -1,0 +1,92 @@
+:gitplant: http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/wonderbird/malimo/main/docs/plantuml
+
+= Architecture
+
+:toc:
+
+== Acknowledgements
+
+This documentation is based on the https://docs.arc42.org[arc42] template. The examples provided there and in
+https://www.dokchess.de/["DokChess als Beispiel für arc42"] act as templates for some sections. Many thanks to all
+contributors for your valuable work.
+
+The architecture document is grown as needed. Chapter numbers follow the suggestions from
+https://docs.arc42.org[arc42]. Numbering gaps are a consequence.
+
+== 3 Business Context
+
+.Business Context
+image::{gitplant}/business-context.puml[Business Context]
+
+The diagram above shows the roles of the different user groups. It also shows the dependency of the system:
+
+[cols="1,4"]
+|===
+|User
+|use the command line interface application "malimo" (CLI) to move all images used by a markdown file into a folder
+
+|Administrator
+|install and maintain the CLI application on the user's computer
+
+|User's filesystem
+|the CLI operates in the local filesystem of the user's computer
+|===
+
+== 5 Composite Structure
+
+The individual components making up the malimo system are depicted below:
+
+.Composite Structure
+image::{gitplant}/composite-structure.puml[Composite Structure]
+
+[cols="1,4"]
+|===
+| malimo
+| CLI application allowing users to invoke the operations of the Markdown Linked Images Mover system
+
+| malimo.rb
+| https://brew.sh[Homebrew] cask allowing allowing administrators to install the malimo application on macOS
+|===
+
+== 7 Deployment View
+
+.Deployment View
+image::{gitplant}/deployment-view.puml[Deployment View]
+
+=== User View: Install malimo
+
+The application supports macOS on ARM64 ("Apple Silicon") and Intel CPUs and Windows on Intel CPUs.
+
+For macOS, a private https://brew.sh[Homebrew] tap is available in https://github.com/wonderbird/homebrew-tools[wonderbird/homebrew-tools]. The cask `malimo.rb` allows installing the latest macOS version. It detects the host platform and downloads the associated "bottle" from the https://github.com/wonderbird/malimo/releases[malimo releases] page.
+
+For Windows, the user downloads the latest ZIP file from https://github.com/wonderbird/malimo/releases[malimo releases]. The files shall be extracted to a folder which is added to the `PATH` environment variable.
+
+=== Maintainer View: Publish a New Release
+
+==== Prerequisite
+
+- The link:../CHANGELOG.md[CHANGELOG.md] must be up-to-date.
+
+==== Trigger the Release Pipeline
+
+After a pull request has been merged to `main`, create and push a version tag:
+
+```shell
+git checkout main
+git pull
+git tag -a "v0.1.5-alpha" -m "v0.1.5-alpha"
+git push --tags
+```
+
+This will trigger the full link:../.github/workflows/dotnet.yml[GitHub Action to publish a new release]. The workflow will finally produce the https://github.com/wonderbird/malimo/releases[GitHub release] and attach the installation packages for the target operating systems.
+
+==== Update Homebrew Tools
+
+After a successful release, update corresponding cask in the https://github.com/wonderbird/homebrew-tools[Homebrew tap wonderbird/tools]:
+
+. Download the release artifacts for macOS, e.g. to `~/Downloads/malimo*`
+. `shasum -a 256 ~/Downloads/malimo*`
+. Update the `version` and `sha256` entries for the new release
+. Test the update locally using `brew upgrade malimo`
+. Publish the changes
+. Ensure the test pipelines are green

@@ -5,11 +5,17 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '!**/*.md'
+      - '!**/*.adoc'
     tags:
       - 'v*'
   pull_request:
     branches:
       - main
+    paths:
+      - '!**/*.md'
+      - '!**/*.adoc'
 
 env:
   RETENTION_DAYS: 5
