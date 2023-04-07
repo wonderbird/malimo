@@ -1,0 +1,15 @@
+@startuml
+left to right direction
+set namespaceSeparator none
+
+component "malimo" <<system>> as m {
+
+  [malimo.rb] <<cask>> as cask
+  [malimo] <<application>> as malimo
+
+}
+
+CLI -- malimo
+malimo -- "Filesystem"
+"Homebrew\nCask" -- cask
+@enduml

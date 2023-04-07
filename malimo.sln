@@ -28,6 +28,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plantuml", "plantuml", "{E555C021-26EF-4E0C-8AC4-0BD22035FA96}"
 	ProjectSection(SolutionItems) = preProject
 		docs\plantuml\deployment-view.puml = docs\plantuml\deployment-view.puml
+		docs\plantuml\composite-structure.puml = docs\plantuml\composite-structure.puml
 	EndProjectSection
 EndProject
 Global

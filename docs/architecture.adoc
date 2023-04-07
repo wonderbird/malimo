@@ -13,6 +13,22 @@ contributors for your valuable work.
 The architecture document is grown as needed. Chapter numbers follow the suggestions from
 https://docs.arc42.org[arc42]. Numbering gaps are a consequence.
 
+== 5 Composite Structure
+
+The individual components making up the malimo system are depicted below:
+
+.Composite Structure
+image::{gitplant}/composite-structure.puml[Composite Structure]
+
+[cols="1,4"]
+|===
+| malimo
+| CLI application
+
+| malimo.rb
+| https://brew.sh[Homebrew] cask allowing to install the malimo application on macOS
+|===
+
 == 7 Deployment View
 
 .Deployment View

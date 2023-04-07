@@ -1,6 +1,8 @@
 @startuml
 left to right direction
 
+set namespaceSeparator none
+
 together {
     node "macOS" <<ARM64>> as armMac {
         artifact "/opt/homebrew/bin/malimo ->\n/opt/homebrew/Caskroom/malimo" as armMalimo
@@ -11,15 +13,15 @@ together {
     }
     
     node "Windows" <<Intel>> {
-        artifact "malimo exe\nIn custom directory" as winMalimo
+        artifact "malimo.exe\nmalimo.xml" as winMalimo
     }
 }
 
 cloud {
   node "GitHub: wonderbird/malimo/releases" {
-    artifact "malimo osx 12-arm64 bottle zip" as armBottle
-    artifact "malimo osx 12-x64 bottle zip" as intelBottle
-    artifact "malimo win-x64 zip" as winRelease
+    artifact "malimo.osx.12-arm64.bottle.zip" as armBottle
+    artifact "malimo.osx.12-x64.bottle.zip" as intelBottle
+    artifact "malimo.win-x64.zip" as winRelease
   }
   
   node "GitHub: wonderbird/homebrew-tools" {
