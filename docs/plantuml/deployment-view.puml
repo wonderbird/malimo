@@ -1,16 +1,18 @@
 @startuml
 left to right direction
 
-node "macOS" <<arm>> as armMac {
-    artifact "/opt/homebrew/bin/malimo ->\n/opt/homebrew/Caskroom/malimo" as armMalimo
-}
-
-node "macOS" <<intel>> as intelMac {
-    artifact "/opt/homebrew/bin/malimo ->\n/opt/homebrew/Caskroom/malimo" as intelMalimo
-}
-
-node "Windows" {
-    artifact "malimo exe\nIn custom directory" as winMalimo
+together {
+    node "macOS" <<ARM64>> as armMac {
+        artifact "/opt/homebrew/bin/malimo ->\n/opt/homebrew/Caskroom/malimo" as armMalimo
+    }
+    
+    node "macOS" <<Intel>> as intelMac {
+        artifact "/opt/homebrew/bin/malimo ->\n/opt/homebrew/Caskroom/malimo" as intelMalimo
+    }
+    
+    node "Windows" <<Intel>> {
+        artifact "malimo exe\nIn custom directory" as winMalimo
+    }
 }
 
 cloud {

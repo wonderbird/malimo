@@ -18,9 +18,15 @@ https://docs.arc42.org[arc42]. Numbering gaps are a consequence.
 .Deployment View
 image::{gitplant}/deployment-view.puml[Deployment View]
 
-== 8 Concepts
+=== User View: Install malimo
 
-=== 8.1 Create a Release
+The application supports macOS on ARM64 ("Apple Silicon") and Intel CPUs and Windows on Intel CPUs.
+
+For macOS, a private https://brew.sh[Homebrew] tap is available in https://github.com/wonderbird/homebrew-tools[wonderbird/homebrew-tools]. The cask `malimo.rb` allows installing the latest macOS version. It detects the host platform and downloads the associated "bottle" from the https://github.com/wonderbird/malimo/releases[malimo releases] page.
+
+For Windows, the user downloads the latest ZIP file from https://github.com/wonderbird/malimo/releases[malimo releases]. The files shall be extracted to a folder which is added to the `PATH` environment variable.
+
+=== Maintainer View: Publish a New Release
 
 ==== Prerequisite
 
