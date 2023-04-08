@@ -1,4 +1,4 @@
-# Produce Chocolatey .nupkg with substituted version and hash.
+# Enter correct version and hash into Chocolatey .nuspec and install script.
 #
 # The version number is written to both the Chocolatey .nuspec file and to the install script.
 # In addition the hash of the release zip is written to the install script.
@@ -14,31 +14,21 @@ param(
     [string] $version,
     
     [Parameter(Mandatory, HelpMessage="Relative path to the ZIP referred to by the Chocolatey package")]
-    [string] $zipFile,
-    
-    [Parameter(Mandatory, HelpMessage="Relative path to the output directory for the Chocolatey .nupkg package")]
-    [string] $outputDirectory
+    [string] $zipFile
 )
 
 $ErrorActionPreference = 'stop'
 
-Write-Host "Update $nuspecPath to version $version"
-
 $nuspecPath = "Chocolatey\malimo.nuspec"
+Write-Host "Update $nuspecPath to version $version"
 $content = Get-Content $nuspecPath -Encoding UTF8 -Raw
 $content = [Regex]::Replace($content, '(<version>.+<\/version>)', "<version>$version</version>")
 $content | Set-Content $nuspecPath -Force -Encoding UTF8
 
-
-Write-Host "Update $installScriptPath to version $version with hash $hash"
-
 $installScriptPath = "Chocolatey\tools\chocolateyinstall.ps1"
 $hash = (Get-FileHash -Algorithm SHA256 -Path $zipFile).Hash.ToUpper()
+Write-Host "Update $installScriptPath to version $version with hash $hash"
 $content = Get-Content $installScriptPath -Encoding UTF8 -Raw
 $content = [Regex]::Replace($content, "(\`$version\s+=\s+'.+')", "`$version = '$version'")
 $content = [Regex]::Replace($content, "(\`$hash\s+=\s+'.+')", "`$hash = '$hash'")
 $content | Set-Content $installScriptPath -Force -Encoding UTF8
-
-Write-Host "Create Chocolatey package"
-
-choco pack --outputdirectory $outputDirectory $nuspecPath
