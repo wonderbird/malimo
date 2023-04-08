@@ -6,6 +6,7 @@ on:
 env:
   RETENTION_DAYS: 1
   VERSION: 0.1.5-alpha
+  HASH: 6e852a984e4118fb30943d54f3dfda52040b8aa8174bb6df9ceac1e4257d0fbf
 
 jobs:
   publish-win:
