@@ -6,7 +6,7 @@ on:
 env:
   RETENTION_DAYS: 1
   VERSION: 0.1.5-alpha
-  PACKAGE_NAME: malimo.${{ env.VERSION }}.nupkg
+  PACKAGE_NAME: malimo.$VERSION.nupkg
 
 jobs:
   publish-win:
