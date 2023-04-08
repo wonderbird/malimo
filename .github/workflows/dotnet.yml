@@ -176,6 +176,10 @@ jobs:
     
     runs-on: windows-latest
     
+    defaults:
+      run:
+        shell: bash
+    
     # Configure GITHUB_TOKEN so that it allows uploading to the release
     permissions:
       contents: write
@@ -207,7 +211,6 @@ jobs:
       # Adopted from https://github.com/svenstaro/upload-release-action
       - name: Read CHANGELOG.md and use it as a body of new release
         id: read_release
-        shell: bash
         run: |
           r=$(cat CHANGELOG.md)                             # <--- Read CHANGELOG.md
           r="${r//'%'/%25}"                                 # Multiline escape sequences for %
