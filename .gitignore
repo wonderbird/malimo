@@ -1,3 +1,6 @@
+# SonarLint Plugin
+**/.idea/sonarlint/
+
 # Coverage reports
 report
 
