@@ -8,7 +8,7 @@ param(
 
 $ErrorActionPreference = 'stop'
 
-$nuspecPath = "Chocolate\malimo.nuspec"
+$nuspecPath = "Chocolatey\malimo.nuspec"
 
 Write-Host "Update $nuspecPath to version $version"
 $content = Get-Content $nuspecPath -Encoding UTF8 -Raw
