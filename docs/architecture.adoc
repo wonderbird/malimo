@@ -53,7 +53,7 @@ image::{gitplant}/composite-structure.puml[Composite Structure]
 .Deployment View
 image::{gitplant}/deployment-view.puml[Deployment View]
 
-=== User View: Install malimo
+=== Administrator View: Install malimo
 
 The application supports macOS on ARM64 ("Apple Silicon") and Intel CPUs and Windows on Intel CPUs.
 
