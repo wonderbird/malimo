@@ -154,18 +154,19 @@ jobs:
         run: |
           dotnet publish malimo/malimo.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true --output "${{ env.PUBLISH_DIR }}"
 
-      - name: Prepare release files
-        run: |
-          del "${{ env.PUBLISH_DIR }}\malimo.pdb"
-
-      - name: ZIP Windows application
-        run: zip -r9 "${{ env.PUBLISH_ZIP_FILENAME }}" "${{ env.PUBLISH_DIR }}"/*
+      - name: ZIP application
+        uses: thedoctor0/zip-release@0.7.1
+        with:
+          type: 'zip'
+          path: ${{ env.PUBLISH_DIR }}
+          filename: ${{ env.PUBLISH_ZIP_FILENAME }}
+          exclusions: '*.pdb'
 
       - name: Attach application to build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.PUBLISH_ZIP_FILENAME }}
-          path: ${{ env.PUBLISH_ZIP_FILENAME }}/*
+          path: ${{ env.PUBLISH_ZIP_FILENAME }}
           retention-days: ${{ env.RETENTION_DAYS }}
 
   release:
