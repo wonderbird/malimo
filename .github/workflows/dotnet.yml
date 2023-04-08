@@ -154,7 +154,6 @@ jobs:
           dotnet publish malimo/malimo.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true --output "${{ env.PUBLISH_DIR }}"
 
       - name: Prepare release files
-        if: runner.os == 'Windows'
         run: |
           del "${{ env.PUBLISH_DIR }}\malimo.pdb"
 
