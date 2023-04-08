@@ -6,7 +6,6 @@ on:
 env:
   RETENTION_DAYS: 1
   VERSION: 0.1.5-alpha
-  PACKAGE_NAME: malimo.$VERSION.nupkg
 
 jobs:
   publish-win:
@@ -22,6 +21,6 @@ jobs:
       - name: Attach application to build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: ${{ env.PACKAGE_NAME }}
-          path: ${{ env.PACKAGE_NAME }}
+          name: malimo.${{ env.VERSION }}.nupkg
+          path: malimo.${{ env.VERSION }}.nupkg
           retention-days: ${{ env.RETENTION_DAYS }}
