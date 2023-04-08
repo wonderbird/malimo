@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>malimo</id>
+    <version>0.1.5-alpha</version>
+    <packageSourceUrl>https://github.com/wonderbird/malimo</packageSourceUrl>
+    <owners>Stefan Boos</owners>
+
+    <title>malimo (Install)</title>
+    <authors>Stefan Boos</authors>
+    <projectUrl>https://github.com/wonderbird/malimo</projectUrl>
+    <copyright>2023 Stefan Boos</copyright>
+    <licenseUrl>https://raw.githubusercontent.com/wonderbird/malimo/main/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <projectSourceUrl>https://github.com/wonderbird/malimo</projectSourceUrl>
+    <docsUrl>https://github.com/wonderbird/malimo#readme</docsUrl>
+    <bugTrackerUrl>https://github.com/wonderbird/malimo/issues</bugTrackerUrl>
+    <tags>malimo markdown link image move</tags>
+    <summary>Markdown Linked Images Mover</summary>
+    <description>Move all images used by a markdown file into a folder</description>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
