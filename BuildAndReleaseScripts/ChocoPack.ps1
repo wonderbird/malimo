@@ -6,6 +6,8 @@ param(
     [string] $hash
 )
 
+$ErrorActionPreference = 'stop'
+
 $nuspecPath = "Chocolate\malimo.nuspec"
 
 Write-Host "Update $nuspecPath to version $version"
