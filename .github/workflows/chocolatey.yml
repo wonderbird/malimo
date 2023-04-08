@@ -23,6 +23,6 @@ jobs:
       - name: Attach application to build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: malimo-0.1.5-alpha.nupkg
-          path: Chocolatey/malimo-0.1.5-alpha.nupkg
+          name: malimo.0.1.5-alpha.nupkg
+          path: Chocolatey/malimo.0.1.5-alpha.nupkg
           retention-days: ${{ env.RETENTION_DAYS }}
