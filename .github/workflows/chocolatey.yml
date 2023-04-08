@@ -3,7 +3,7 @@ name: Chocolatey
 on:
   push:
     paths:
-      - 'Chocolatey'
+      - 'Chocolatey/**'
 
 env:
   RETENTION_DAYS: 1
