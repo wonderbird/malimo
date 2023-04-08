@@ -207,6 +207,11 @@ jobs:
 
       - name: Create Chocolatey package
         run: choco pack --outputdirectory ./release ./Chocolatey/malimo.nuspec
+        
+      - name: Push Chocolatey package
+        run: |
+          choco apikey --key ${{ secrets.CHOCO_API_KEY }} --source https://push.chocolatey.org/
+          choco push ./release/malimo.${{ steps.identify_version.outputs.VERSION }}.nupkg --source https://push.chocolatey.org/
 
       # Adopted from https://github.com/svenstaro/upload-release-action
       - name: Read CHANGELOG.md and use it as a body of new release

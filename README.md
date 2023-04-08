@@ -20,20 +20,46 @@ an [Open Source License](https://www.jetbrains.com/community/opensource/) for th
 
 ## Installation
 
+### macOS
+
 For macOS I am maintaining a [Homebrew](https://brew.sh) installer:
 
 ```shell
 brew install wonderbird/tools/malimo
 ```
 
-This creates a symlink named `malimo` in your `$(brew --prefix)/bin` directory. After successful installation
-you can run the program and get help by entering
+This creates a symlink named `malimo` in your `$(brew --prefix)/bin` directory.
+
+The corresponding Homebrew cask is at [wonderbird / homebrew-tools / Casks / malimo.rb](https://github.com/wonderbird/homebrew-tools/blob/main/Casks/malimo.rb).
+
+### Windows
+
+#### Use the Chocolatey Package Manager
+
+For Windows, the [release process](./.github/workflows/dotnet.yml) publishes the latest package to the
+[Chocolatey Community Repository](https://community.chocolatey.org/packages). You can install by:
+
+```powershell
+choco install malimo
+```
+
+The Chocolatey package will install the latest [malimo GitHub release](https://github.com/wonderbird/malimo/releases).
+
+#### Manual Installation
+
+If you do not manage your Windows software using [Chocolatey](https://community.chocolatey.org/), then
+
+- download `malimo.win-x64.zip` from the latest [GitHub release](https://github.com/wonderbird/malimo/releases),
+- extract the files into a folder
+- add the folder to your PATH environment variable.
+
+### Verification
+
+After successful installation you can run the program and get help by entering
 
 ```shell
 malimo --help
 ```
-
-The corresponding Homebrew cask is at [wonderbird / homebrew-tools / Casks / malimo.rb](https://github.com/wonderbird/homebrew-tools/blob/main/Casks/malimo.rb).
 
 ## Development
 
