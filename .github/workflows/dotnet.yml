@@ -199,7 +199,7 @@ jobs:
         run: echo "VERSION=${{ github.ref_name }}" | sed 's/=v/=/' >> $GITHUB_OUTPUT
         
       - name: Create Chocolatey package
-        run: pwsh .\BuildAndReleaseScripts\ChocoPack.ps1 -version ${{ steps.identify_version.outputs.VERSION }} -zipFile .\release\malimo.win-x64.zip -outputDirectory .\release
+        run: pwsh ./BuildAndReleaseScripts/ChocoPack.ps1 -version ${{ steps.identify_version.outputs.VERSION }} -zipFile ./release/malimo.win-x64.zip -outputDirectory ./release
 
       # Adopted from https://github.com/svenstaro/upload-release-action
       - name: Read CHANGELOG.md and use it as a body of new release
