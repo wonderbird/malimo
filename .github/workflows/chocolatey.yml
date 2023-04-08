@@ -2,10 +2,6 @@ name: Chocolatey
 
 on:
   push:
-    branches:
-      - "**"
-    paths:
-      - 'Chocolatey/**'
 
 env:
   RETENTION_DAYS: 1
