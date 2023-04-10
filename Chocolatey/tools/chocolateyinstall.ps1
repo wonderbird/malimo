@@ -2,7 +2,7 @@
 $toolsDir = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $version = 'Will be replaced by the CI pipeline'
 $hash = 'Will be replaced by the CI pipeline'
-$url64 = 'https://github.com/wonderbird/malimo/releases/download/v$version/malimo.win-x64.zip'
+$url64 = "https://github.com/wonderbird/malimo/releases/download/v$version/malimo.win-x64.zip"
 
 $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
