@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.7-alpha] - 2023-04-10
+
+### Fixed
+
+- Correct download URL for the Chocolatey package
+- Automatically use correct release version number in the published application
+- Correct style issues in the Chocolatey .nuspec file
+
 ## [0.1.6-alpha] - 2023-04-08
 
 ### Added

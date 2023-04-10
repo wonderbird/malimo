@@ -8,7 +8,8 @@
 
     <title>malimo (Install)</title>
     <authors>Stefan Boos</authors>
-    <projectUrl>https://github.com/wonderbird/malimo</projectUrl>
+    <projectUrl>https://github.com/wonderbird/malimo#readme</projectUrl>
+    <iconUrl>https://cdn.statically.io/gh/wonderbird/malimo/7192c2c7f252eba335cbde99d7b31dc26890a2e7/assets/application-icon/application-icon.png</iconUrl>
     <copyright>2023 Stefan Boos</copyright>
     <licenseUrl>https://raw.githubusercontent.com/wonderbird/malimo/main/LICENSE</licenseUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
@@ -18,6 +19,7 @@
     <tags>malimo markdown link image move</tags>
     <summary>Markdown Linked Images Mover</summary>
     <description>Move all images used by a markdown file into a folder</description>
+    <releaseNotes>[Markdown Linked Images Mover (malimo) Release Notes](https://github.com/wonderbird/malimo/releases)</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />
