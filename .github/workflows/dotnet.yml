@@ -19,7 +19,7 @@ on:
 
 env:
   RETENTION_DAYS: 5
-  VERSION: ${GITHUB_REF_NAME#v}
+  PUBLISH_VERSION: ${GITHUB_REF_NAME#v}
 
 jobs:
   build-and-test:
@@ -28,7 +28,7 @@ jobs:
     steps:
       - name: Display relevant environment variables
         run: |
-          echo "VERSION=${{ env.VERSION }}"
+          echo "PUBLISH_VERSION=${{ env.PUBLISH_VERSION }}"
 
       - uses: actions/checkout@v3
 
@@ -92,7 +92,7 @@ jobs:
 
       - name: Create application
         run: |
-          dotnet publish malimo/malimo.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true -p:Version=${{ env.VERSION }} --output "${{ env.PUBLISH_DIR }}"
+          dotnet publish malimo/malimo.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true -p:Version=${{ env.PUBLISH_VERSION }} --output "${{ env.PUBLISH_DIR }}"
 
       - name: Prepare release files
         run: |
@@ -157,7 +157,7 @@ jobs:
 
       - name: Create application
         run: |
-          dotnet publish malimo/malimo.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true -p:Version=${{ env.VERSION }} --output "${{ env.PUBLISH_DIR }}"
+          dotnet publish malimo/malimo.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true -p:Version=${{ env.PUBLISH_VERSION }} --output "${{ env.PUBLISH_DIR }}"
 
       - name: ZIP application
         uses: thedoctor0/zip-release@0.7.1
@@ -204,7 +204,7 @@ jobs:
           mv malimo.win-x64.zip/malimo.win-x64.zip ./release/
 
       - name: Prepare Chocolatey configuration
-        run: pwsh ./BuildAndReleaseScripts/ReplaceVariablesInChocolateyConfiguration.ps1 -version ${{ env.VERSION }} -zipFile ./release/malimo.win-x64.zip
+        run: pwsh ./BuildAndReleaseScripts/ReplaceVariablesInChocolateyConfiguration.ps1 -version ${{ env.PUBLISH_VERSION }} -zipFile ./release/malimo.win-x64.zip
 
       - name: Create Chocolatey package
         run: choco pack --outputdirectory ./release ./Chocolatey/malimo.nuspec
@@ -212,7 +212,7 @@ jobs:
       - name: Push Chocolatey package
         run: |
           choco apikey --key ${{ secrets.CHOCO_API_KEY }} --source https://push.chocolatey.org/
-          choco push ./release/malimo.${{ env.VERSION }}.nupkg --source https://push.chocolatey.org/
+          choco push ./release/malimo.${{ env.PUBLISH_VERSION }}.nupkg --source https://push.chocolatey.org/
 
       # Adopted from https://github.com/svenstaro/upload-release-action
       - name: Read CHANGELOG.md and use it as a body of new release
