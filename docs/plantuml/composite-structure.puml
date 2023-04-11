@@ -3,13 +3,22 @@ left to right direction
 set namespaceSeparator none
 
 component "malimo" <<system>> as m {
+  portin " " as cliPort
+  portin " " as maintenancePort
 
-  [malimo.rb] <<cask>> as cask
+  [Chocolatey] <<chocolatey package>> as choco
+  [malimo.rb] <<homebrew cask>> as cask
   [malimo] <<application>> as malimo
 
 }
 
-CLI -- malimo
+() CLI as cli
+cli -- cliPort
+cliPort -- malimo
 malimo -- "Filesystem"
-"Homebrew\nCask" -- cask
+
+() "Install, update, \nuninstall" as maintenance
+maintenance -- maintenancePort
+maintenancePort -- cask
+maintenancePort -- choco
 @enduml

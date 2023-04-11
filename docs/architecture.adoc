@@ -2,6 +2,8 @@
 
 = Architecture
 
+:icons: font
+
 :toc:
 
 == Acknowledgements
@@ -45,7 +47,10 @@ image::{gitplant}/composite-structure.puml[Composite Structure]
 | CLI application allowing users to invoke the operations of the Markdown Linked Images Mover system
 
 | malimo.rb
-| https://brew.sh[Homebrew] cask allowing allowing administrators to install the malimo application on macOS
+| https://brew.sh[Homebrew] cask allowing allowing administrators to install the malimo application on macOS. This file is available in the separate GitHub repository https://github.com/wonderbird/homebrew-tools[wonderbird / homebrew-tools]. 
+
+| Chocolatey
+| This folder contains the https://docs.chocolatey.org/en-us/create/create-packages[Chocolatey package definition], which allows administrators to install the malimo application on Windows.
 |===
 
 == 7 Deployment View
@@ -59,7 +64,7 @@ The application supports macOS on ARM64 ("Apple Silicon") and Intel CPUs and Win
 
 For macOS, a private https://brew.sh[Homebrew] tap is available in https://github.com/wonderbird/homebrew-tools[wonderbird/homebrew-tools]. The cask `malimo.rb` allows installing the latest macOS version. It detects the host platform and downloads the associated "bottle" from the https://github.com/wonderbird/malimo/releases[malimo releases] page.
 
-For Windows, the user downloads the latest ZIP file from https://github.com/wonderbird/malimo/releases[malimo releases]. The files shall be extracted to a folder which is added to the `PATH` environment variable.
+For Windows, a https://community.chocolatey.org/packages/malimo[Chocolatey package] is available in the https://community.chocolatey.org/[Chocolatey Community Repository]. As an alternative, the software administrator can download the latest ZIP file from the https://github.com/wonderbird/malimo/releases[malimo releases page]. The files shall be extracted to a folder which is added to the `PATH` environment variable.
 
 === Maintainer View: Publish a New Release
 
@@ -78,7 +83,9 @@ git tag -a "v0.1.5-alpha" -m "v0.1.5-alpha"
 git push --tags
 ```
 
-This will trigger the full link:../.github/workflows/dotnet.yml[GitHub Action to publish a new release]. The workflow will finally produce the https://github.com/wonderbird/malimo/releases[GitHub release] and attach the installation packages for the target operating systems.
+This will trigger the full link:../.github/workflows/dotnet.yml[GitHub Action to publish a new release]. The workflow will finally produce the https://github.com/wonderbird/malimo/releases[GitHub release], attach the installation packages for the target operating systems and push the Chocolatey package to the community repository.
+
+NOTE: It usually takes about 1 hour until the updated Chocolatey package is available.
 
 ==== Update Homebrew Tools
 
