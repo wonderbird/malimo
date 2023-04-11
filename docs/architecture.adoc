@@ -1,6 +1,6 @@
 // To always get the latest diagrams, update the
 // commit hash from the version merged into main
-:gitplant: http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/wonderbird/malimo/blob/64cf7ec116a259f3187de55f1f9307442947739c/docs/plantuml
+:gitplant: http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/wonderbird/malimo/64cf7ec116a259f3187de55f1f9307442947739c/docs/plantuml
 
 = Architecture
 
