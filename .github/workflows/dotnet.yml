@@ -21,7 +21,7 @@ jobs:
     name: Build and test
     runs-on: ubuntu-latest
     
-    output:
+    outputs:
       semanticVersion: ${{ steps.semanticVersion.result }}
       assemblyVersion: ${{ steps.assemblyVersion.result }}
     
