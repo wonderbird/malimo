@@ -36,14 +36,16 @@ The corresponding Homebrew cask is at [wonderbird / homebrew-tools / Casks / mal
 
 #### Use the Chocolatey Package Manager
 
-For Windows, the [release process](./.github/workflows/dotnet.yml) publishes the latest package to the
-[Chocolatey Community Repository](https://community.chocolatey.org/packages). You can install by:
+For Windows, the [release process](./.github/workflows/dotnet.yml) publishes a wrapper package to the
+[Chocolatey Community Repository](https://community.chocolatey.org/packages). The package will download and install the release ZIP file from the [malimo GitHub release page](https://github.com/wonderbird/malimo/releases).
+
+You can install malimo by:
 
 ```powershell
-choco install malimo
+choco install malimo --pre
 ```
 
-The Chocolatey package will install the latest [malimo GitHub release](https://github.com/wonderbird/malimo/releases).
+At the moment I consider the software a prerelease. This is why the `--pre` argument is required.
 
 #### Manual Installation
 
@@ -60,6 +62,14 @@ After successful installation you can run the program and get help by entering
 ```shell
 malimo --help
 ```
+
+and you can check the version
+
+```shell
+malimo --version
+```
+
+The displayed version number contains 4 numbers separated by a ".", e.g. `0.1.7.178`. The first three numbers reflect the [semantic version](https://semver.org/spec/v2.0.0.html) of the release, here `0.1.7`. The last number is the [GitHub workflow run number](https://github.com/wonderbird/malimo/actions?query=workflow%3A%22.NET%22), during which the package was created, in the example case it was [run #178](https://github.com/wonderbird/malimo/actions/runs/4669300742).
 
 ## Development
 
