@@ -5,6 +5,4 @@ The application icon uses the
 
 ## Acknowledgement
 
-The application icon is a copy of the work `folder-document.png` by tango-harm, which is published as a part of the [Open Icon Library](https://sourceforge.net/projects/openiconlibrary/) using the [CC-BY 3.0](https://creativecommons.org/licenses/by/3.0/) license
-
-Thanks to the author for this work ❤️.
+The [application icon](assets/application-icon) is the `folder-document.png` from the "Tango harm-on-icons" icon set, which is published in the [Open Icon Library](https://sourceforge.net/projects/openiconlibrary/) using the [CC-BY 3.0](https://creativecommons.org/licenses/by/3.0/) license. Thanks to the author(s) for their work ❤️.

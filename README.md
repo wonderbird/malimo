@@ -13,7 +13,10 @@ During online talks and workshops I take notes containing many screenshots. I wo
 
 I am developing during my spare time and use this project for learning purposes. Please assume that I will need some days to answer your questions. At some point I might lose interest in the project. Please keep this in mind when using this project in a production environment.
 
-## Thanks
+## Acknowledgements
+
+The [application icon](assets/application-icon) is the `folder-document.png` from the "Tango harm-on-icons" icon set, which is published in the [Open Icon Library](https://sourceforge.net/projects/openiconlibrary/) using the [CC-BY 3.0](https://creativecommons.org/licenses/by/3.0/) license. Thanks to the author(s) for their work ❤️.
+
 
 Many thanks to [JetBrains](https://www.jetbrains.com/?from=malimo) who provide
 an [Open Source License](https://www.jetbrains.com/community/opensource/) for this project ❤️.
