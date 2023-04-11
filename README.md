@@ -13,7 +13,10 @@ During online talks and workshops I take notes containing many screenshots. I wo
 
 I am developing during my spare time and use this project for learning purposes. Please assume that I will need some days to answer your questions. At some point I might lose interest in the project. Please keep this in mind when using this project in a production environment.
 
-## Thanks
+## Acknowledgements
+
+The [application icon](assets/application-icon) is the `folder-document.png` from the "Tango harm-on-icons" icon set, which is published in the [Open Icon Library](https://sourceforge.net/projects/openiconlibrary/) using the [CC-BY 3.0](https://creativecommons.org/licenses/by/3.0/) license. Thanks to the author(s) for their work ❤️.
+
 
 Many thanks to [JetBrains](https://www.jetbrains.com/?from=malimo) who provide
 an [Open Source License](https://www.jetbrains.com/community/opensource/) for this project ❤️.
@@ -36,14 +39,16 @@ The corresponding Homebrew cask is at [wonderbird / homebrew-tools / Casks / mal
 
 #### Use the Chocolatey Package Manager
 
-For Windows, the [release process](./.github/workflows/dotnet.yml) publishes the latest package to the
-[Chocolatey Community Repository](https://community.chocolatey.org/packages). You can install by:
+For Windows, the [release process](./.github/workflows/dotnet.yml) publishes a wrapper package to the
+[Chocolatey Community Repository](https://community.chocolatey.org/packages). The package will download and install the release ZIP file from the [malimo GitHub release page](https://github.com/wonderbird/malimo/releases).
+
+You can install malimo by:
 
 ```powershell
-choco install malimo
+choco install malimo --pre
 ```
 
-The Chocolatey package will install the latest [malimo GitHub release](https://github.com/wonderbird/malimo/releases).
+At the moment I consider the software a prerelease. This is why the `--pre` argument is required.
 
 #### Manual Installation
 
@@ -60,6 +65,14 @@ After successful installation you can run the program and get help by entering
 ```shell
 malimo --help
 ```
+
+and you can check the version
+
+```shell
+malimo --version
+```
+
+The displayed version number contains 4 numbers separated by a ".", e.g. `0.1.7.178`. The first three numbers reflect the [semantic version](https://semver.org/spec/v2.0.0.html) of the release, here `0.1.7`. The last number is the [GitHub workflow run number](https://github.com/wonderbird/malimo/actions?query=workflow%3A%22.NET%22), during which the package was created, in the example case it was [run #178](https://github.com/wonderbird/malimo/actions/runs/4669300742).
 
 ## Development
 
