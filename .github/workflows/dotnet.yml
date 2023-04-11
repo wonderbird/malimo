@@ -145,7 +145,7 @@ jobs:
     env:
       PUBLISH_DIR: malimo.${{ matrix.runtime }}
       PUBLISH_ZIP_FILENAME: malimo.${{ matrix.runtime }}.zip
-      CHOCOLATEY_PACKAGE_FILENAME: malimo.${{ env.SEMANTIC_VERSION }}.nupkg
+      CHOCOLATEY_PACKAGE_FILENAME: malimo.${SEMANTIC_VERSION}.nupkg
 
     runs-on: windows-latest
     
