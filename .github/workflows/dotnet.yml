@@ -22,8 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     
     outputs:
-      semantic_version: ${{ steps.semantic_version.semantic_version }}
-      assembly_version: ${{ steps.assembly_version.assembly_version }}
+      semantic_version: ${{ steps.semantic_version.outputs.semantic_version }}
+      assembly_version: ${{ steps.assembly_version.outputs.assembly_version }}
     
     steps:
       - name: Get version from tag
