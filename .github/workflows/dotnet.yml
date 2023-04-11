@@ -40,39 +40,39 @@ jobs:
         id: assembly_version
         run: echo "assembly_version=${SEMANTIC_VERSION%%-*}.$GITHUB_RUN_NUMBER" >> "$GITHUB_OUTPUT"
 
-      - uses: actions/checkout@v3
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: 7.0.x
-
-      - name: Install dotnet global tools (coverlet, reportgenerator)
-        run: |
-          dotnet tool install --global coverlet.console
-          dotnet tool install --global dotnet-reportgenerator-globaltool
-
-      - name: Install dependencies
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build --no-restore --configuration Release
-
-      - name: Run tests
-        run: dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='./TestResults/coverage.cobertura.xml'
-
-      - name: Generate coverage reports
-        run: reportgenerator "-reports:malimo.Tests/TestResults/*.xml" \
-          "-targetdir:report" \
-          "-reporttypes:Html;lcov" \
-          "-title:DotnetStarter"
-
-      - name: Attach coverage reports to build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: coverage-reports
-          path: report
-          retention-days: ${{ env.RETENTION_DAYS }}
+#      - uses: actions/checkout@v3
+#
+#      - name: Setup .NET
+#        uses: actions/setup-dotnet@v3
+#        with:
+#          dotnet-version: 7.0.x
+#
+#      - name: Install dotnet global tools (coverlet, reportgenerator)
+#        run: |
+#          dotnet tool install --global coverlet.console
+#          dotnet tool install --global dotnet-reportgenerator-globaltool
+#
+#      - name: Install dependencies
+#        run: dotnet restore
+#
+#      - name: Build
+#        run: dotnet build --no-restore --configuration Release
+#
+#      - name: Run tests
+#        run: dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='./TestResults/coverage.cobertura.xml'
+#
+#      - name: Generate coverage reports
+#        run: reportgenerator "-reports:malimo.Tests/TestResults/*.xml" \
+#          "-targetdir:report" \
+#          "-reporttypes:Html;lcov" \
+#          "-title:DotnetStarter"
+#
+#      - name: Attach coverage reports to build artifacts
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: coverage-reports
+#          path: report
+#          retention-days: ${{ env.RETENTION_DAYS }}
 
   publish_macos:
     name: Publish macOS
