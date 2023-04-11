@@ -3,16 +3,16 @@ name: .NET
 # Save energy - only build main branch updates
 on:
   push:
-    branches:
-      - main
-    tags:
-      - 'v*'
+#    branches:
+#      - main
+#    tags:
+#      - 'v*'
   pull_request:
     branches:
       - main
 
 env:
-  RETENTION_DAYS: 5
+  RETENTION_DAYS: 1
   # 0.1.0-snapshot is used, if no tag is present
   VERSION_FROM_TAG: v0.1.0-snapshot
 
@@ -67,7 +67,7 @@ jobs:
 
   publish-macos:
     name: Publish macOS
-    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+#    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: build-and-test
     
     strategy:
@@ -114,16 +114,16 @@ jobs:
         run: |
           ditto -c --sequesterRsrc -k -V "${{ env.PUBLISH_DIR }}" "${{ env.PUBLISH_ZIP_FILENAME }}"
 
-      - name: Notarize application
-        run: |
-          /bin/sh BuildAndReleaseScripts/Notarize.sh "xpdbumm@boos.systems" "${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}" "M9YN683HBZ" "${{ env.PUBLISH_ZIP_FILENAME }}"
-
-      - name: Attach notarize log to build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.NOTARIZE_LOG_FILENAME }}
-          path: ./notarize_log.json
-          retention-days: ${{ env.RETENTION_DAYS }}
+#      - name: Notarize application
+#        run: |
+#          /bin/sh BuildAndReleaseScripts/Notarize.sh "xpdbumm@boos.systems" "${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}" "M9YN683HBZ" "${{ env.PUBLISH_ZIP_FILENAME }}"
+#
+#      - name: Attach notarize log to build artifacts
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: ${{ env.NOTARIZE_LOG_FILENAME }}
+#          path: ./notarize_log.json
+#          retention-days: ${{ env.RETENTION_DAYS }}
           
       - name: Attach application to build artifacts
         uses: actions/upload-artifact@v3
@@ -134,7 +134,7 @@ jobs:
 
   publish-win:
     name: Publish Windows
-    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+#    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: build-and-test
     
     strategy:
@@ -191,7 +191,7 @@ jobs:
     
   release:
     name: Release
-    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+#    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: [publish-macos, publish-win]
     
     runs-on: ubuntu-latest
@@ -215,22 +215,27 @@ jobs:
           mv -v malimo.win-x64.zip/malimo.win-x64.zip ./release/
           mv -v malimo.${{ env.SEMANTIC_VERSION }}.nupkg/malimo.${{ env.SEMANTIC_VERSION }}.nupkg ./release/
 
-      # Adopted from https://github.com/svenstaro/upload-release-action
-      - name: Read CHANGELOG.md and use it as a body of new release
-        id: read_release
-        run: |
-          r=$(cat CHANGELOG.md)                             # <--- Read CHANGELOG.md
-          r="${r//'%'/%25}"                                 # Multiline escape sequences for %
-          r="${r//$'\n'/%0A}"                               # Multiline escape sequences for '\n'
-          r="${r//$'\r'/%0D}"                               # Multiline escape sequences for '\r'
-          echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT          # <--- Set environment variable
-
-      - name: Upload applications to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file_glob: true
-          file: release/*
-          tag: ${{ github.ref }}
-          overwrite: true
-          body: ${{ steps.read_release.outputs.RELEASE_BODY }}
+#      - name: Push Chocolatey package
+#        run: |
+#          choco apikey --key ${{ secrets.CHOCO_API_KEY }} --source https://push.chocolatey.org/
+#          choco push ./release/malimo.${{ env.SEMANTIC_VERSION }}.nupkg --source https://push.chocolatey.org/
+#
+#      # Adopted from https://github.com/svenstaro/upload-release-action
+#      - name: Read CHANGELOG.md and use it as a body of new release
+#        id: read_release
+#        run: |
+#          r=$(cat CHANGELOG.md)                             # <--- Read CHANGELOG.md
+#          r="${r//'%'/%25}"                                 # Multiline escape sequences for %
+#          r="${r//$'\n'/%0A}"                               # Multiline escape sequences for '\n'
+#          r="${r//$'\r'/%0D}"                               # Multiline escape sequences for '\r'
+#          echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT          # <--- Set environment variable
+#
+#      - name: Upload applications to release
+#        uses: svenstaro/upload-release-action@v2
+#        with:
+#          repo_token: ${{ secrets.GITHUB_TOKEN }}
+#          file_glob: true
+#          file: release/*
+#          tag: ${{ github.ref }}
+#          overwrite: true
+#          body: ${{ steps.read_release.outputs.RELEASE_BODY }}
