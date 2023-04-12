@@ -6,6 +6,7 @@ on:
       retention_days:
         description: "Days to keep the build artifacts"
         required: false
+        type: string
         default: '5'
 
 jobs:
