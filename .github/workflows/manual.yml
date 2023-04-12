@@ -1,19 +1,9 @@
-name: .NET
+name: .NET (manual)
 
-# Save energy - only build main branch updates
-on:
-  push:
-    branches:
-      - main
-    tags:
-      - 'v*'
-  pull_request:
-    branches:
-      - main
+on: workflow_dispatch
 
 env:
-  RETENTION_DAYS: 5
-  # 0.1.0-snapshot is used, if no tag is present
+  RETENTION_DAYS: 1
   VERSION_FROM_TAG: v0.1.0-snapshot
 
 jobs:
@@ -26,10 +16,6 @@ jobs:
       assembly_version: ${{ steps.assembly_version.outputs.assembly_version }}
     
     steps:
-      - name: Get version from tag
-        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
-        run: echo "VERSION_FROM_TAG=$GITHUB_REF_NAME" >> "$GITHUB_ENV"
-
       - name: Determine semantic version
         id: semantic_version
         run: |
@@ -76,7 +62,6 @@ jobs:
 
   publish_macos:
     name: Publish macOS
-    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: build_and_test
     
     strategy:
@@ -88,7 +73,6 @@ jobs:
     env:
       PUBLISH_DIR: malimo.${{ matrix.runtime }}
       PUBLISH_ZIP_FILENAME: malimo.${{ matrix.runtime }}.bottle.zip
-      NOTARIZE_LOG_FILENAME: notarize_log.${{ matrix.runtime }}.json
 
     runs-on: macos-latest
     
@@ -123,17 +107,6 @@ jobs:
         run: |
           ditto -c --sequesterRsrc -k -V "${{ env.PUBLISH_DIR }}" "${{ env.PUBLISH_ZIP_FILENAME }}"
 
-      - name: Notarize application
-        run: |
-          /bin/sh ./build/Notarize.sh "xpdbumm@boos.systems" "${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}" "M9YN683HBZ" "${{ env.PUBLISH_ZIP_FILENAME }}"
-
-      - name: Attach notarize log to build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ env.NOTARIZE_LOG_FILENAME }}
-          path: ./notarize_log.json
-          retention-days: ${{ env.RETENTION_DAYS }}
-          
       - name: Attach application to build artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -143,7 +116,6 @@ jobs:
 
   publish_win:
     name: Publish Windows
-    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: build_and_test
     
     strategy:
@@ -196,58 +168,4 @@ jobs:
           name: malimo.${{ needs.build_and_test.outputs.semantic_version }}.nupkg
           path: malimo.${{ needs.build_and_test.outputs.semantic_version }}.nupkg
           retention-days: ${{ env.RETENTION_DAYS }}
-    
-  release:
-    name: Release
-    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
-    needs: [build_and_test, publish_macos, publish_win]
-    
-    runs-on: windows-latest
-    
-    defaults:
-      run:
-        shell: bash
-    
-    # Configure GITHUB_TOKEN so that it allows uploading to the release
-    permissions:
-      contents: write
-    
-    steps:
-      - uses: actions/checkout@v3
-    
-      - uses: actions/download-artifact@v3
-        
-      - name: Create release folder
-        run: mkdir release
-        
-      - name: Move ZIPs to release folder
-        run: |
-          mv -v malimo.osx.12-arm64.bottle.zip/malimo.osx.12-arm64.bottle.zip ./release/  
-          mv -v malimo.osx.12-x64.bottle.zip/malimo.osx.12-x64.bottle.zip ./release/
-          mv -v malimo.win-x64.zip/malimo.win-x64.zip ./release/
-          mv -v malimo.${{ needs.build_and_test.outputs.semantic_version }}.nupkg/malimo.${{ needs.build_and_test.outputs.semantic_version }}.nupkg ./release/
-
-      # Adopted from https://github.com/svenstaro/upload-release-action
-      - name: Read CHANGELOG.md and use it as a body of new release
-        id: read_release
-        run: |
-          r=$(cat CHANGELOG.md)                             # <--- Read CHANGELOG.md
-          r="${r//'%'/%25}"                                 # Multiline escape sequences for %
-          r="${r//$'\n'/%0A}"                               # Multiline escape sequences for '\n'
-          r="${r//$'\r'/%0D}"                               # Multiline escape sequences for '\r'
-          echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT          # <--- Set environment variable
-
-      - name: Upload applications to release
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file_glob: true
-          file: release/*
-          tag: ${{ github.ref }}
-          overwrite: true
-          body: ${{ steps.read_release.outputs.RELEASE_BODY }}
-
-      - name: Push Chocolatey package
-        run: |
-          choco apikey --key ${{ secrets.CHOCO_API_KEY }} --source https://push.chocolatey.org/
-          choco push ./release/malimo.${{ needs.build_and_test.outputs.semantic_version }}.nupkg --source https://push.chocolatey.org/
+  

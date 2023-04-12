@@ -19,13 +19,13 @@ param(
 
 $ErrorActionPreference = 'stop'
 
-$nuspecPath = "Chocolatey\malimo.nuspec"
+$nuspecPath = "chocolatey\malimo.nuspec"
 Write-Host "Update $nuspecPath to version $version"
 $content = Get-Content $nuspecPath -Encoding UTF8 -Raw
 $content = [Regex]::Replace($content, '(<version>.+<\/version>)', "<version>$version</version>")
 $content | Set-Content $nuspecPath -Force -Encoding UTF8
 
-$installScriptPath = "Chocolatey\tools\chocolateyinstall.ps1"
+$installScriptPath = "chocolatey\tools\chocolateyinstall.ps1"
 $hash = (Get-FileHash -Algorithm SHA256 -Path $zipFile).Hash.ToUpper()
 Write-Host "Update $installScriptPath to version $version with hash $hash"
 $content = Get-Content $installScriptPath -Encoding UTF8 -Raw
