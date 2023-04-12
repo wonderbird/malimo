@@ -47,7 +47,7 @@ jobs:
     if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: [determine_version, test, publish_macos, publish_win]
 
-    uses: ./.github/workflows/_publish_win.yml
+    uses: ./.github/workflows/release.yml
     with:
       semantic_version: ${{ needs.determine_version.outputs.semantic_version }}
       is_dry_run: false
