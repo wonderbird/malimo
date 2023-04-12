@@ -21,7 +21,7 @@ jobs:
   test:
     uses: ./.github/workflows/_unit_tests.yml
     with:
-      retention_days: ${{ env.RETENTION_DAYS }}
+      retention_days: 5
 
   publish_macos:
     name: Publish macOS
