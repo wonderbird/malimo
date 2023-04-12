@@ -117,7 +117,7 @@ jobs:
 
       - name: Sign application
         run: |
-          /bin/sh BuildAndReleaseScripts/SignMac.sh "${{ env.PUBLISH_DIR }}/malimo" "Developer ID Application: Stefan Boos" "BuildAndReleaseScripts/entitlements.plist"
+          /bin/sh ./build/SignMac.sh "${{ env.PUBLISH_DIR }}/malimo" "Developer ID Application: Stefan Boos" "./build/entitlements.plist"
 
       - name: ZIP application
         run: |
@@ -125,7 +125,7 @@ jobs:
 
       - name: Notarize application
         run: |
-          /bin/sh BuildAndReleaseScripts/Notarize.sh "xpdbumm@boos.systems" "${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}" "M9YN683HBZ" "${{ env.PUBLISH_ZIP_FILENAME }}"
+          /bin/sh ./build/Notarize.sh "xpdbumm@boos.systems" "${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}" "M9YN683HBZ" "${{ env.PUBLISH_ZIP_FILENAME }}"
 
       - name: Attach notarize log to build artifacts
         uses: actions/upload-artifact@v3
@@ -185,7 +185,7 @@ jobs:
           retention-days: ${{ env.RETENTION_DAYS }}
 
       - name: Prepare Chocolatey configuration
-        run: pwsh ./BuildAndReleaseScripts/ReplaceVariablesInChocolateyConfiguration.ps1 -version ${{ needs.build_and_test.outputs.semantic_version }} -zipFile ${{ env.PUBLISH_ZIP_FILENAME }}
+        run: pwsh ./build/ReplaceVariablesInChocolateyConfiguration.ps1 -version ${{ needs.build_and_test.outputs.semantic_version }} -zipFile ${{ env.PUBLISH_ZIP_FILENAME }}
 
       - name: Create Chocolatey package
         run: choco pack ./chocolatey/malimo.nuspec
