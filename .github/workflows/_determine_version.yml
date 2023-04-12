@@ -34,5 +34,12 @@ jobs:
   
     - name: Determine version for .NET assemblies
       id: assembly_version
-      run: echo "assembly_version=${SEMANTIC_VERSION%%-*}.$GITHUB_RUN_NUMBER" >> "$GITHUB_OUTPUT"
-  
+      run: |
+        echo "ASSEMBLY_VERSION=${SEMANTIC_VERSION%%-*}.$GITHUB_RUN_NUMBER" >> "$GITHUB_ENV"
+        echo "assembly_version=${SEMANTIC_VERSION%%-*}.$GITHUB_RUN_NUMBER" >> "$GITHUB_OUTPUT"
+
+    - name: Display versions
+      run: |
+        echo "VERSION_FROM_TAG=$VERSION_FROM_TAG"
+        echo "SEMANTIC_VERSION=$SEMANTIC_VERSION"
+        echo "ASSEMBLY_VERSION=$ASSEMBLY_VERSION"
