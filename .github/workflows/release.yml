@@ -1,15 +1,9 @@
-name: .NET
+name: .NET release
 
-# Save energy - only build main branch updates
 on:
   push:
-    branches:
-      - main
     tags:
       - 'v*'
-  pull_request:
-    branches:
-      - main
 
 env:
   RETENTION_DAYS: 5
@@ -25,7 +19,6 @@ jobs:
 
   publish_macos:
     name: Publish macOS
-    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: [determine_version, test]
     
     uses: ./.github/workflows/_publish_macos.yml
@@ -36,7 +29,6 @@ jobs:
 
   publish_win:
     name: Publish Windows
-    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: [determine_version, test]
     
     uses: ./.github/workflows/_publish_win.yml
@@ -46,7 +38,6 @@ jobs:
     
   release:
     name: Release
-    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: [determine_version, test, publish_macos, publish_win]
     
     permissions:
