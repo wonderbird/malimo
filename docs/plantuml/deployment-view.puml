@@ -32,6 +32,10 @@ cloud {
   node "Chocolatey: Community Repository" {
     artifact "malimo.<version>.nupkg" as chocoPackage
   }
+  
+  node "Statically.io" <<cdn>> {
+    artifact "application-icon.png" as appIcon
+  }
 }
 
 cask .. armBottle
@@ -43,4 +47,6 @@ intelMalimo .. cask
 winMalimo .. chocoPackage
 chocoPackage .. chocoCopy : << copy of >>
 chocoPackage .. winRelease
+
+chocoPackage .. appIcon : malimo.nuspec::iconUrl
 @enduml

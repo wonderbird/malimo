@@ -188,7 +188,7 @@ jobs:
         run: pwsh ./BuildAndReleaseScripts/ReplaceVariablesInChocolateyConfiguration.ps1 -version ${{ needs.build_and_test.outputs.semantic_version }} -zipFile ${{ env.PUBLISH_ZIP_FILENAME }}
 
       - name: Create Chocolatey package
-        run: choco pack ./Chocolatey/malimo.nuspec
+        run: choco pack ./chocolatey/malimo.nuspec
 
       - name: Attach Chocolatey package to build artifacts
         uses: actions/upload-artifact@v3

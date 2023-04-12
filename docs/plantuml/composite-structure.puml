@@ -6,7 +6,7 @@ component "malimo" <<system>> as m {
   portin " " as cliPort
   portin " " as maintenancePort
 
-  [Chocolatey] <<chocolatey package>> as choco
+  [chocolatey] <<chocolatey package>> as choco
   [malimo.rb] <<homebrew cask>> as cask
   [malimo] <<application>> as malimo
 

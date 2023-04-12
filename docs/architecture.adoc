@@ -51,8 +51,8 @@ image::{gitplant}/composite-structure.puml[Composite Structure]
 | malimo.rb
 | https://brew.sh[Homebrew] cask allowing allowing administrators to install the malimo application on macOS. This file is available in the separate GitHub repository https://github.com/wonderbird/homebrew-tools[wonderbird / homebrew-tools]. 
 
-| Chocolatey
-| This folder contains the https://docs.chocolatey.org/en-us/create/create-packages[Chocolatey package definition], which allows administrators to install the malimo application on Windows.
+| chocolatey
+| The link:../chocolatey[chocolatey folder] contains the https://docs.chocolatey.org/en-us/create/create-packages[Chocolatey package definition], which allows administrators to install the malimo application on Windows.
 |===
 
 == 7 Deployment View
@@ -67,6 +67,10 @@ The application supports macOS on ARM64 ("Apple Silicon") and Intel CPUs and Win
 For macOS, a private https://brew.sh[Homebrew] tap is available in https://github.com/wonderbird/homebrew-tools[wonderbird/homebrew-tools]. The cask `malimo.rb` allows installing the latest macOS version. It detects the host platform and downloads the associated "bottle" from the https://github.com/wonderbird/malimo/releases[malimo releases] page.
 
 For Windows, a https://community.chocolatey.org/packages/malimo[Chocolatey package] is available in the https://community.chocolatey.org/[Chocolatey Community Repository]. As an alternative, the software administrator can download the latest ZIP file from the https://github.com/wonderbird/malimo/releases[malimo releases page]. The files shall be extracted to a folder which is added to the `PATH` environment variable.
+
+=== Maintainer View: Update Application Icon
+
+The application icon is referenced by `<iconUrl>` entry in the Chocolatey package configuration file link:../chocolatey/malimo.nuspec[malimo.nuspec].
 
 === Maintainer View: Publish a New Release
 
