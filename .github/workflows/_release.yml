@@ -1,0 +1,72 @@
+name: Release
+
+on:
+  workflow_call:
+    inputs:
+      semantic_version:
+        description: "Three number version for the Chocolatey package, e.g. 0.1.8-alpha"
+        required: true
+        type: string
+      is_dry_run:
+        description: "Is this a dry run without actually creating the release?"
+        required: true
+        type: boolean
+    secrets:
+      CHOCO_API_KEY:
+        required: true
+    
+jobs:
+  release:
+    name: Release
+    
+    runs-on: windows-latest
+    
+    defaults:
+      run:
+        shell: bash
+    
+    # Configure GITHUB_TOKEN so that it allows uploading to the release
+    permissions:
+      contents: write
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/download-artifact@v3
+
+      - name: Create release folder
+        run: mkdir release
+
+      - name: Move ZIPs to release folder
+        run: |
+          mv -v malimo.osx.12-arm64.bottle.zip/malimo.osx.12-arm64.bottle.zip ./release/  
+          mv -v malimo.osx.12-x64.bottle.zip/malimo.osx.12-x64.bottle.zip ./release/
+          mv -v malimo.win-x64.zip/malimo.win-x64.zip ./release/
+          mv -v malimo.${{ inputs.semantic_version }}.nupkg/malimo.${{ inputs.semantic_version }}.nupkg ./release/
+
+      # Adopted from https://github.com/svenstaro/upload-release-action
+      - name: Read CHANGELOG.md and use it as a body of new release
+        id: read_release
+        run: |
+          r=$(cat CHANGELOG.md)                             # <--- Read CHANGELOG.md
+          r="${r//'%'/%25}"                                 # Multiline escape sequences for %
+          r="${r//$'\n'/%0A}"                               # Multiline escape sequences for '\n'
+          r="${r//$'\r'/%0D}"                               # Multiline escape sequences for '\r'
+          echo "RELEASE_BODY=$r" >> $GITHUB_OUTPUT          # <--- Set environment variable
+
+      - name: Upload applications to release
+        if: ${{ is_dry_run == false }}
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file_glob: true
+          file: release/*
+          tag: ${{ github.ref }}
+          overwrite: true
+          body: ${{ steps.read_release.outputs.RELEASE_BODY }}
+
+      - name: Push Chocolatey package
+        if: ${{ is_dry_run == false }}
+        run: |
+          choco apikey --key ${{ secrets.CHOCO_API_KEY }} --source https://push.chocolatey.org/
+          choco push ./release/malimo.${{ inputs.semantic_version }}.nupkg --source https://push.chocolatey.org/
