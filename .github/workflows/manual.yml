@@ -1,0 +1,171 @@
+name: .NET (manual)
+
+on: workflow_dispatch
+
+env:
+  RETENTION_DAYS: 1
+  VERSION_FROM_TAG: v0.1.0-snapshot
+
+jobs:
+  build_and_test:
+    name: Build and test
+    runs-on: ubuntu-latest
+    
+    outputs:
+      semantic_version: ${{ steps.semantic_version.outputs.semantic_version }}
+      assembly_version: ${{ steps.assembly_version.outputs.assembly_version }}
+    
+    steps:
+      - name: Determine semantic version
+        id: semantic_version
+        run: |
+          echo "SEMANTIC_VERSION=${VERSION_FROM_TAG#v}" >> "$GITHUB_ENV"
+          echo "semantic_version=${VERSION_FROM_TAG#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Determine version for .NET assemblies
+        id: assembly_version
+        run: echo "assembly_version=${SEMANTIC_VERSION%%-*}.$GITHUB_RUN_NUMBER" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+
+      - name: Install dotnet global tools (coverlet, reportgenerator)
+        run: |
+          dotnet tool install --global coverlet.console
+          dotnet tool install --global dotnet-reportgenerator-globaltool
+
+      - name: Install dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Run tests
+        run: dotnet test --no-restore --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='./TestResults/coverage.cobertura.xml'
+
+      - name: Generate coverage reports
+        run: reportgenerator "-reports:malimo.Tests/TestResults/*.xml" \
+          "-targetdir:report" \
+          "-reporttypes:Html;lcov" \
+          "-title:DotnetStarter"
+
+      - name: Attach coverage reports to build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-reports
+          path: report
+          retention-days: ${{ env.RETENTION_DAYS }}
+
+  publish_macos:
+    name: Publish macOS
+    needs: build_and_test
+    
+    strategy:
+      matrix:
+        runtime:
+          - osx.12-arm64
+          - osx.12-x64
+
+    env:
+      PUBLISH_DIR: malimo.${{ matrix.runtime }}
+      PUBLISH_ZIP_FILENAME: malimo.${{ matrix.runtime }}.bottle.zip
+
+    runs-on: macos-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+
+      - name: Create application
+        run: |
+          dotnet publish malimo/malimo.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true -p:Version=${{ needs.build_and_test.outputs.assembly_version }} --output "${{ env.PUBLISH_DIR }}"
+
+      - name: Prepare release files
+        run: |
+          rm -vf "${{ env.PUBLISH_DIR }}/malimo.pdb"
+          chmod +x "${{ env.PUBLISH_DIR }}/malimo"
+
+      - name: Add cert to keychain
+        uses: apple-actions/import-codesign-certs@v2
+        with:
+          p12-file-base64: ${{ secrets.APPLE_DEVELOPER_ID_APP_CERTIFICATE_BASE64 }}
+          p12-password: ${{ secrets.APPLE_DEVELOPER_ID_APP_CERTIFICATE_PASSWORD }}
+
+      - name: Sign application
+        run: |
+          /bin/sh ./build/SignMac.sh "${{ env.PUBLISH_DIR }}/malimo" "Developer ID Application: Stefan Boos" "./build/entitlements.plist"
+
+      - name: ZIP application
+        run: |
+          ditto -c --sequesterRsrc -k -V "${{ env.PUBLISH_DIR }}" "${{ env.PUBLISH_ZIP_FILENAME }}"
+
+      - name: Attach application to build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.PUBLISH_ZIP_FILENAME }}
+          path: ${{ env.PUBLISH_ZIP_FILENAME }}
+          retention-days: ${{ env.RETENTION_DAYS }}
+
+  publish_win:
+    name: Publish Windows
+    needs: build_and_test
+    
+    strategy:
+      matrix:
+        runtime:
+          - win-x64
+    
+    env:
+      PUBLISH_DIR: malimo.${{ matrix.runtime }}
+      PUBLISH_ZIP_FILENAME: malimo.${{ matrix.runtime }}.zip
+
+    runs-on: windows-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.0.x
+
+      - name: Create application
+        run: |
+          dotnet publish malimo/malimo.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true -p:Version=${{ needs.build_and_test.outputs.assembly_version }} --output "${{ env.PUBLISH_DIR }}"
+
+      - name: ZIP application
+        uses: thedoctor0/zip-release@0.7.1
+        with:
+          type: 'zip'
+          path: ${{ env.PUBLISH_DIR }}
+          filename: ${{ env.PUBLISH_ZIP_FILENAME }}
+          exclusions: '*.pdb'
+
+      - name: Attach application to build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.PUBLISH_ZIP_FILENAME }}
+          path: ${{ env.PUBLISH_ZIP_FILENAME }}
+          retention-days: ${{ env.RETENTION_DAYS }}
+
+      - name: Prepare Chocolatey configuration
+        run: pwsh ./build/ReplaceVariablesInChocolateyConfiguration.ps1 -version ${{ needs.build_and_test.outputs.semantic_version }} -zipFile ${{ env.PUBLISH_ZIP_FILENAME }}
+
+      - name: Create Chocolatey package
+        run: choco pack ./chocolatey/malimo.nuspec
+
+      - name: Attach Chocolatey package to build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: malimo.${{ needs.build_and_test.outputs.semantic_version }}.nupkg
+          path: malimo.${{ needs.build_and_test.outputs.semantic_version }}.nupkg
+          retention-days: ${{ env.RETENTION_DAYS }}
+  
