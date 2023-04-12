@@ -11,8 +11,6 @@ jobs:
 
   test:
     uses: ./.github/workflows/_unit_tests.yml
-    with:
-      retention_days: 1
 
   publish_macos:
     name: Publish macOS

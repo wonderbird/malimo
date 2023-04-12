@@ -1,13 +1,7 @@
 name: Run unit tests
 
 on:
-  workflow_call:
-    inputs:
-      retention_days:
-        description: "Days to keep the build artifacts"
-        required: false
-        type: string
-        default: '5'
+  workflow_call
 
 jobs:
   test:
@@ -47,4 +41,4 @@ jobs:
         with:
           name: coverage-reports
           path: report
-          retention-days: ${{ inputs.retention_days }}
+          retention-days: ${{ env.RETENTION_DAYS }}
