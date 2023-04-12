@@ -29,7 +29,7 @@ jobs:
     uses: ./.github/workflows/_publish_macos.yml
     with:
       assembly_version: ${{ needs.determine_version.outputs.assembly_version }}
-      use_notarize: true
+      is_dry_run: false
     secrets: inherit
 
   publish_win:

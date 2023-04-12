@@ -7,8 +7,8 @@ on:
         description: "Four number version for the .NET assembly, e.g. 0.1.8.180"
         required: true
         type: string
-      use_notarize:
-        description: "Shall the publish artifact be notarized by apple?"
+      is_dry_run:
+        description: "Is this a dry run without actually notarizing the app by apple?"
         required: true
         type: boolean
     secrets:
@@ -68,12 +68,12 @@ jobs:
           ditto -c --sequesterRsrc -k -V "${{ env.PUBLISH_DIR }}" "${{ env.PUBLISH_ZIP_FILENAME }}"
 
       - name: Notarize application
-        if: ${{ inputs.use_notarize }}
+        if: ${{ inputs.is_dry_run == false }}
         run: |
           /bin/sh ./build/Notarize.sh "xpdbumm@boos.systems" "${{ secrets.APPLE_ID_APP_SPECIFIC_PASSWORD }}" "M9YN683HBZ" "${{ env.PUBLISH_ZIP_FILENAME }}"
 
       - name: Attach notarize log to build artifacts
-        if: ${{ inputs.use_notarize }}
+        if: ${{ inputs.is_dry_run == false }}
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.NOTARIZE_LOG_FILENAME }}
