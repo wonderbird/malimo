@@ -24,7 +24,6 @@ jobs:
 
   publish_win:
     name: Publish Windows
-    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: [determine_version, test]
     
     uses: ./.github/workflows/_publish_win.yml
