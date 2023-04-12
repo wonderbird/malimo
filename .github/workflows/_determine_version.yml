@@ -1,0 +1,38 @@
+env:
+  # 0.1.0-snapshot is used, if no tag is present
+  VERSION_FROM_TAG: v0.1.0-snapshot
+
+on:
+  workflow_call:
+    outputs:
+      semantic_version:
+        description: "Semantic version taken from the current tag or a default, e.g. 0.1.8-alpha"
+        value: jobs.determine_version.outputs.semantic_version
+      assembly_version:
+        description: "Four number version constructed from semantic version and build number, e.g. 0.1.8.180"
+        value: jobs.determine_version.outputs.assembly_version
+
+jobs:
+  determine_version:
+    name: Determine version
+    runs-on: ubuntu-latest
+    
+    outputs:
+      semantic_version: ${{ steps.semantic_version.outputs.semantic_version }}
+      assembly_version: ${{ steps.assembly_version.outputs.assembly_version }}
+
+    steps:
+    - name: Get version from tag
+      if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+      run: echo "VERSION_FROM_TAG=$GITHUB_REF_NAME" >> "$GITHUB_ENV"
+  
+    - name: Determine semantic version
+      id: semantic_version
+      run: |
+        echo "SEMANTIC_VERSION=${VERSION_FROM_TAG#v}" >> "$GITHUB_ENV"
+        echo "semantic_version=${VERSION_FROM_TAG#v}" >> "$GITHUB_OUTPUT"
+  
+    - name: Determine version for .NET assemblies
+      id: assembly_version
+      run: echo "assembly_version=${SEMANTIC_VERSION%%-*}.$GITHUB_RUN_NUMBER" >> "$GITHUB_OUTPUT"
+  

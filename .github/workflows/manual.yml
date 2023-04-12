@@ -4,28 +4,16 @@ on: workflow_dispatch
 
 env:
   RETENTION_DAYS: 1
-  VERSION_FROM_TAG: v0.1.0-snapshot
 
 jobs:
+  determine_version:
+    uses: ./.github/workflows/_determine_version.yml
+
   build_and_test:
     name: Build and test
     runs-on: ubuntu-latest
     
-    outputs:
-      semantic_version: ${{ steps.semantic_version.outputs.semantic_version }}
-      assembly_version: ${{ steps.assembly_version.outputs.assembly_version }}
-    
     steps:
-      - name: Determine semantic version
-        id: semantic_version
-        run: |
-          echo "SEMANTIC_VERSION=${VERSION_FROM_TAG#v}" >> "$GITHUB_ENV"
-          echo "semantic_version=${VERSION_FROM_TAG#v}" >> "$GITHUB_OUTPUT"
-
-      - name: Determine version for .NET assemblies
-        id: assembly_version
-        run: echo "assembly_version=${SEMANTIC_VERSION%%-*}.$GITHUB_RUN_NUMBER" >> "$GITHUB_OUTPUT"
-
       - uses: actions/checkout@v3
 
       - name: Setup .NET
@@ -86,7 +74,7 @@ jobs:
 
       - name: Create application
         run: |
-          dotnet publish malimo/malimo.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true -p:Version=${{ needs.build_and_test.outputs.assembly_version }} --output "${{ env.PUBLISH_DIR }}"
+          dotnet publish malimo/malimo.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true -p:Version=${{ needs.determine_version.outputs.assembly_version }} --output "${{ env.PUBLISH_DIR }}"
 
       - name: Prepare release files
         run: |
@@ -139,7 +127,7 @@ jobs:
 
       - name: Create application
         run: |
-          dotnet publish malimo/malimo.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true -p:Version=${{ needs.build_and_test.outputs.assembly_version }} --output "${{ env.PUBLISH_DIR }}"
+          dotnet publish malimo/malimo.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true -p:Version=${{ needs.determine_version.outputs.assembly_version }} --output "${{ env.PUBLISH_DIR }}"
 
       - name: ZIP application
         uses: thedoctor0/zip-release@0.7.1
@@ -157,7 +145,7 @@ jobs:
           retention-days: ${{ env.RETENTION_DAYS }}
 
       - name: Prepare Chocolatey configuration
-        run: pwsh ./build/ReplaceVariablesInChocolateyConfiguration.ps1 -version ${{ needs.build_and_test.outputs.semantic_version }} -zipFile ${{ env.PUBLISH_ZIP_FILENAME }}
+        run: pwsh ./build/ReplaceVariablesInChocolateyConfiguration.ps1 -version ${{ needs.determine_version.outputs.semantic_version }} -zipFile ${{ env.PUBLISH_ZIP_FILENAME }}
 
       - name: Create Chocolatey package
         run: choco pack ./chocolatey/malimo.nuspec
@@ -165,7 +153,7 @@ jobs:
       - name: Attach Chocolatey package to build artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: malimo.${{ needs.build_and_test.outputs.semantic_version }}.nupkg
-          path: malimo.${{ needs.build_and_test.outputs.semantic_version }}.nupkg
+          name: malimo.${{ needs.determine_version.outputs.semantic_version }}.nupkg
+          path: malimo.${{ needs.determine_version.outputs.semantic_version }}.nupkg
           retention-days: ${{ env.RETENTION_DAYS }}
   
