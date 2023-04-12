@@ -1,3 +1,5 @@
+name: Determine version
+
 env:
   # 0.1.0-snapshot is used, if no tag is present
   VERSION_FROM_TAG: v0.1.0-snapshot
@@ -7,10 +9,10 @@ on:
     outputs:
       semantic_version:
         description: "Semantic version taken from the current tag or a default, e.g. 0.1.8-alpha"
-        value: jobs.determine_version.outputs.semantic_version
+        value: ${{ jobs.determine_version.outputs.semantic_version }}
       assembly_version:
         description: "Four number version constructed from semantic version and build number, e.g. 0.1.8.180"
-        value: jobs.determine_version.outputs.assembly_version
+        value: ${{ jobs.determine_version.outputs.assembly_version }}
 
 jobs:
   determine_version:
