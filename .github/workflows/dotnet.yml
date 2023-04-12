@@ -16,9 +16,11 @@ env:
 
 jobs:
   determine_version:
+    name: Determine version
     uses: ./.github/workflows/_determine_version.yml
 
   test:
+    name: Unit tests
     uses: ./.github/workflows/_unit_tests.yml
 
   publish_macos:
