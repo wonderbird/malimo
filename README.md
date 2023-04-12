@@ -1,7 +1,7 @@
 # malimo - Markdown Linked Images Mover
 
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/wonderbird/malimo)
-[![Build Status Badge](https://github.com/wonderbird/malimo/workflows/.NET/badge.svg)](https://github.com/wonderbird/malimo/actions?query=workflow%3A%22.NET%22)
+[![Build Status Badge](https://github.com/wonderbird/malimo/actions/workflows/build_wo_release.yml/badge.svg?branch=main)](https://github.com/wonderbird/malimo/actions?query=workflow%3A%22.NET%20build%20w/o%20release%22)
 
 Move all images used by a markdown file into a folder.
 
