@@ -1,0 +1,50 @@
+name: .NET release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  RETENTION_DAYS: 5
+
+jobs:
+  determine_version:
+    name: Determine version
+    uses: ./.github/workflows/_determine_version.yml
+
+  test:
+    name: Unit tests
+    uses: ./.github/workflows/_unit_tests.yml
+
+  publish_macos:
+    name: Publish macOS
+    needs: [determine_version, test]
+    
+    uses: ./.github/workflows/_publish_macos.yml
+    with:
+      assembly_version: ${{ needs.determine_version.outputs.assembly_version }}
+      is_dry_run: false
+    secrets: inherit
+
+  publish_win:
+    name: Publish Windows
+    needs: [determine_version, test]
+    
+    uses: ./.github/workflows/_publish_win.yml
+    with:
+      semantic_version: ${{ needs.determine_version.outputs.semantic_version }}
+      assembly_version: ${{ needs.determine_version.outputs.assembly_version }}
+    
+  release:
+    name: Release
+    needs: [determine_version, test, publish_macos, publish_win]
+    
+    permissions:
+      contents: write
+
+    uses: ./.github/workflows/_release.yml
+    with:
+      semantic_version: ${{ needs.determine_version.outputs.semantic_version }}
+      is_dry_run: false
+    secrets: inherit

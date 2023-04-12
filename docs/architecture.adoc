@@ -60,7 +60,7 @@ image::{gitplant}/composite-structure.puml[Composite Structure]
 .Deployment View
 image::{gitplant}/deployment-view.puml[Deployment View]
 
-=== Administrator View: Install malimo
+=== 7.1 Administrator View: Install malimo
 
 The application supports macOS on ARM64 ("Apple Silicon") and Intel CPUs and Windows on Intel CPUs.
 
@@ -68,11 +68,11 @@ For macOS, a private https://brew.sh[Homebrew] tap is available in https://githu
 
 For Windows, a https://community.chocolatey.org/packages/malimo[Chocolatey package] is available in the https://community.chocolatey.org/[Chocolatey Community Repository]. As an alternative, the software administrator can download the latest ZIP file from the https://github.com/wonderbird/malimo/releases[malimo releases page]. The files shall be extracted to a folder which is added to the `PATH` environment variable.
 
-=== Maintainer View: Update Application Icon
+=== 7.2 Maintainer View: Update Application Icon
 
 The application icon is referenced by `<iconUrl>` entry in the Chocolatey package configuration file link:../chocolatey/malimo.nuspec[malimo.nuspec].
 
-=== Maintainer View: Publish a New Release
+=== 7.3 Maintainer View: Publish a New Release
 
 ==== Prerequisite
 
