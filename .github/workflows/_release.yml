@@ -48,7 +48,7 @@ jobs:
       - name: Read CHANGELOG.md and use it as a body of new release
         id: read_release
         run: |
-          r=$(cat CHANGELOG.md)                             # <--- Read CHANGELOG.md
+          r=$(./build/extract_latest_changelog.sh)          # <--- Read CHANGELOG.md
           r="${r//'%'/%25}"                                 # Multiline escape sequences for %
           r="${r//$'\n'/%0A}"                               # Multiline escape sequences for '\n'
           r="${r//$'\r'/%0D}"                               # Multiline escape sequences for '\r'
