@@ -39,6 +39,12 @@ jobs:
         run: |
           dotnet publish malimo/malimo.csproj --configuration Release --runtime "${{ matrix.runtime }}" --self-contained true -p:PublishSingleFile=true -p:Version=${{ inputs.assembly_version }} --output "${{ env.PUBLISH_DIR }}"
 
+      - name: Prepare release files
+        shell: bash
+        run: |
+          rm -vf "${{ env.PUBLISH_DIR }}/malimo.pdb"
+          cp -v LICENSE README.md CHANGELOG.md "${{ env.PUBLISH_DIR }}"
+
       - name: ZIP application
         uses: thedoctor0/zip-release@0.7.1
         with:
