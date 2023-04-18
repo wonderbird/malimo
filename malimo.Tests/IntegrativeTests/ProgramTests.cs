@@ -5,7 +5,7 @@ namespace malimo.Tests.IntegrativeTests;
 public sealed class ProgramTests
 {
     [Fact]
-    public void MarkdownFileWithTwoImages()
+    public void WithoutSourceDirAndWithoutDryRunParameters()
     {
         using var testDir = TestDirectory.Create();
 
@@ -26,12 +26,26 @@ public sealed class ProgramTests
 
         var sourceFile = new FileInfo(Path.Combine(testDir.SourceDir.FullName, "Testfile.md"));
 
-        Program.Main(sourceFile, testDir.TargetDir, true);
+        Program.Main(sourceFile, testDir.TargetDir, null, true);
 
         AssertFileExists("noun-island-1479438.png", testDir.SourceDir);
         AssertFileExists("noun-starship-3799189.png", testDir.SourceDir);
         AssertFileDoesNotExist("noun-island-1479438.png", testDir.TargetDir);
         AssertFileDoesNotExist("noun-starship-3799189.png", testDir.TargetDir);
+    }
+
+    [Fact]
+    public void WithSourceDirAndWithoutDryRunParameters()
+    {
+        using var testDir = TestDirectory.Create();
+
+        var sourceFile = new FileInfo(Path.Combine(testDir.SourceDir.FullName, "ImagesInSubdirectory.md"));
+
+        Program.Main(sourceFile, testDir.TargetDir, new DirectoryInfo(Path.Combine(testDir.SourceDir.FullName, "subdirectory")));
+
+        var sourceDir = new DirectoryInfo(Path.Combine(testDir.SourceDir.FullName, "subdirectory"));
+        AssertFileDoesNotExist("noun-plant-5382590.png", sourceDir);
+        AssertFileExists("noun-plant-5382590.png", testDir.TargetDir);
     }
 
     private static void AssertFileDoesNotExist(string fileName, FileSystemInfo dir) =>

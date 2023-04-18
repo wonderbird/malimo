@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
-using System.Threading;
 using Microsoft.Extensions.Logging;
 
 namespace malimo;
@@ -20,7 +19,7 @@ internal class App
         _fileMover = fileMover;
     }
 
-    public void Run(FileInfo markdownFile, DirectoryInfo targetDir)
+    public void Run(FileInfo markdownFile, DirectoryInfo sourceDir, DirectoryInfo targetDir)
     {
         if (HasInvalidArguments(markdownFile, targetDir))
         {
@@ -30,13 +29,23 @@ internal class App
         var imageNames = GetImagesFromMarkdownFile(markdownFile);
         LogImageNames(markdownFile, targetDir, imageNames);
 
-        var missingFiles = CheckForMissingFiles(markdownFile, imageNames);
+        var baseDirectory = sourceDir?.FullName ?? markdownFile.DirectoryName ?? "";
+        var images = imageNames
+            .Select(imageName => new FileInfo(Path.Combine(baseDirectory, imageName)))
+            .ToList();
+
+        var missingFiles = CheckForMissingFiles(images);
         LogMissingFiles(missingFiles);
 
         if (!missingFiles.Any())
         {
-            MoveImagesToTargetDir(markdownFile, targetDir, imageNames);
+            MoveImagesToTargetDir(targetDir, images);
         }
+    }
+
+    public void Run(FileInfo markdownFile, DirectoryInfo targetDir)
+    {
+        Run(markdownFile, null, targetDir);
     }
 
     private bool HasInvalidArguments(FileInfo markdownFile, DirectoryInfo targetDir)
@@ -71,24 +80,18 @@ internal class App
         imageNames.ForEach(imageName => _logger.LogInformation("- '{@ImageFile}'", imageName));
     }
 
-    private List<string> CheckForMissingFiles(FileInfo markdownFile, IEnumerable<string> imageNames) =>
-        imageNames
-            .Select(imageName => Path.Combine(markdownFile.DirectoryName ?? "", imageName))
-            .Where(fullName => !_fileSystem.File.Exists(fullName))
+    private List<FileInfo> CheckForMissingFiles(List<FileInfo> images) =>
+        images
+            .Where(file => !_fileSystem.File.Exists(file.FullName))
             .ToList();
 
-    private void LogMissingFiles(List<string> missingFiles)
+    private void LogMissingFiles(List<FileInfo> missingFiles)
     {
-        missingFiles.ForEach(fullName => _logger.LogError("File '{@ImageFile}' does not exist", fullName));
+        missingFiles.ForEach(file => _logger.LogError("File '{@ImageFile}' does not exist", file.FullName));
     }
 
-    private void MoveImagesToTargetDir(
-        FileInfo markdownFile,
-        DirectoryInfo targetDir,
-        IEnumerable<string> imageNames
+    private void MoveImagesToTargetDir(DirectoryInfo targetDir,
+        List<FileInfo> images
     ) =>
-        imageNames
-            .Select(imageName => new FileInfo(Path.Combine(markdownFile.DirectoryName ?? "", imageName)))
-            .ToList()
-            .ForEach(sourceFile => _fileMover.Move(sourceFile, targetDir));
+        images.ForEach(image => _fileMover.Move(image, targetDir));
 }

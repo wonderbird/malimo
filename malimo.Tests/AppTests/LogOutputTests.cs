@@ -60,7 +60,7 @@ public sealed class LogOutputTests
     }
 
     [Fact]
-    public void AllImagesExist()
+    public void FileContainsTwoImages()
     {
         var sourceFile = new FileInfo("/MockedSourceFile.md");
         _fileSystemMock.AddFile(
