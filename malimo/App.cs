@@ -60,14 +60,22 @@ internal class App
         return MarkdownParser.ParseLinkedImages(fileContent).ToList();
     }
 
-    private void LogMarkdownFileAnalysisResults(FileSystemInfo markdownFile, FileSystemInfo targetDir, List<string> imageNames)
+    private void LogMarkdownFileAnalysisResults(
+        FileSystemInfo markdownFile,
+        FileSystemInfo targetDir,
+        List<string> imageNames
+    )
     {
         _logger.LogInformation("Target folder: '{@TargetFolder}'", targetDir.FullName);
         _logger.LogInformation("File '{@SourceFile}' contains", markdownFile.FullName);
         imageNames.ForEach(imageName => _logger.LogInformation("- '{@ImageFile}'", imageName));
     }
 
-    private static List<FileInfo> ConstructImagePaths(FileInfo markdownFile, DirectoryInfo sourceDir, List<string> imageNames)
+    private static List<FileInfo> ConstructImagePaths(
+        FileInfo markdownFile,
+        DirectoryInfo sourceDir,
+        List<string> imageNames
+    )
     {
         var baseDirectory = sourceDir?.FullName ?? markdownFile.DirectoryName ?? "";
         return imageNames.Select(imageName => new FileInfo(Path.Combine(baseDirectory, imageName))).ToList();
