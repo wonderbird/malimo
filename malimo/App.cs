@@ -41,11 +41,6 @@ internal class App
         }
     }
 
-    public void Run(FileInfo markdownFile, DirectoryInfo targetDir)
-    {
-        Run(markdownFile, null, targetDir);
-    }
-
     private bool HasInvalidArguments(FileInfo markdownFile, DirectoryInfo targetDir)
     {
         var isValid = true;
