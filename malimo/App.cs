@@ -30,9 +30,7 @@ internal class App
         LogImageNames(markdownFile, targetDir, imageNames);
 
         var baseDirectory = sourceDir?.FullName ?? markdownFile.DirectoryName ?? "";
-        var images = imageNames
-            .Select(imageName => new FileInfo(Path.Combine(baseDirectory, imageName)))
-            .ToList();
+        var images = imageNames.Select(imageName => new FileInfo(Path.Combine(baseDirectory, imageName))).ToList();
 
         var missingFiles = CheckForMissingFiles(images);
         LogMissingFiles(missingFiles);
@@ -81,17 +79,11 @@ internal class App
     }
 
     private List<FileInfo> CheckForMissingFiles(List<FileInfo> images) =>
-        images
-            .Where(file => !_fileSystem.File.Exists(file.FullName))
-            .ToList();
+        images.Where(file => !_fileSystem.File.Exists(file.FullName)).ToList();
 
-    private void LogMissingFiles(List<FileInfo> missingFiles)
-    {
+    private void LogMissingFiles(List<FileInfo> missingFiles) =>
         missingFiles.ForEach(file => _logger.LogError("File '{@ImageFile}' does not exist", file.FullName));
-    }
 
-    private void MoveImagesToTargetDir(DirectoryInfo targetDir,
-        List<FileInfo> images
-    ) =>
+    private void MoveImagesToTargetDir(DirectoryInfo targetDir, List<FileInfo> images) =>
         images.ForEach(image => _fileMover.Move(image, targetDir));
 }
