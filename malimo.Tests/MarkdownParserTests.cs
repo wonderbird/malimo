@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
+using System.IO.Abstractions;
+using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using System.Text;
 
@@ -7,34 +10,40 @@ namespace malimo.Tests;
 
 public class MarkdownParserTests
 {
-    [Fact]
-    public void NullArgument()
+    private readonly MockFileSystem _fileSystemMock;
+    private readonly FileInfo _file;
+
+    public MarkdownParserTests()
     {
-        MarkdownParser.ParseLinkedImages(null).Should().BeEmpty();
+        _fileSystemMock = new MockFileSystem();
+        _file = new FileInfo("/MarkdownFile.md");
     }
 
     [Fact]
-    public void EmptyString()
+    public void EmptyFile()
     {
-        MarkdownParser.ParseLinkedImages("").Should().BeEmpty();
+        GivenEmptyFile();
+
+        new MarkdownParser(_fileSystemMock).ParseLinkedImages(_file).Should().BeEmpty();
     }
 
     [Theory]
     [InlineData("No image links")]
     [InlineData("Invalid image link: ![Invalid Link]")]
-    public void NonEmptyString_NoLinkedImages(string fileContent)
+    public void NonEmptyFile_NoLinkedImages(string fileContent)
     {
-        MarkdownParser.ParseLinkedImages(fileContent).Should().BeEmpty();
+        GivenFileWithContent(fileContent);
+        new MarkdownParser(_fileSystemMock).ParseLinkedImages(_file).Should().BeEmpty();
     }
 
     [Fact]
-    public void StringWithMultipleLinks()
+    public void FileWithMultipleLinks()
     {
         var expectedFiles = new[] { "link1.png", "link2.png", "link3.png" };
 
-        var fileContent = CreateMarkdownWithLinksTo(expectedFiles, "\n");
+        GivenFileWithLinksTo(expectedFiles, "\n");
 
-        MarkdownParser.ParseLinkedImages(fileContent).Should().BeEquivalentTo(expectedFiles);
+        new MarkdownParser(_fileSystemMock).ParseLinkedImages(_file).Should().BeEquivalentTo(expectedFiles);
     }
 
     [Fact]
@@ -43,9 +52,9 @@ public class MarkdownParserTests
         var containedFiles = new[] { "A.png", "A.png" };
         var expectedFiles = new[] { "A.png" };
 
-        var fileContent = CreateMarkdownWithLinksTo(containedFiles, "\n");
+        GivenFileWithLinksTo(containedFiles, "\n");
 
-        MarkdownParser.ParseLinkedImages(fileContent).Should().BeEquivalentTo(expectedFiles);
+        new MarkdownParser(_fileSystemMock).ParseLinkedImages(_file).Should().BeEquivalentTo(expectedFiles);
     }
 
     [Fact]
@@ -53,9 +62,26 @@ public class MarkdownParserTests
     {
         var expectedFiles = new[] { "link1.png", "link2.png", "link3.png" };
 
-        var fileContent = CreateMarkdownWithLinksTo(expectedFiles, " ");
+        GivenFileWithLinksTo(expectedFiles, " ");
 
-        MarkdownParser.ParseLinkedImages(fileContent).Should().BeEquivalentTo(expectedFiles);
+        new MarkdownParser(_fileSystemMock).ParseLinkedImages(_file).Should().BeEquivalentTo(expectedFiles);
+    }
+
+    private void GivenEmptyFile()
+    {
+        _fileSystemMock.AddEmptyFile(_file.FullName);
+    }
+
+    private void GivenFileWithContent(string fileContent)
+    {
+        _fileSystemMock.AddFile(_file.FullName, new MockFileData(fileContent));
+    }
+
+    private void GivenFileWithLinksTo(IEnumerable<string> expectedFiles, string separatedBy)
+    {
+        var fileContent = CreateMarkdownWithLinksTo(expectedFiles, separatedBy);
+
+        _fileSystemMock.AddFile(_file.FullName, new MockFileData(fileContent));
     }
 
     private static string CreateMarkdownWithLinksTo(IEnumerable<string> imageFiles, string separatedBy)

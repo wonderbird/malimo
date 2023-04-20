@@ -1,13 +1,25 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Abstractions;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace malimo;
 
-internal static class MarkdownParser
+internal class MarkdownParser
 {
-    public static IEnumerable<string> ParseLinkedImages(string fileContent)
+    private readonly IFileSystem _fileSystem;
+
+    public MarkdownParser(IFileSystem fileSystem) => _fileSystem = fileSystem;
+
+    public List<string> ParseLinkedImages(FileSystemInfo markdownFile)
+    {
+        var fileContent = _fileSystem.File.ReadAllText(markdownFile.FullName);
+        return ParseLinkedImages(fileContent).ToList();
+    }
+
+    private static IEnumerable<string> ParseLinkedImages(string fileContent)
     {
         if (string.IsNullOrEmpty(fileContent))
         {

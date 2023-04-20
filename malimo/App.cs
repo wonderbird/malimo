@@ -11,12 +11,14 @@ internal class App
     private readonly ILogger<App> _logger;
     private readonly IFileSystem _fileSystem;
     private readonly IFileMover _fileMover;
+    private readonly MarkdownParser _markdownParser;
 
     public App(ILogger<App> logger, IFileSystem fileSystem, IFileMover fileMover)
     {
         _logger = logger;
         _fileSystem = fileSystem;
         _fileMover = fileMover;
+        _markdownParser = new MarkdownParser(fileSystem);
     }
 
     public void Run(FileInfo markdownFile, DirectoryInfo sourceDir, DirectoryInfo targetDir)
@@ -26,7 +28,7 @@ internal class App
             return;
         }
 
-        var imageNames = GetImageNamesFromMarkdownFile(markdownFile);
+        var imageNames = _markdownParser.ParseLinkedImages(markdownFile);
 
         LogMarkdownFileAnalysisResults(markdownFile, targetDir, imageNames);
 
@@ -52,12 +54,6 @@ internal class App
         }
 
         return !isValid;
-    }
-
-    private List<string> GetImageNamesFromMarkdownFile(FileSystemInfo markdownFile)
-    {
-        var fileContent = _fileSystem.File.ReadAllText(markdownFile.FullName);
-        return MarkdownParser.ParseLinkedImages(fileContent).ToList();
     }
 
     private void LogMarkdownFileAnalysisResults(
