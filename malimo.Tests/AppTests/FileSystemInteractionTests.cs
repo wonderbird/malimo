@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions.TestingHelpers;
 using Microsoft.Extensions.Logging;
@@ -26,7 +25,7 @@ public class FileSystemInteractionTests
         var loggerMock = new Mock<ILogger<App>>();
         var fileMoverMock = new Mock<IFileMover>();
 
-        new App(loggerMock.Object, fileSystemMock, fileMoverMock.Object).Run(sourceFile, targetDir);
+        new App(loggerMock.Object, fileSystemMock, fileMoverMock.Object).Run(sourceFile, null, targetDir);
 
         fileMoverMock.Verify(mover => mover.Move(It.IsAny<FileInfo>(), It.IsAny<DirectoryInfo>()), Times.Never);
     }

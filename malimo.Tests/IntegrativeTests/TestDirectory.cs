@@ -38,11 +38,26 @@ public sealed class TestDirectory : IDisposable
 
     private void CopySeedToSource()
     {
-        var seedDir = new DirectoryInfo("data/seed");
-        foreach (var seedFile in seedDir.GetFiles())
+        CopyDirectoryRecursively(new DirectoryInfo("data/seed"), SourceDir);
+    }
+
+    private void CopyDirectoryRecursively(DirectoryInfo sourceDirectory, DirectoryInfo targetDirectory)
+    {
+        if (!targetDirectory.Exists)
         {
-            var targetFile = Path.Combine(SourceDir.FullName, seedFile.Name);
-            seedFile.CopyTo(targetFile);
+            targetDirectory.Create();
+        }
+
+        foreach (var file in sourceDirectory.GetFiles())
+        {
+            var targetFilePath = Path.Combine(targetDirectory.FullName, file.Name);
+            file.CopyTo(targetFilePath);
+        }
+
+        foreach (var subdirectory in sourceDirectory.GetDirectories())
+        {
+            var targetSubdirectory = new DirectoryInfo(Path.Combine(SourceDir.FullName, subdirectory.Name));
+            CopyDirectoryRecursively(subdirectory, targetSubdirectory);
         }
     }
 
