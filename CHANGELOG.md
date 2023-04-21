@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - The new `--source-dir` parameter allows different directories for images and markdown file
+- When `--no-action` flag is given, log what would be moved
 
 ## [0.1.7-alpha] - 2023-04-11
 

@@ -11,7 +11,6 @@ internal class NoAction : IFileMover
 
     public void Move(FileInfo sourceFile, DirectoryInfo targetDir)
     {
-        // TODO: Add Test
-        _logger.LogInformation("Would move '{@SourceFile}' to '{@TargetFolder}'", sourceFile.FullName, targetDir.FullName);
+        _logger.LogDebug("Would move '{@ImageFile}' to '{@TargetFolder}'", sourceFile.FullName, targetDir.FullName);
     }
 }

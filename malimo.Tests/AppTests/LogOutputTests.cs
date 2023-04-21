@@ -60,7 +60,7 @@ public sealed class LogOutputTests
     }
 
     [Fact]
-    public void TwoExistingImages()
+    public void GivenTwoExistingImages_ThenLogsNamesOfImages()
     {
         var sourceFile = new FileInfo("/MockedSourceFile.md");
         _fileSystemMock.AddFile(
