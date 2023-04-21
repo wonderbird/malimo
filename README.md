@@ -74,6 +74,29 @@ malimo --version
 
 The displayed version number contains 4 numbers separated by a ".", e.g. `0.1.7.178`. The first three numbers reflect the [semantic version](https://semver.org/spec/v2.0.0.html) of the release, here `0.1.7`. The last number is the [GitHub workflow run number](https://github.com/wonderbird/malimo/actions?query=workflow%3A%22.NET%22), during which the package was created, in the example case it was [run #178](https://github.com/wonderbird/malimo/actions/runs/4669300742).
 
+## Usage Examples
+
+Search the images linked in `talk-about-clean-code.md` in the current directory. Move the images to the
+folder `./assets/conference-talks/clean-code`:
+
+```shell
+malimo --file talk-about-clean-code.md --target-dir assets/conference-talks/clean-code
+```
+
+Search the images linked in `notes/talk-about-clean-code.md` in the `./notes` subdirectory. Move the images to the
+folder `./assets/conference-talks/clean-code`:
+
+```shell
+malimo --file notes/talk-about-clean-code.md --target-dir assets/conference-talks/clean-code
+```
+
+Search the images linked in `notes/talk-about-clean-code.md` in the current directory. Move the images to the
+folder `./assets/conference-talks/clean-code`:
+
+```shell
+malimo --file notes/talk-about-clean-code.md --source-dir . --target-dir assets/conference-talks/clean-code
+```
+
 ## Development
 
 ### Architecture Overview
