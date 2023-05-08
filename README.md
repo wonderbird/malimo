@@ -182,7 +182,11 @@ rm -r malimo.Tests/data/source malimo.Tests/data/target
 
 ### Before Creating a Pull Request ...
 
-#### Apply code formatting rules
+#### Fix Static Code Analysis Warnings
+
+... fix static code analysis warnings reported by [SonarLint](https://www.sonarsource.com/products/sonarlint/)
+
+#### Apply Code Formatting Rules
 
 ```shell
 # Install https://csharpier.io globally, once
@@ -227,14 +231,26 @@ At the time of writing, I want to stay below the following thresholds:
 
 Finally, remove all code duplication. The next section describes how to detect code duplication.
 
-### Remove Code Duplication Where Appropriate
+#### Remove Code Duplication Where Appropriate
 
-To detect duplicates I use the [CPD Copy Paste Detector](https://pmd.github.io/latest/pmd_userdocs_cpd.html)
-tool from the [PMD Source Code Analyzer Project](https://pmd.github.io/latest/index.html).
+To detect duplicates I use the [CPD Copy Paste Detector](https://docs.pmd-code.org/latest/pmd_userdocs_cpd.html)
+tool from the [PMD Source Code Analyzer Project](https://docs.pmd-code.org/latest/index.html).
 
 If you have installed PMD by download & unzip, replace `pmd` by `./run.sh`.
 The [homebrew pmd formula](https://formulae.brew.sh/formula/pmd) makes the `pmd` command globally available.
 
 ```sh
-pmd cpd --minimum-tokens 50 --language cs --files .
+# Remove temporary and generated files
+# 1. dry run
+git clean -ndx
+```
+
+```shell
+# 2. Remove the files shown by the dry run
+git clean -fdx
+```
+
+```shell
+# Identify duplicated code in files to push to GitHub
+pmd cpd --minimum-tokens 50 --language cs --dir .
 ```
