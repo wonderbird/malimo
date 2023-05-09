@@ -14,7 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{7CF31C68-F
 		.gitpod.Dockerfile = .gitpod.Dockerfile
 		.gitpod.yml = .gitpod.yml
 		.github\dependabot.yml = .github\dependabot.yml
-		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
 		LICENSE = LICENSE
 		README.md = README.md
 		CHANGELOG.md = CHANGELOG.md
@@ -33,6 +32,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plantuml", "plantuml", "{E5
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "malimo.Integration.Tests", "malimo.Integration.Tests\malimo.Integration.Tests.csproj", "{95FB74B6-30FF-4D59-8B57-0971DBDBE9CA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github-actions", "github-actions", "{E251B2A0-872E-4433-BAD6-1AA7CAC1A40B}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\_determine_version.yml = .github\workflows\_determine_version.yml
+		.github\workflows\_publish_macos.yml = .github\workflows\_publish_macos.yml
+		.github\workflows\_publish_win.yml = .github\workflows\_publish_win.yml
+		.github\workflows\_release.yml = .github\workflows\_release.yml
+		.github\workflows\_unit_tests.yml = .github\workflows\_unit_tests.yml
+		.github\workflows\build_wo_release.yml = .github\workflows\build_wo_release.yml
+		.github\workflows\release.yml = .github\workflows\release.yml
+		.github\workflows\README.md = .github\workflows\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
