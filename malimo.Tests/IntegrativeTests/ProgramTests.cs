@@ -1,4 +1,5 @@
 using System.IO;
+using malimo.TestDirectoryHelper;
 
 namespace malimo.Tests.IntegrativeTests;
 

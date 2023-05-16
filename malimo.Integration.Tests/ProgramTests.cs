@@ -1,3 +1,5 @@
+using malimo.TestDirectoryHelper;
+
 namespace malimo.Integration.Tests;
 
 public class ProgramTests

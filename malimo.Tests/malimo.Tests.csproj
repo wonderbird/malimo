@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\malimo.TestDirectoryHelper\malimo.TestDirectoryHelper.csproj" />
         <ProjectReference Include="..\malimo\malimo.csproj" />
     </ItemGroup>
 

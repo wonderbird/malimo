@@ -1,6 +1,6 @@
 using System.Globalization;
 
-namespace malimo.Integration.Tests;
+namespace malimo.TestDirectoryHelper;
 
 public sealed class TestDirectory : IDisposable
 {
