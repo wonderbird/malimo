@@ -1,4 +1,5 @@
 using malimo.TestDirectoryHelper;
+using TestProcessWrapper;
 
 namespace malimo.Integration.Tests;
 
@@ -9,7 +10,12 @@ public class ProgramTests
     {
         using var testDir = TestDirectory.Create();
 
-        var process = new TestProcessWrapper.TestProcessWrapper("malimo", false);
+#if DEBUG
+        const BuildConfiguration buildConfiguration = BuildConfiguration.Debug;
+#else
+        const BuildConfiguration buildConfiguration = BuildConfiguration.Release;
+#endif
+        var process = new TestProcessWrapper.TestProcessWrapper("malimo", false, buildConfiguration);
         var sourceFile = new FileInfo(Path.Combine(testDir.SourceDir.FullName, "Testfile.md"));
         var targetDir = testDir.TargetDir;
 
