@@ -16,7 +16,13 @@ public class NoActionTests
 
         new NoAction(loggerMock.Object).Move(sourceFile, targetDir);
 
-        loggerMock.VerifyLog(logger => logger.LogDebug("Would move '{@ImageFile}' to '{@TargetFolder}'", sourceFile.FullName,
-            targetDir.FullName));
+        loggerMock.VerifyLog(
+            logger =>
+                logger.LogDebug(
+                    "Would move '{@ImageFile}' to '{@TargetFolder}'",
+                    sourceFile.FullName,
+                    targetDir.FullName
+                )
+        );
     }
 }

@@ -2,34 +2,35 @@
 
     <PropertyGroup>
         <TargetFramework>net7.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-
-        <IsPackable>false</IsPackable>
+        <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Boos.TestProcessWrapper" Version="6.0.317-alpha" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
-        <PackageReference Include="xunit" Version="2.4.2" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="coverlet.collector" Version="3.1.2">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
+        <Using Include="TechTalk.SpecFlow" />
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="data\seed\Testfile.md">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
+        <PackageReference Include="Boos.TestProcessWrapper" Version="6.0.317-alpha" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+        <PackageReference Include="SpecFlow.Plus.LivingDocPlugin" Version="3.9.57" />
+        <PackageReference Include="SpecFlow.xUnit" Version="3.9.74" />
+        <PackageReference Include="xunit" Version="2.4.1" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="FluentAssertions" Version="6.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
       <None Update="data\seed\noun-island-1479438.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="data\seed\noun-starship-3799189.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="data\seed\Testfile.md">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>

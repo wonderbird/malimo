@@ -15,7 +15,10 @@ public class FileSystemInteractionTests
         const string missingImageFile = "image2.png";
 
         var fileSystemMock = new MockFileSystem();
-        fileSystemMock.AddFile(sourceFile.FullName, new MockFileData($"![[{existingImageFile}]] ![[{missingImageFile}]]"));
+        fileSystemMock.AddFile(
+            sourceFile.FullName,
+            new MockFileData($"![[{existingImageFile}]] ![[{missingImageFile}]]")
+        );
         fileSystemMock.AddFile($"/{existingImageFile}", new MockFileData(""));
 
         Assert.True(fileSystemMock.FileExists($"/{existingImageFile}"));

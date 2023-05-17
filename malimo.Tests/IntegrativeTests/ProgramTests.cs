@@ -42,7 +42,11 @@ public sealed class ProgramTests
 
         var sourceFile = new FileInfo(Path.Combine(testDir.SourceDir.FullName, "ImagesInSubdirectory.md"));
 
-        Program.Main(sourceFile, testDir.TargetDir, new DirectoryInfo(Path.Combine(testDir.SourceDir.FullName, "subdirectory")));
+        Program.Main(
+            sourceFile,
+            testDir.TargetDir,
+            new DirectoryInfo(Path.Combine(testDir.SourceDir.FullName, "subdirectory"))
+        );
 
         var sourceDir = new DirectoryInfo(Path.Combine(testDir.SourceDir.FullName, "subdirectory"));
         AssertFileDoesNotExist("noun-plant-5382590.png", sourceDir);

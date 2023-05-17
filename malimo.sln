@@ -31,8 +31,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "plantuml", "plantuml", "{E5
 		docs\plantuml\business-context.puml = docs\plantuml\business-context.puml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "malimo.Integration.Tests", "malimo.Integration.Tests\malimo.Integration.Tests.csproj", "{95FB74B6-30FF-4D59-8B57-0971DBDBE9CA}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github-actions", "github-actions", "{E251B2A0-872E-4433-BAD6-1AA7CAC1A40B}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\_determine_version.yml = .github\workflows\_determine_version.yml
@@ -46,6 +44,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github-actions", "github-ac
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "malimo.TestDirectoryHelper", "malimo.TestDirectoryHelper\malimo.TestDirectoryHelper.csproj", "{47E6C7C7-738C-4025-99BC-35042785ED6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "malimo.Acceptance.Tests", "malimo.Acceptance.Tests\malimo.Acceptance.Tests.csproj", "{91CB7962-D0F3-4ED6-9B96-7417C741800A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -81,18 +81,6 @@ Global
 		{5EC6F230-F709-49F1-97A5-0482B48719E7}.Release|x64.Build.0 = Release|Any CPU
 		{5EC6F230-F709-49F1-97A5-0482B48719E7}.Release|x86.ActiveCfg = Release|Any CPU
 		{5EC6F230-F709-49F1-97A5-0482B48719E7}.Release|x86.Build.0 = Release|Any CPU
-		{95FB74B6-30FF-4D59-8B57-0971DBDBE9CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{95FB74B6-30FF-4D59-8B57-0971DBDBE9CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{95FB74B6-30FF-4D59-8B57-0971DBDBE9CA}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{95FB74B6-30FF-4D59-8B57-0971DBDBE9CA}.Debug|x64.Build.0 = Debug|Any CPU
-		{95FB74B6-30FF-4D59-8B57-0971DBDBE9CA}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{95FB74B6-30FF-4D59-8B57-0971DBDBE9CA}.Debug|x86.Build.0 = Debug|Any CPU
-		{95FB74B6-30FF-4D59-8B57-0971DBDBE9CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{95FB74B6-30FF-4D59-8B57-0971DBDBE9CA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{95FB74B6-30FF-4D59-8B57-0971DBDBE9CA}.Release|x64.ActiveCfg = Release|Any CPU
-		{95FB74B6-30FF-4D59-8B57-0971DBDBE9CA}.Release|x64.Build.0 = Release|Any CPU
-		{95FB74B6-30FF-4D59-8B57-0971DBDBE9CA}.Release|x86.ActiveCfg = Release|Any CPU
-		{95FB74B6-30FF-4D59-8B57-0971DBDBE9CA}.Release|x86.Build.0 = Release|Any CPU
 		{47E6C7C7-738C-4025-99BC-35042785ED6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{47E6C7C7-738C-4025-99BC-35042785ED6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47E6C7C7-738C-4025-99BC-35042785ED6A}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -105,6 +93,18 @@ Global
 		{47E6C7C7-738C-4025-99BC-35042785ED6A}.Release|x64.Build.0 = Release|Any CPU
 		{47E6C7C7-738C-4025-99BC-35042785ED6A}.Release|x86.ActiveCfg = Release|Any CPU
 		{47E6C7C7-738C-4025-99BC-35042785ED6A}.Release|x86.Build.0 = Release|Any CPU
+		{91CB7962-D0F3-4ED6-9B96-7417C741800A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91CB7962-D0F3-4ED6-9B96-7417C741800A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91CB7962-D0F3-4ED6-9B96-7417C741800A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{91CB7962-D0F3-4ED6-9B96-7417C741800A}.Debug|x64.Build.0 = Debug|Any CPU
+		{91CB7962-D0F3-4ED6-9B96-7417C741800A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{91CB7962-D0F3-4ED6-9B96-7417C741800A}.Debug|x86.Build.0 = Debug|Any CPU
+		{91CB7962-D0F3-4ED6-9B96-7417C741800A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91CB7962-D0F3-4ED6-9B96-7417C741800A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91CB7962-D0F3-4ED6-9B96-7417C741800A}.Release|x64.ActiveCfg = Release|Any CPU
+		{91CB7962-D0F3-4ED6-9B96-7417C741800A}.Release|x64.Build.0 = Release|Any CPU
+		{91CB7962-D0F3-4ED6-9B96-7417C741800A}.Release|x86.ActiveCfg = Release|Any CPU
+		{91CB7962-D0F3-4ED6-9B96-7417C741800A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
