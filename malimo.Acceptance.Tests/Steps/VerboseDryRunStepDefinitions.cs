@@ -44,7 +44,7 @@ public sealed class VerboseDryRunStepDefinitions : IDisposable
 #else
         const BuildConfiguration buildConfiguration = BuildConfiguration.Release;
 #endif
-        _process = new TestProcessWrapper.TestProcessWrapper("malimo", false, buildConfiguration);
+        _process = new TestProcessWrapper.TestProcessWrapper("malimo", true, buildConfiguration);
         _process.TestOutputHelper = _testOutputHelper;
 
         foreach (var (argument, value) in _arguments)

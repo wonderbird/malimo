@@ -31,7 +31,7 @@ jobs:
         run: dotnet test --no-restore --configuration Release --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='./TestResults/coverage.cobertura.xml'
 
       - name: Generate coverage reports
-        run: reportgenerator "-reports:malimo.Tests/TestResults/*.xml" \
+        run: reportgenerator "-reports:malimo.Tests/TestResults/*.xml;malimo.Acceptance.Tests/TestResults/*.xml" \
           "-targetdir:report" \
           "-reporttypes:Html;lcov" \
           "-title:DotnetStarter"
