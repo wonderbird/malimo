@@ -47,6 +47,10 @@ public sealed class MalimoStepDefinitions
     [Given(@"the file is ""(.*)""")]
     public void GivenTheFileIs(string fileName) => _arguments["--file"] = Path.Combine(SourceDirectory, fileName);
 
+    [Given(@"the ""--source-dir"" argument is configured as ""(.*)""")]
+    public void GivenTheArgumentIsConfiguredAs(string directoryName) =>
+        _arguments["--source-dir"] = Path.Combine(SourceDirectory, directoryName);
+
     [Given(@"the target directory is configured")]
     public void GivenTheTargetDirectoryIsConfigured() => _arguments["--target-dir"] = Path.Combine(TargetDirectory);
 
@@ -92,6 +96,13 @@ public sealed class MalimoStepDefinitions
     public void ThenTheFileDoesNotExistInTheSourceDirectory(string fileName)
     {
         var file = new FileInfo(Path.Combine(SourceDirectory, fileName));
+        Assert.False(file.Exists, $"file '{file.FullName}' should not exist");
+    }
+
+    [Then(@"the file ""(.*)"" does not exist in the directory ""(.*)"" beneath the source directory")]
+    public void ThenTheFileDoesNotExistInTheDirectoryBeneathTheSourceDirectory(string fileName, string directoryName)
+    {
+        var file = new FileInfo(Path.Combine(SourceDirectory, directoryName, fileName));
         Assert.False(file.Exists, $"file '{file.FullName}' should not exist");
     }
 

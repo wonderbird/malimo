@@ -33,10 +33,25 @@
       <None Update="data\seed\WithTwoImages.md">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+      <None Update="data\seed\subdirectory\noun-island-1479438.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="data\seed\subdirectory\noun-starship-3799189.png">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\malimo.TestDirectoryHelper\malimo.TestDirectoryHelper.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Features\ImagesInOtherFolder.feature.cs">
+        <DependentUpon>ImagesInOtherFolder.feature</DependentUpon>
+        <AutoGen>true</AutoGen>
+        <DesignTime>true</DesignTime>
+        <Visible>true</Visible>
+      </Compile>
     </ItemGroup>
 
 </Project>
