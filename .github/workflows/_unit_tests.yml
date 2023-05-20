@@ -52,4 +52,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: FeatureDocumentation
-          path: malimo.Acceptance.Tests/bin/Debug/net7.0/LivingDoc.html
+          path: malimo.Acceptance.Tests/bin/Release/net7.0/LivingDoc.html
