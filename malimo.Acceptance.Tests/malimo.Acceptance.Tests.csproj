@@ -42,10 +42,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\malimo.TestDirectoryHelper\malimo.TestDirectoryHelper.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Compile Update="Features\ImagesInOtherFolder.feature.cs">
         <DependentUpon>ImagesInOtherFolder.feature</DependentUpon>
         <AutoGen>true</AutoGen>

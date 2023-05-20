@@ -1,5 +1,4 @@
-﻿using malimo.TestDirectoryHelper;
-using TestProcessWrapper;
+﻿using TestProcessWrapper;
 using Xunit;
 using Xunit.Sdk;
 
