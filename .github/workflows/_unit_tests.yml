@@ -34,7 +34,7 @@ jobs:
         run: reportgenerator "-reports:malimo.Tests/TestResults/*.xml;malimo.Acceptance.Tests/TestResults/*.xml" \
           "-targetdir:report" \
           "-reporttypes:Html;lcov" \
-          "-title:DotnetStarter"
+          "-title:malimo"
 
       - name: Attach coverage reports to build artifacts
         uses: actions/upload-artifact@v3

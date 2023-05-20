@@ -30,7 +30,7 @@
       <None Update="data\seed\noun-starship-3799189.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="data\seed\Testfile.md">
+      <None Update="data\seed\WithTwoImages.md">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>

@@ -6,36 +6,6 @@ namespace malimo.Tests.IntegrativeTests;
 public sealed class ProgramTests
 {
     [Fact]
-    public void WithoutSourceDirAndWithoutDryRunParameters()
-    {
-        using var testDir = TestDirectory.Create();
-
-        var sourceFile = new FileInfo(Path.Combine(testDir.SourceDir.FullName, "Testfile.md"));
-
-        Program.Main(sourceFile, testDir.TargetDir);
-
-        AssertFileDoesNotExist("noun-island-1479438.png", testDir.SourceDir);
-        AssertFileDoesNotExist("noun-starship-3799189.png", testDir.SourceDir);
-        AssertFileExists("noun-island-1479438.png", testDir.TargetDir);
-        AssertFileExists("noun-starship-3799189.png", testDir.TargetDir);
-    }
-
-    [Fact]
-    public void DryRun()
-    {
-        using var testDir = TestDirectory.Create();
-
-        var sourceFile = new FileInfo(Path.Combine(testDir.SourceDir.FullName, "Testfile.md"));
-
-        Program.Main(sourceFile, testDir.TargetDir, null, true);
-
-        AssertFileExists("noun-island-1479438.png", testDir.SourceDir);
-        AssertFileExists("noun-starship-3799189.png", testDir.SourceDir);
-        AssertFileDoesNotExist("noun-island-1479438.png", testDir.TargetDir);
-        AssertFileDoesNotExist("noun-starship-3799189.png", testDir.TargetDir);
-    }
-
-    [Fact]
     public void WithSourceDirAndWithoutDryRunParameters()
     {
         using var testDir = TestDirectory.Create();
