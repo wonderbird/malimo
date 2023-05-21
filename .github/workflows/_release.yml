@@ -43,6 +43,7 @@ jobs:
           mv -v malimo.osx.12-x64.bottle.zip/malimo.osx.12-x64.bottle.zip ./release/
           mv -v malimo.win-x64.zip/malimo.win-x64.zip ./release/
           mv -v malimo.${{ inputs.semantic_version }}.nupkg/malimo.${{ inputs.semantic_version }}.nupkg ./release/
+          mv -v FeatureDocumentation.zip/FeatureDocumentation.html ./release
 
       # Adopted from https://github.com/svenstaro/upload-release-action
       - name: Read CHANGELOG.md and use it as a body of new release
