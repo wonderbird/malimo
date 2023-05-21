@@ -17,6 +17,12 @@ jobs:
     name: Unit tests
     uses: ./.github/workflows/_unit_tests.yml
 
+  publish_analysis_results:
+    name: Publish Analysis Results
+    needs: test
+    
+    uses: ./.github/workflows/_publish_analysis_results.yml
+
   publish_macos:
     name: Publish macOS
     needs: [determine_version, test]
