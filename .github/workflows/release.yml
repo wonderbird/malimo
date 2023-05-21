@@ -44,7 +44,7 @@ jobs:
     
   release:
     name: Release
-    needs: [publish_macos, publish_win]
+    needs: [determine_version, test, publish_macos, publish_win]
     
     permissions:
       contents: write
