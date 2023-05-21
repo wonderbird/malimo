@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Use Gherkin and [specflow](https://specflow.org/) for integration tests
 - The release page only contains the changes of the released version
+- Upgrade dependencies: Fluent Assertions 6.11.0, TestableIO.System.IO.Abstractions 19.2.29, TestableIO.System.IO.Abstractions.Wrappers 19.2.29, TestableIO.System.IO.Abstractions.TestingHelpers 19.2.29
 
 ## [0.1.7-alpha] - 2023-04-11
 

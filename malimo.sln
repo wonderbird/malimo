@@ -41,6 +41,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github-actions", "github-ac
 		.github\workflows\build_wo_release.yml = .github\workflows\build_wo_release.yml
 		.github\workflows\release.yml = .github\workflows\release.yml
 		.github\workflows\README.md = .github\workflows\README.md
+		.github\workflows\_publish_analysis_results.yml = .github\workflows\_publish_analysis_results.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "malimo.Acceptance.Tests", "malimo.Acceptance.Tests\malimo.Acceptance.Tests.csproj", "{91CB7962-D0F3-4ED6-9B96-7417C741800A}"
