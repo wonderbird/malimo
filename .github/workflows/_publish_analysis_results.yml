@@ -4,7 +4,7 @@ on:
   workflow_call
 
 jobs:
-  test:
+  publish_analysis_results:
     name: Publish analysis results
     runs-on: ubuntu-latest
     
@@ -23,3 +23,4 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
           coverageLocations: coverage-reports/lcov.info:lcov
+          debug: true
