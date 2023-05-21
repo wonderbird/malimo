@@ -1,10 +1,29 @@
 ﻿@DryRun
-Feature: Dry Run
-  To be sure that malimo does not damage my files
-  as a user
-  I want malimo to print what would be moved without modifying the files on disk.
+Feature: Dry run simulates what would happen
+  
+Use case
+--
 
-Scenario: Add `--dry-run` option
+- Files shall not be moved 
+- You have a markdown file linking to one or more images
+- The markdown file and all images are located in the folder `./`
+- You want to list the files linked by the markdown file
+
+Command line
+--
+
+```
+malimo --dry-run --file WithTwoImages.md --target-dir ../any-directory-name
+```
+
+Result
+--
+
+- The `--dry-run` option prevents `malimo` from changing the file system
+- `malimo` will ensure that the linked images exist in the folder `./`
+- It will print out in detail which image would be moved
+
+Scenario: Prevent moving files by using the `--dry-run` option
 	Given the option "--dry-run" is added
 	And the file is "WithTwoImages.md"
 	And the target directory is configured

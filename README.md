@@ -76,26 +76,27 @@ The displayed version number contains 4 numbers separated by a ".", e.g. `0.1.7.
 
 ## Usage Examples
 
-Search the images linked in `talk-about-clean-code.md` in the current directory. Move the images to the
-folder `./assets/conference-talks/clean-code`:
+The most basic usage is
 
 ```shell
-malimo --file talk-about-clean-code.md --target-dir assets/conference-talks/clean-code
+malimo --file ./my-markdown-file.md --target-dir ./target
 ```
 
-Search the images linked in `notes/talk-about-clean-code.md` in the `./notes` subdirectory. Move the images to the
-folder `./assets/conference-talks/clean-code`:
+`malimo` will list the images linked in `./my-markdown-file.md`. It will ensure that every image exists in the same  directory `./`. Then it will move all linked images to the directory `./target`.
+
+If you want to double check what would be moved before actually moving the files, then add the `--dry-run` option. This way, no file will be moved.
 
 ```shell
-malimo --file notes/talk-about-clean-code.md --target-dir assets/conference-talks/clean-code
+malimo --dry-run --file ./my-markdown-file.md --target-dir ./will-be-ignored
 ```
 
-Search the images linked in `notes/talk-about-clean-code.md` in the current directory. Move the images to the
-folder `./assets/conference-talks/clean-code`:
+To get help, specify the `--help` option:
 
 ```shell
-malimo --file notes/talk-about-clean-code.md --source-dir . --target-dir assets/conference-talks/clean-code
+malimo --help
 ```
+
+You can find elaborate usage examples in the `FeatureDocumentation` HTML file attached to each [release](https://github.com/wonderbird/malimo/releases) starting from 0.1.8-alpha.
 
 ## Development
 

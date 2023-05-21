@@ -1,9 +1,29 @@
 @ImagesInOtherFolder
-Feature: Images in other folder
-	Use the `--source-dir` argument to specify an images folder. This option is used when the images and the markdown
-  file are in different folders.   
+Feature: Images and markdown file are in different folders
 
-Scenario: Markdown file with two images in other folder
+Use case
+--
+
+- You have a markdown file linking to one or more images
+- The markdown file is located in the folder `./`
+- All images are located in the folder `./subdirectory`
+- You want to move the images to the folder `./target`
+
+Command line
+--
+
+```
+malimo --file ./WithTwoImages.md --source-dir ./subdirectory --target-dir ./target
+```
+
+Result
+--
+
+- `malimo` will ensure that the linked images exist in the folder `./source`
+- It will print out which images are moved
+- It will move the images from `./source` to `./target` 
+
+Scenario: Specify image folder using `--source-dir`
 	Given the file is "WithTwoImages.md"
 	And the "--source-dir" argument is configured as "subdirectory"
 	And the target directory is configured

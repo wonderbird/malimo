@@ -1,8 +1,28 @@
 @ImagesNextToMarkdownFile
-Feature: Images next to markdown file
-	`malimo` moves images located in the same folder as the markdown file into the target directory. 
+Feature: Images and markdown file are in the same folder
+  
+Use case
+--
 
-Scenario: Markdown file with two existing images
+- You have a markdown file linking to one or more images.
+- The markdown file and all images are located in the folder `./`
+- You want to move the images to the folder `./target`
+
+Command line
+--
+
+```
+malimo --file ./WithTwoImages.md --target-dir ./target
+```
+
+Result
+--
+
+- `malimo` will ensure that the linked images exist in the folder `./`
+- It will print out which images are moved
+- It will move the images from `./` to `./target` 
+
+Scenario: Images and markdown file in same folder
 	Given the file is "WithTwoImages.md"
 	And the target directory is configured
 	When malimo is executed
