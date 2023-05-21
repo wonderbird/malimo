@@ -61,4 +61,4 @@ jobs:
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
-          coverageLocations: coverage-reports/lcov.info:lcov
+          coverageLocations: report/lcov.info:lcov
