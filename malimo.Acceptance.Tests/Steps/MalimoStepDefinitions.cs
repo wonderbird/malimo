@@ -76,6 +76,10 @@ public sealed class MalimoStepDefinitions
         _recordedOutput = process.RecordedOutput;
 
         process.ForceTermination();
+
+        _testOutputHelper.WriteLine("===== Recorded process output =====");
+        _testOutputHelper.WriteLine(process.RecordedOutput);
+        _testOutputHelper.WriteLine("===== End of recorded process output =====");
     }
 
     [Then(@"the output matches the regex ""(.*)""")]
