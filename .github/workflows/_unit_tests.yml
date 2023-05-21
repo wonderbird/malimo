@@ -26,10 +26,10 @@ jobs:
         run: dotnet restore
 
       - name: Build
-        run: dotnet build --no-restore --configuration Debug
+        run: dotnet build --no-restore --configuration Release
 
       - name: Run tests
-        run: dotnet test --no-restore --configuration Debug --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='./TestResults/coverage.cobertura.xml'
+        run: dotnet test --no-restore --configuration Release --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='./TestResults/coverage.cobertura.xml'
 
       - name: Generate coverage reports
         run: reportgenerator "-reports:malimo.Tests/TestResults/*.xml;malimo.Acceptance.Tests/TestResults/*.xml" \
@@ -48,10 +48,17 @@ jobs:
         run: |
           livingdoc test-assembly malimo.Acceptance.Tests.dll -t TestExecution.json
           mv LivingDoc.html FeatureDocumentation.html
-        working-directory: malimo.Acceptance.Tests/bin/Debug/net7.0
+        working-directory: malimo.Acceptance.Tests/bin/Release/net7.0
 
       - name: Attach feature documentation to build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: FeatureDocumentation
-          path: malimo.Acceptance.Tests/bin/Debug/net7.0/FeatureDocumentation.html
+          path: malimo.Acceptance.Tests/bin/Release/net7.0/FeatureDocumentation.html
+
+      - name: Publish coverage report to CodeClimate
+        uses: paambaati/codeclimate-action@v4.0.0
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          coverageLocations: coverage-reports/lcov.info:lcov
