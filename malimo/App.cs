@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
@@ -23,6 +24,8 @@ internal class App
 
     public void Run(FileInfo markdownFile, DirectoryInfo sourceDir, DirectoryInfo targetDir)
     {
+        LogProcessIdForIntegrationTests();
+
         if (HasInvalidArguments(markdownFile, targetDir))
         {
             return;
@@ -35,6 +38,11 @@ internal class App
         var images = ConstructImagePaths(markdownFile, sourceDir, imageNames);
 
         MoveImagesToTargetDir(targetDir, images);
+    }
+
+    private void LogProcessIdForIntegrationTests()
+    {
+        _logger.LogDebug("Process ID {@ProcessId}", Environment.ProcessId);
     }
 
     private bool HasInvalidArguments(FileInfo markdownFile, DirectoryInfo targetDir)

@@ -1,18 +1,26 @@
-using System;
 using System.Globalization;
-using System.IO;
 
-namespace malimo.Tests.IntegrativeTests;
+namespace malimo.Acceptance.Tests.Steps;
 
 public sealed class TestDirectory : IDisposable
 {
-    private DirectoryInfo _baseDir;
+    private readonly DirectoryInfo _baseDir;
 
-    public DirectoryInfo SourceDir { get; private set; }
+    public DirectoryInfo SourceDir { get; }
 
-    public DirectoryInfo TargetDir { get; private set; }
+    public DirectoryInfo TargetDir { get; }
 
     public void Dispose() => Delete();
+
+    private TestDirectory()
+    {
+        var dateString = DateTime.Now.ToString("yyyyMMddTHHmmss", CultureInfo.InvariantCulture);
+        var uid = Guid.NewGuid();
+
+        _baseDir = new DirectoryInfo($"data/test-{dateString}-{uid}");
+        SourceDir = new DirectoryInfo(Path.Combine(_baseDir.FullName, "source"));
+        TargetDir = new DirectoryInfo(Path.Combine(_baseDir.FullName, "target"));
+    }
 
     public static TestDirectory Create()
     {
@@ -24,15 +32,8 @@ public sealed class TestDirectory : IDisposable
 
     private void CreateDirectories()
     {
-        var dateString = DateTime.Now.ToString("yyyyMMddTHHmmss", CultureInfo.InvariantCulture);
-        var uid = Guid.NewGuid();
-        _baseDir = new DirectoryInfo($"data/test-{dateString}-{uid}");
         _baseDir.Create();
-
-        SourceDir = new DirectoryInfo(Path.Combine(_baseDir.FullName, "source"));
         SourceDir.Create();
-
-        TargetDir = new DirectoryInfo(Path.Combine(_baseDir.FullName, "target"));
         TargetDir.Create();
     }
 
@@ -61,7 +62,5 @@ public sealed class TestDirectory : IDisposable
         }
     }
 
-    private void Delete() => _baseDir?.Delete(recursive: true);
-
-    private TestDirectory() { }
+    private void Delete() => _baseDir.Delete(recursive: true);
 }
