@@ -16,7 +16,7 @@ jobs:
         with:
           dotnet-version: 7.0.x
 
-      - name: Install dotnet global tools (coverlet, reportgenerator)
+      - name: Install dotnet global tools
         run: |
           dotnet tool install --global coverlet.console
           dotnet tool install --global dotnet-reportgenerator-globaltool
@@ -55,3 +55,10 @@ jobs:
         with:
           name: FeatureDocumentation
           path: malimo.Acceptance.Tests/bin/Release/net7.0/FeatureDocumentation.html
+
+      - name: Publish coverage report to CodeClimate
+        uses: paambaati/codeclimate-action@v4.0.0
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          coverageLocations: report/lcov.info:lcov

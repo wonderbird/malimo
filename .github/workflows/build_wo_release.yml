@@ -18,6 +18,7 @@ jobs:
   test:
     name: Unit tests
     uses: ./.github/workflows/_unit_tests.yml
+    secrets: inherit
 
   publish_macos:
     name: Publish macOS
@@ -37,7 +38,7 @@ jobs:
     with:
       semantic_version: ${{ needs.determine_version.outputs.semantic_version }}
       assembly_version: ${{ needs.determine_version.outputs.assembly_version }}
-
+  
   release:
     name: Release
     needs: [determine_version, test, publish_macos, publish_win]
