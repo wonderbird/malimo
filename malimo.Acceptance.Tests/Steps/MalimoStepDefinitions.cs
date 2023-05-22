@@ -1,4 +1,5 @@
-﻿using TestProcessWrapper;
+﻿using Gherkin.CucumberMessages.Types;
+using TestProcessWrapper;
 using Xunit;
 using Xunit.Sdk;
 
@@ -89,37 +90,42 @@ public sealed class MalimoStepDefinitions
     public void ThenMalimoHasExitedGracefully() => Assert.True(_hasExitedGracefully, "malimo should exit gracefully");
 
     [Then(@"the file ""(.*)"" exists in the source directory")]
-    public void ThenTheFileExistsInTheSourceDirectory(string fileName)
-    {
-        var file = new FileInfo(Path.Combine(SourceDirectory, fileName));
-        Assert.True(file.Exists, $"file '{file.FullName}' should exist");
-    }
+    public void ThenTheFileExistsInTheSourceDirectory(string fileName) =>
+        AssertFile(FileStatus.Exists, fileName, SourceDirectory);
 
     [Then(@"the file ""(.*)"" does not exist in the source directory")]
-    public void ThenTheFileDoesNotExistInTheSourceDirectory(string fileName)
-    {
-        var file = new FileInfo(Path.Combine(SourceDirectory, fileName));
-        Assert.False(file.Exists, $"file '{file.FullName}' should not exist");
-    }
+    public void ThenTheFileDoesNotExistInTheSourceDirectory(string fileName) =>
+        AssertFile(FileStatus.DoesNotExist, fileName, SourceDirectory);
 
     [Then(@"the file ""(.*)"" does not exist in the directory ""(.*)"" beneath the source directory")]
-    public void ThenTheFileDoesNotExistInTheDirectoryBeneathTheSourceDirectory(string fileName, string directoryName)
-    {
-        var file = new FileInfo(Path.Combine(SourceDirectory, directoryName, fileName));
-        Assert.False(file.Exists, $"file '{file.FullName}' should not exist");
-    }
+    public void ThenTheFileDoesNotExistInTheDirectoryBeneathTheSourceDirectory(string fileName, string directoryName) =>
+        AssertFile(FileStatus.DoesNotExist, fileName, Path.Combine(SourceDirectory, directoryName));
 
     [Then(@"the file ""(.*)"" exists in the target directory")]
-    public void ThenTheFileExistsInTheTargetDirectory(string fileName)
-    {
-        var file = new FileInfo(Path.Combine(TargetDirectory, fileName));
-        Assert.True(file.Exists, $"file '{file.FullName}' should exist");
-    }
+    public void ThenTheFileExistsInTheTargetDirectory(string fileName) =>
+        AssertFile(FileStatus.Exists, fileName, TargetDirectory);
 
     [Then(@"the file ""(.*)"" does not exist in the target directory")]
-    public void ThenTheFileDoesNotExistInTheTargetDirectory(string fileName)
+    public void ThenTheFileDoesNotExistInTheTargetDirectory(string fileName) =>
+        AssertFile(FileStatus.DoesNotExist, fileName, TargetDirectory);
+
+    private static void AssertFile(FileStatus expectedStatus, string fileName, string parentDirectory)
     {
-        var file = new FileInfo(Path.Combine(TargetDirectory, fileName));
-        Assert.False(file.Exists, $"file '{file.FullName}' should not exist");
+        var file = new FileInfo(Path.Combine(parentDirectory, fileName));
+
+        if (expectedStatus == FileStatus.Exists)
+        {
+            Assert.True(file.Exists, $"file '{file.FullName}' should exist");
+        }
+        else
+        {
+            Assert.False(file.Exists, $"file '{file.FullName}' should not exist");
+        }
+    }
+
+    private enum FileStatus
+    {
+        Exists,
+        DoesNotExist
     }
 }
