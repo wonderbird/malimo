@@ -190,6 +190,7 @@ rm -r malimo.Tests/data/source malimo.Tests/data/target
 #### Fix Static Code Analysis Warnings
 
 ... fix static code analysis warnings reported by [SonarLint](https://www.sonarsource.com/products/sonarlint/)
+and by [CodeClimate](https://codeclimate.com/github/wonderbird/malimo/issues).
 
 #### Apply Code Formatting Rules
 
