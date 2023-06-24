@@ -17,7 +17,13 @@ public static class Program
     /// </param>
     /// <param name="dryRun">Do not move the files (no action). Equivalent to --no-action.</param>
     /// <param name="noAction">Do not move the files (no action). Equivalent to --dry-run.</param>
-    public static void Main(FileInfo file, DirectoryInfo targetDir, DirectoryInfo sourceDir = null, bool dryRun = false, bool noAction = false)
+    public static void Main(
+        FileInfo file,
+        DirectoryInfo targetDir,
+        DirectoryInfo sourceDir = null,
+        bool dryRun = false,
+        bool noAction = false
+    )
     {
         var serviceProvider = ServiceProviderFactory.CreateServiceProvider(dryRun || noAction);
         var app = serviceProvider.GetRequiredService<App>();
