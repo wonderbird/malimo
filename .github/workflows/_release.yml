@@ -11,9 +11,6 @@ on:
         description: "Is this a dry run without actually creating the release?"
         required: true
         type: boolean
-    secrets:
-      CHOCO_API_KEY:
-        required: true
     
 jobs:
   release:
