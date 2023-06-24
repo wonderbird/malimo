@@ -11,13 +11,6 @@ on:
         description: "Is this a dry run without actually notarizing the app by apple?"
         required: true
         type: boolean
-    secrets:
-      APPLE_DEVELOPER_ID_APP_CERTIFICATE_BASE64:
-        required: true
-      APPLE_DEVELOPER_ID_APP_CERTIFICATE_PASSWORD:
-        required: true
-      APPLE_ID_APP_SPECIFIC_PASSWORD:
-        required: true
 
 jobs:
   publish_macos:
