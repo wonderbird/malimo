@@ -55,12 +55,14 @@ jobs:
           cp -v LICENSE README.md CHANGELOG.md "${{ env.PUBLISH_DIR }}"
 
       - name: Add cert to keychain
+        if: ${{ inputs.is_dry_run == false }}
         uses: apple-actions/import-codesign-certs@v2
         with:
           p12-file-base64: ${{ secrets.APPLE_DEVELOPER_ID_APP_CERTIFICATE_BASE64 }}
           p12-password: ${{ secrets.APPLE_DEVELOPER_ID_APP_CERTIFICATE_PASSWORD }}
 
       - name: Sign application
+        if: ${{ inputs.is_dry_run == false }}
         run: |
           /bin/sh ./build/SignMac.sh "${{ env.PUBLISH_DIR }}/malimo" "Developer ID Application: Stefan Boos" "./build/entitlements.plist"
 
