@@ -3,9 +3,9 @@ name: .NET build w/o release
 on:
   workflow_dispatch:
   push:
-    branches: main
+    branches: [ main ]
   pull_request:
-    branches: main
+    branches: [ main ]
 
 env:
   RETENTION_DAYS: 1
@@ -18,6 +18,8 @@ jobs:
   test:
     name: Unit tests
     uses: ./.github/workflows/_unit_tests.yml
+    with:
+      publish_to_codeclimate: ${{ github.event_name != 'pull_request' }}
     secrets: inherit
 
   publish_macos:

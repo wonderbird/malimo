@@ -16,6 +16,8 @@ jobs:
   test:
     name: Unit tests
     uses: ./.github/workflows/_unit_tests.yml
+    with:
+      publish_to_codeclimate: true
     secrets: inherit
 
   publish_macos:
