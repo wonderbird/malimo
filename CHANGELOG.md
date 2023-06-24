@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- The option `--no-action` can be used as an alternative to `--dry-run`.
+
 ### Changed
 
 - For pull requests do not send coverage reports to CodeClimate
@@ -16,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - The new `--source-dir` parameter allows different directories for images and markdown file
-- When `--no-action` flag is given, log in detail what would be moved
+- When `--dry-run` flag is given, log in detail what would be moved
 - Attach detailed feature documentation with use cases and examples to each release
 - Code coverage is reported to [CodeClimate](https://codeclimate.com/github/wonderbird/malimo/)
 
