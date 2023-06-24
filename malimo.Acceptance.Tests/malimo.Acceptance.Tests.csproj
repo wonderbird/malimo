@@ -45,7 +45,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Features\ImagesInOtherFolder.feature.cs">
+      <Compile Update="Features\ImagesAndMarkdownFileAreInDifferentFolders.feature.cs">
         <DependentUpon>ImagesInOtherFolder.feature</DependentUpon>
         <AutoGen>true</AutoGen>
         <DesignTime>true</DesignTime>
