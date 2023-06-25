@@ -34,13 +34,14 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github-actions", "github-actions", "{E251B2A0-872E-4433-BAD6-1AA7CAC1A40B}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\_determine_version.yml = .github\workflows\_determine_version.yml
-		.github\workflows\_publish_macos.yml = .github\workflows\_publish_macos.yml
-		.github\workflows\_publish_win.yml = .github\workflows\_publish_win.yml
 		.github\workflows\_release.yml = .github\workflows\_release.yml
 		.github\workflows\_unit_tests.yml = .github\workflows\_unit_tests.yml
 		.github\workflows\build_wo_release.yml = .github\workflows\build_wo_release.yml
 		.github\workflows\release.yml = .github\workflows\release.yml
 		.github\workflows\README.md = .github\workflows\README.md
+		.github\workflows\_pack_macos.yml = .github\workflows\_pack_macos.yml
+		.github\workflows\_pack_win.yml = .github\workflows\_pack_win.yml
+		.github\workflows\_publish_codeclimate.yml = .github\workflows\_publish_codeclimate.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "malimo.Acceptance.Tests", "malimo.Acceptance.Tests\malimo.Acceptance.Tests.csproj", "{91CB7962-D0F3-4ED6-9B96-7417C741800A}"
