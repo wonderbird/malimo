@@ -1,4 +1,4 @@
-name: Publish macOS
+name: Pack for macOS
 
 on:
   workflow_call:
@@ -13,8 +13,8 @@ on:
         type: boolean
 
 jobs:
-  publish_macos:
-    name: Publish macOS
+  pack_macos:
+    name: Pack for macOS
     
     strategy:
       matrix:

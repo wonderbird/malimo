@@ -1,4 +1,4 @@
-name: Run unit tests
+name: Publish to CodeClimate
 
 on:
   workflow_call:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   test:
-    name: Publish coverage report to CodeClimate
+    name: Publish to CodeClimate
     runs-on: ubuntu-latest
     
     steps:
