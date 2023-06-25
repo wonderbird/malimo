@@ -1,4 +1,4 @@
-name: Publish macOS
+name: Pack for macOS
 
 on:
   workflow_call:
@@ -11,17 +11,10 @@ on:
         description: "Is this a dry run without actually notarizing the app by apple?"
         required: true
         type: boolean
-    secrets:
-      APPLE_DEVELOPER_ID_APP_CERTIFICATE_BASE64:
-        required: true
-      APPLE_DEVELOPER_ID_APP_CERTIFICATE_PASSWORD:
-        required: true
-      APPLE_ID_APP_SPECIFIC_PASSWORD:
-        required: true
 
 jobs:
-  publish_macos:
-    name: Publish macOS
+  pack_macos:
+    name: Pack for macOS
     
     strategy:
       matrix:
@@ -55,12 +48,14 @@ jobs:
           cp -v LICENSE README.md CHANGELOG.md "${{ env.PUBLISH_DIR }}"
 
       - name: Add cert to keychain
+        if: ${{ inputs.is_dry_run == false }}
         uses: apple-actions/import-codesign-certs@v2
         with:
           p12-file-base64: ${{ secrets.APPLE_DEVELOPER_ID_APP_CERTIFICATE_BASE64 }}
           p12-password: ${{ secrets.APPLE_DEVELOPER_ID_APP_CERTIFICATE_PASSWORD }}
 
       - name: Sign application
+        if: ${{ inputs.is_dry_run == false }}
         run: |
           /bin/sh ./build/SignMac.sh "${{ env.PUBLISH_DIR }}/malimo" "Developer ID Application: Stefan Boos" "./build/entitlements.plist"
 

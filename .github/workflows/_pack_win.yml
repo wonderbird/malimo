@@ -1,4 +1,4 @@
-name: Publish Windows
+name: Pack for Windows
 
 on:
   workflow_call:
@@ -13,8 +13,8 @@ on:
         type: string
 
 jobs:
-  publish_win:
-    name: Publish Windows
+  pack_win:
+    name: Pack Windows
     
     strategy:
       matrix:

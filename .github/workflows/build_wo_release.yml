@@ -18,32 +18,36 @@ jobs:
   test:
     name: Unit tests
     uses: ./.github/workflows/_unit_tests.yml
-    with:
-      publish_to_codeclimate: ${{ github.event_name != 'pull_request' }}
+
+  publish_codeclimate:
+    name: Publish to CodeClimate
+    needs: [test]
+    if: ${{ github.event_name != 'pull_request' }}
+    uses: ./.github/workflows/_publish_codeclimate.yml
     secrets: inherit
 
-  publish_macos:
-    name: Publish macOS
+  pack_macos:
+    name: Pack for macOS
     needs: [determine_version, test]
     
-    uses: ./.github/workflows/_publish_macos.yml
+    uses: ./.github/workflows/_pack_macos.yml
     with:
       assembly_version: ${{ needs.determine_version.outputs.assembly_version }}
       is_dry_run: true
     secrets: inherit
 
-  publish_win:
-    name: Publish Windows
+  pack_win:
+    name: Pack for Windows
     needs: [determine_version, test]
     
-    uses: ./.github/workflows/_publish_win.yml
+    uses: ./.github/workflows/_pack_win.yml
     with:
       semantic_version: ${{ needs.determine_version.outputs.semantic_version }}
       assembly_version: ${{ needs.determine_version.outputs.assembly_version }}
   
   release:
     name: Release
-    needs: [determine_version, test, publish_macos, publish_win]
+    needs: [determine_version, test, pack_macos, pack_win]
 
     permissions:
       contents: write

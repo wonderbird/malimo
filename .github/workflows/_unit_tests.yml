@@ -2,11 +2,6 @@ name: Run unit tests
 
 on:
   workflow_call:
-    inputs:
-      publish_to_codeclimate:
-        description: "Shall we upload coverage reports to CodeClimate?"
-        required: true
-        type: boolean
 
 jobs:
   test:
@@ -36,6 +31,13 @@ jobs:
       - name: Run tests
         run: dotnet test --no-restore --configuration Release --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='./TestResults/coverage.cobertura.xml'
 
+      - name: Attach build result to build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-result
+          path: malimo/obj/Release/net7.0
+          retention-days: ${{ env.RETENTION_DAYS }}
+
       - name: Generate coverage reports
         run: reportgenerator "-reports:malimo.Tests/TestResults/*.xml;malimo.Acceptance.Tests/TestResults/*.xml" \
           "-targetdir:report" \
@@ -60,11 +62,3 @@ jobs:
         with:
           name: FeatureDocumentation
           path: malimo.Acceptance.Tests/bin/Release/net7.0/FeatureDocumentation.html
-
-      - name: Publish coverage report to CodeClimate
-        if: ${{ inputs.publish_to_codeclimate == true }}
-        uses: paambaati/codeclimate-action@v4.0.0
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        with:
-          coverageLocations: report/lcov.info:lcov
