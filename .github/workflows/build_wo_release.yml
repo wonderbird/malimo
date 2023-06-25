@@ -18,8 +18,12 @@ jobs:
   test:
     name: Unit tests
     uses: ./.github/workflows/_unit_tests.yml
-    with:
-      publish_to_codeclimate: ${{ github.event_name != 'pull_request' }}
+
+  publish_codeclimate:
+    name: Publish coverage report to CodeClimate
+    needs: [test]
+    if: ${{ github.event_name != 'pull_request' }}
+    uses: ./.github/workflows/_publish_codeclimate.yml
     secrets: inherit
 
   publish_macos:

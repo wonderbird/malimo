@@ -2,11 +2,6 @@ name: Run unit tests
 
 on:
   workflow_call:
-    inputs:
-      publish_to_codeclimate:
-        description: "Shall we upload coverage reports to CodeClimate?"
-        required: true
-        type: boolean
 
 jobs:
   test:
@@ -60,11 +55,3 @@ jobs:
         with:
           name: FeatureDocumentation
           path: malimo.Acceptance.Tests/bin/Release/net7.0/FeatureDocumentation.html
-
-      - name: Publish coverage report to CodeClimate
-        if: ${{ inputs.publish_to_codeclimate == true }}
-        uses: paambaati/codeclimate-action@v4.0.0
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        with:
-          coverageLocations: report/lcov.info:lcov
