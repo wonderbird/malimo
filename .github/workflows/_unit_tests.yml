@@ -31,6 +31,13 @@ jobs:
       - name: Run tests
         run: dotnet test --no-restore --configuration Release --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='./TestResults/coverage.cobertura.xml'
 
+      - name: Attach build result to build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-result
+          path: malimo/obj/Release/net7.0
+          retention-days: ${{ env.RETENTION_DAYS }}
+
       - name: Generate coverage reports
         run: reportgenerator "-reports:malimo.Tests/TestResults/*.xml;malimo.Acceptance.Tests/TestResults/*.xml" \
           "-targetdir:report" \
