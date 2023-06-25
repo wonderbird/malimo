@@ -15,10 +15,17 @@ public static class Program
     /// <param name="targetDir">Move files to this target folder</param>
     /// <param name="sourceDir">Search image files in this directory. If this parameter is not specified, then images are searched in the directory of the markdown file.
     /// </param>
-    /// <param name="dryRun">Do not move the files (no action)</param>
-    public static void Main(FileInfo file, DirectoryInfo targetDir, DirectoryInfo sourceDir = null, bool dryRun = false)
+    /// <param name="dryRun">Do not move the files (no action). Equivalent to --no-action.</param>
+    /// <param name="noAction">Do not move the files (no action). Equivalent to --dry-run.</param>
+    public static void Main(
+        FileInfo file,
+        DirectoryInfo targetDir,
+        DirectoryInfo sourceDir = null,
+        bool dryRun = false,
+        bool noAction = false
+    )
     {
-        var serviceProvider = ServiceProviderFactory.CreateServiceProvider(dryRun);
+        var serviceProvider = ServiceProviderFactory.CreateServiceProvider(dryRun || noAction);
         var app = serviceProvider.GetRequiredService<App>();
         app.Run(file, sourceDir, targetDir);
         serviceProvider.Dispose(); // Flush log messages

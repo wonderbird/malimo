@@ -1,5 +1,5 @@
 ﻿@DryRun
-Feature: Dry run simulates what would happen
+Feature: Simulate what would happen
   
 Use case
 --
@@ -12,14 +12,22 @@ Use case
 Command line
 --
 
+Either use the `--dry-run` parameter
+
 ```
 malimo --dry-run --file WithTwoImages.md --target-dir ../any-directory-name
 ```
+  
+or the `--no-action` parameter
 
+```
+malimo --no-action --file WithTwoImages.md --target-dir ../any-directory-name
+```
+  
 Result
 --
 
-- The `--dry-run` option prevents `malimo` from changing the file system
+- Both the `--dry-run` and the equivalent `--no-action` option prevents `malimo` from changing the file system
 - `malimo` will ensure that the linked images exist in the folder `./`
 - It will print out in detail which image would be moved
 
@@ -29,6 +37,18 @@ Scenario: Prevent moving files by using the `--dry-run` option
 	And the target directory is configured
 	When malimo is executed
 	Then the output matches the regex "Would move '.*/noun-island-1479438.png'"
+  And the file "noun-island-1479438.png" exists in the source directory
+  And the file "noun-starship-3799189.png" exists in the source directory
+  And the file "noun-island-1479438.png" does not exist in the target directory
+  And the file "noun-starship-3799189.png" does not exist in the target directory
+  And malimo has exited gracefully
+
+Scenario: Prevent moving files by using the `--no-action` option
+  Given the option "--no-action" is added
+  And the file is "WithTwoImages.md"
+  And the target directory is configured
+  When malimo is executed
+  Then the output matches the regex "Would move '.*/noun-island-1479438.png'"
   And the file "noun-island-1479438.png" exists in the source directory
   And the file "noun-starship-3799189.png" exists in the source directory
   And the file "noun-island-1479438.png" does not exist in the target directory
