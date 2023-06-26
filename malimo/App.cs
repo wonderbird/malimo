@@ -38,6 +38,8 @@ internal class App
         var images = ConstructImagePaths(markdownFile, sourceDir, imageNames);
 
         MoveImagesToTargetDir(targetDir, images);
+
+        _logger.LogDebug("malimo has completed");
     }
 
     private void LogProcessIdForIntegrationTests()
