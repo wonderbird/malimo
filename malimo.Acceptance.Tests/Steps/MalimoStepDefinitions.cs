@@ -70,6 +70,8 @@ public sealed class MalimoStepDefinitions
             process.AddCommandLineArgument(argument, value);
         }
 
+        process.AddReadinessCheck(output => output.Contains("malimo has completed"));
+
         process.Start();
         process.WaitForProcessExit();
 
