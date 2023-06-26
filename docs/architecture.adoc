@@ -93,6 +93,16 @@ This will trigger the full link:../.github/workflows/dotnet.yml[GitHub Action to
 
 NOTE: It usually takes about 1 hour until the updated Chocolatey package is available.
 
+==== Abort Release Making
+
+If the pipeline fails, then the release should be rolled back:
+
+1. To save some energy, abort the corresponding GitHub action, if it is still running
+2. Delete the corresponding tag from the https://github.com/wonderbird/malimo/tags[GitHub tags] page
+3. Delete the tag from all local working directories: `git tag -d "v0.1.5-alpha"`
+
+Now you can start over.
+
 ==== Update Homebrew Tools
 
 After a successful release, update corresponding cask in the https://github.com/wonderbird/homebrew-tools[Homebrew tap wonderbird/tools]:
