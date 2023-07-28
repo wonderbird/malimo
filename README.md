@@ -11,7 +11,11 @@ Move all images used by a markdown file into a folder.
 
 ## Motivation
 
-During online talks and workshops I take notes containing many screenshots. I would like to move these screenshots into a separate folder, so that I can share them later.
+During online conferences and workshops I take notes in markdown format using [Obsidian.md](https://obsidian.md). As a result I have a folder with many screenshots from different talks in the evening.
+
+The Markdown Linked Images Mover "`malimo`" moves all images addressed by a markdown file into a separate folder.
+
+This way I can separate screenshots by topic at the end of a conference or workshop day.
 
 ## Development and Support Status
 
