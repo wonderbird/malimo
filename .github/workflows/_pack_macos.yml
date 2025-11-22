@@ -19,8 +19,8 @@ jobs:
     strategy:
       matrix:
         runtime:
-          - osx.12-arm64
-          - osx.12-x64
+          - osx-arm64
+          - osx-x64
 
     env:
       PUBLISH_DIR: malimo.${{ matrix.runtime }}
