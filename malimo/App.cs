@@ -101,7 +101,7 @@ internal class App
     {
         var missingFiles = images.Where(file => !_fileSystem.File.Exists(file.FullName)).ToList();
         LogMissingFiles(missingFiles);
-        return missingFiles.Count == 0;
+        return missingFiles.Count != 0;
     }
 
     private void LogMissingFiles(List<FileInfo> missingFiles) =>
