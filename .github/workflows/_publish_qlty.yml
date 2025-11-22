@@ -1,0 +1,32 @@
+name: Publish to Qlty.sh
+
+on:
+  workflow_call:
+
+jobs:
+  test:
+    name: Publish to CodeClimate
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Download build result
+        uses: actions/download-artifact@v6
+        with:
+          name: build-result
+          path: malimo/obj/Release/net8.0
+
+      - name: Download coverage reports
+        uses: actions/download-artifact@v6
+        with:
+          name: coverage-reports
+          path: report
+
+      - name: Publish coverage report to qlty.sh
+        uses: qltysh/qlty-action/coverage@v2
+        with:
+          oidc: true
+          files: coverage-reports/lcov.info
+          format: lcov
+          skip-errors: false

@@ -28,12 +28,12 @@ jobs:
     runs-on: windows-latest
     
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 7.0.x
+          dotnet-version: 8.0.x
 
       - name: Create application
         run: |
@@ -46,7 +46,7 @@ jobs:
           cp -v LICENSE README.md CHANGELOG.md "${{ env.PUBLISH_DIR }}"
 
       - name: ZIP application
-        uses: thedoctor0/zip-release@0.7.1
+        uses: thedoctor0/zip-release@0.7.6
         with:
           type: 'zip'
           path: ${{ env.PUBLISH_DIR }}
@@ -54,7 +54,7 @@ jobs:
           exclusions: '*.pdb'
 
       - name: Attach application to build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.PUBLISH_ZIP_FILENAME }}
           path: ${{ env.PUBLISH_ZIP_FILENAME }}
@@ -67,7 +67,7 @@ jobs:
         run: choco pack ./chocolatey/malimo.nuspec
 
       - name: Attach Chocolatey package to build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: malimo.${{ inputs.semantic_version }}.nupkg
           path: malimo.${{ inputs.semantic_version }}.nupkg

@@ -30,12 +30,12 @@ jobs:
     runs-on: macos-latest
     
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 7.0.x
+          dotnet-version: 8.0.x
 
       - name: Create application
         run: |
@@ -49,7 +49,7 @@ jobs:
 
       - name: Add cert to keychain
         if: ${{ inputs.is_dry_run == false }}
-        uses: apple-actions/import-codesign-certs@v2
+        uses: apple-actions/import-codesign-certs@v5
         with:
           p12-file-base64: ${{ secrets.APPLE_DEVELOPER_ID_APP_CERTIFICATE_BASE64 }}
           p12-password: ${{ secrets.APPLE_DEVELOPER_ID_APP_CERTIFICATE_PASSWORD }}
@@ -70,14 +70,14 @@ jobs:
 
       - name: Attach notarize log to build artifacts
         if: ${{ inputs.is_dry_run == false }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.NOTARIZE_LOG_FILENAME }}
           path: ./notarize_log.json
           retention-days: ${{ env.RETENTION_DAYS }}
 
       - name: Attach application to build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.PUBLISH_ZIP_FILENAME }}
           path: ${{ env.PUBLISH_ZIP_FILENAME }}

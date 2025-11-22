@@ -9,12 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 7.0.x
+          dotnet-version: 8.0.x
 
       - name: Install dotnet global tools
         run: |
@@ -32,10 +32,10 @@ jobs:
         run: dotnet test --no-restore --configuration Release --verbosity normal /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput='./TestResults/coverage.cobertura.xml'
 
       - name: Attach build result to build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-result
-          path: malimo/obj/Release/net7.0
+          path: malimo/obj/Release/net8.0
           retention-days: ${{ env.RETENTION_DAYS }}
 
       - name: Generate coverage reports
@@ -45,7 +45,7 @@ jobs:
           "-title:malimo"
 
       - name: Attach coverage reports to build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-reports
           path: report
@@ -55,10 +55,10 @@ jobs:
         run: |
           livingdoc test-assembly malimo.Acceptance.Tests.dll -t TestExecution.json
           mv LivingDoc.html FeatureDocumentation.html
-        working-directory: malimo.Acceptance.Tests/bin/Release/net7.0
+        working-directory: malimo.Acceptance.Tests/bin/Release/net8.0
 
       - name: Attach feature documentation to build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: FeatureDocumentation
-          path: malimo.Acceptance.Tests/bin/Release/net7.0/FeatureDocumentation.html
+          path: malimo.Acceptance.Tests/bin/Release/net8.0/FeatureDocumentation.html
