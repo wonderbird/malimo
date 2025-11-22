@@ -17,12 +17,15 @@ jobs:
     name: Unit tests
     uses: ./.github/workflows/_unit_tests.yml
 
-  publish_codeclimate:
+  publish_qlty:
+    name: Publish to Qlty.sh
     needs: [test]
-    name: Publish to CodeClimate
-    uses: ./.github/workflows/_publish_codeclimate.yml
+    uses: ./.github/workflows/_publish_qlty.yml
     secrets: inherit
-
+    permissions:
+      contents: read
+      id-token: write
+    
   pack_macos:
     name: Pack for macOS
     needs: [determine_version, test]
