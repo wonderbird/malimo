@@ -2,10 +2,8 @@
 
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/wonderbird/malimo)
 [![Build Status Badge](https://github.com/wonderbird/malimo/actions/workflows/build_wo_release.yml/badge.svg?branch=main)](https://github.com/wonderbird/malimo/actions?query=workflow%3A%22.NET%20build%20w/o%20release%22)
-[![Test Coverage](https://img.shields.io/codeclimate/coverage-letter/wonderbird/malimo)](https://codeclimate.com/github/wonderbird/malimo/trends/test_coverage_total)
-[![Code Maintainability](https://img.shields.io/codeclimate/maintainability-percentage/wonderbird/malimo)](https://codeclimate.com/github/wonderbird/malimo)
-[![Issues in Code](https://img.shields.io/codeclimate/issues/wonderbird/malimo)](https://codeclimate.com/github/wonderbird/malimo/issues)
-[![Technical Debt](https://img.shields.io/codeclimate/tech-debt/wonderbird/malimo)](https://codeclimate.com/github/wonderbird/malimo)
+[![Maintainability](https://qlty.sh/gh/wonderbird/projects/malimo/maintainability.svg)](https://qlty.sh/gh/wonderbird/projects/malimo)
+[![Code Coverage](https://qlty.sh/gh/wonderbird/projects/malimo/coverage.svg)](https://qlty.sh/gh/wonderbird/projects/malimo)
 
 Move all images used by a markdown file into a folder.
 
@@ -24,10 +22,6 @@ I am developing during my spare time and use this project for learning purposes.
 ## Acknowledgements
 
 The [application icon](assets/application-icon) is the `folder-document.png` from the "Tango harm-on-icons" icon set, which is published in the [Open Icon Library](https://sourceforge.net/projects/openiconlibrary/) using the [CC-BY 3.0](https://creativecommons.org/licenses/by/3.0/) license. Thanks to the author(s) for their work ❤️.
-
-
-Many thanks to [JetBrains](https://www.jetbrains.com/?from=malimo) who provide
-an [Open Source License](https://www.jetbrains.com/community/opensource/) for this project ❤️.
 
 ## Installation
 
