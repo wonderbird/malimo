@@ -19,8 +19,8 @@ together {
 
 cloud {
   node "GitHub: wonderbird/malimo/releases" {
-    artifact "malimo.osx.12-arm64.bottle.zip" as armBottle
-    artifact "malimo.osx.12-x64.bottle.zip" as intelBottle
+    artifact "malimo.osx-arm64.bottle.zip" as armBottle
+    artifact "malimo.osx-x64.bottle.zip" as intelBottle
     artifact "malimo.win-x64.zip" as winRelease
     artifact "malimo.<version>.nupkg" as chocoCopy
   }
