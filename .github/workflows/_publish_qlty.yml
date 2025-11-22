@@ -5,7 +5,7 @@ on:
 
 jobs:
   test:
-    name: Publish to CodeClimate
+    name: Publish to Qlty.sh
     runs-on: ubuntu-latest
     
     steps:
